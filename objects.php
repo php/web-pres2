@@ -1046,7 +1046,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!$this->hide) {
 				if(!empty($this->filename)) {
 					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
-					$_html_file = file_get_contents($_html_filename);
+					$_html_file = join(file($_html_filename),'');
 				} else {
 					$_html_file = $this->text;
 				}
