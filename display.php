@@ -535,7 +535,9 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 
         $style .= 'list-style-type: none;';
 
-        echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.markup_text(htmlspecialchars($bullet->text))."</li></div>\n";
+        $markedText = ($bullet->text == '&nbsp;') ? $bullet->text : markup_text(htmlspecialchars($bullet->text));
+           
+        echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
     }
 
     function _table(&$table) {
