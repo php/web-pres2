@@ -291,7 +291,13 @@ FOOTER;
             $size = "width=\"{$image->width}\" height=\"{$image->height}\"";
         } else {
             $size = getimagesize($this->slideDir.$image->filename);
-            $size = $size[3];
+        	if (!empty($image->scale)) {
+				$width = $size[0] * $image->scale;
+				$height = $size[1] * $image->scale;
+	            $size = "width=\"{$width}\" height=\"{$height}\"";
+			} else {
+	            $size = $size[3];
+        	}
         }
 ?>
 <div <?=$effect?> align="<?=$image->align?>" style="margin-left: <?=$image->marginleft?>; margin-right: <?=$image->marginright?>;">
@@ -529,7 +535,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 
         $style .= 'list-style-type: none;';
 
-        echo "<div $eff_str><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.markup_text($bullet->text)."</li></div>\n";
+        echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.markup_text(htmlspecialchars($bullet->text))."</li></div>\n";
     }
 
     function _table(&$table) {
