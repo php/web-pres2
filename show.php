@@ -61,11 +61,11 @@
 	$prevSlideNum = $nextSlideNum = 0;
 	if($slideNum > 0) {
 		$prevSlideNum = $slideNum-1;
-		$prevTitle = $titles[$prevSlideNum]['title'];
+		$prevTitle = @$titles[$prevSlideNum]['title'];
 	} else $prevTitle = '';
 	if($slideNum < $maxSlideNum) {
 		$nextSlideNum = $slideNum+1;
-		$nextTitle = $titles[$nextSlideNum]['title'];
+		$nextTitle = @$titles[$nextSlideNum]['title'];
 	} else $nextTitle = '';
 
 	$slideDir = dirname($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename).'/';
