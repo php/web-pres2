@@ -16,6 +16,7 @@
 
 	session_start();
 	session_register('selected_display_mode');
+	session_register('show_speaker_notes');
 	$titles = null;
 	
 	$topics = array();
@@ -85,7 +86,7 @@
 <script language="JavaScript1.2">
 <!--
 function change_mode() {
-	document.cookie="display_mode="+document.modes_form.modes.value;	
+	document.cookie="display_mode="+document.modes_form.modes.value+"|"+document.modes_form.speaker.checked;
 	top.location=top.location.href;
 }
 -->
@@ -124,7 +125,11 @@ Simply click the topic you wish to find presentations on to view all available p
 	}
 
 } else {
-	if(empty($_COOKIE['display_mode'])) { $display_mode = 'html'; } else { $display_mode = $_COOKIE['display_mode']; }
+	if(empty($_COOKIE['display_mode'])) { $display_mode = 'html'; $form_speaker='false'; } 
+	else { 
+		list($display_mode,$form_speaker) = explode('|',$_COOKIE['display_mode']); 
+	}
+	$show_speaker_notes = ($form_speaker=='true');
 	$selected_display_mode = $display_mode;
 ?>
 <form name="modes_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
@@ -137,6 +142,8 @@ Simply click the topic you wish to find presentations on to view all available p
 <option value="pdfusl" <?=($display_mode=='pdfusl')?'SELECTED':''?>>PDF (US-Legal)</option>
 <option value="pdfa4" <?=($display_mode=='pdfa4')?'SELECTED':''?>>PDF (A4)</option>
 </select>
+<br />
+Show Speaker Notes: <input type="checkbox" name="speaker" <?=$speaker?'checked':''?> onChange="change_mode()">
 </p>
 </form>
 <?php

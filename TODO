@@ -34,5 +34,3 @@ Things to work on
 - Go through each XML tag and make sure the attributes are implemented and 
   consistent across all display modes.  And at the same time, document each
   tag in the intro presentation.
-
-- Speaker notes tag

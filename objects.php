@@ -569,6 +569,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->text         = '';
 			$this->textcolor    = '#000000';
 			$this->effect       = '';
+			$this->type         = '';
 		}
 
 		function display() {
@@ -583,21 +584,31 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
+			global $show_speaker_notes;
+
+			if($this->type=='speaker' && !$show_speaker_notes) return;
 			$effect = '';
 			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(!empty($this->title)) {
+				if($this->type=='speaker') $this->titlecolor='#ff3322';
 				echo "<div $effect align=\"$this->talign\" style=\"font-size: $this->fontsize; color: $this->titlecolor\">".markup_text($this->title)."</div>\n";
 			}
 			if(!empty($this->text)) {
+				if($this->type=='speaker') $this->textcolor='#ff3322';
 				echo "<div $effect align=\"$this->align\" style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">".markup_text($this->text)."</div><br />\n";
 			}
 		}
 
 		function plainhtml() {
+			global $show_speaker_notes;
+
+			if($this->type=='speaker' && !$show_speaker_notes) return;
 			if(!empty($this->title)) {
+				if($this->type=='speaker') $this->titlecolor='#ff3322';
 				echo "<h1 align=\"$this->talign\"><font color=\"$this->titlecolor\">".markup_text($this->title)."</font></h1>\n";
 			}
 			if(!empty($this->text)) {
+				if($this->type=='speaker') $this->textcolor='#ff3322';
 				echo "<p align=\"$this->align\"><font color=\"$this->textcolor\">".markup_text($this->text)."</font></p>\n";
 			}
 		}
@@ -610,6 +621,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
 
 			if(!empty($this->title)) {
+				if($this->type=='speaker') {
+					pdf_setcolor($pdf,'fill','rgb',1,0,0);
+				}
 				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
 				$dx = pdf_stringwidth($pdf,$this->title);
 				$pdf_cy = pdf_get_value($pdf, "texty");
@@ -629,6 +643,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				pdf_continue_text($pdf, strip_markups($this->title));
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$x,$pdf_cy+5);
+				pdf_setcolor($pdf,'fill','rgb',0,0,0);
 			}
 			$pdf_cy = pdf_get_value($pdf, "texty");
 
@@ -665,8 +680,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			}
 
 			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
+			if($this->type=='speaker') {
+				pdf_setcolor($pdf,'fill','rgb',1,0,0);
+			}
 			pdf_show_boxed($pdf, str_replace("\n",' ',$txt), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, $align);
 			pdf_continue_text($pdf, "\n");
+			pdf_setcolor($pdf,'fill','rgb',0,0,0);
 		}
 
 	}
