@@ -5,7 +5,7 @@ body {
 	margin-right:0em;
 	margin-bottom:0em;
 	<?php
-	if ($pres[1]->backgroundcol) { echo "background: $pres[1]->backgroundcol;\n"; }
+	if ($pres[1]->backgroundcol) { echo "background: {$pres[1]->backgroundcol};\n"; }
 	if ($pres[1]->backgroundimage) echo "background-image: url({$pres[1]->backgroundimage});\n";
 	if ($pres[1]->backgroundfixed) echo "background-attachment : fixed;\n";
 	if ($pres[1]->backgroundrepeat) echo "background-repeat : repeat\n";
