@@ -521,6 +521,7 @@ function strip_markups($str) {
 			if($objs[1]->template == 'titlepage') {
 				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
 				$smallerfontsize = (2*(float)$basefontsize/3).'em';
+				$smallestfontsize = ((float)$basefontsize/2).'em';
 				$p = $pres[1];
 				$parts =  ( !empty($p->title) + !empty($p->event) +
 							(!empty($p->date)||!empty($p->location)) + 
@@ -587,6 +588,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			if($objs[1]->template == 'titlepage') {
 				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
 				$smallerfontsize = (2*(float)$basefontsize/3).'em';
+				$smallestfontsize = ((float)$basefontsize/2).'em';
 				$p = $pres[1];
 				$parts =  ( !empty($p->title) + !empty($p->event) +
 							(!empty($p->date)||!empty($p->location)) + 
@@ -1880,7 +1882,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function plainhtml() {
-			if(!empty($this->align)) $align = 'align="'.$this->align.'"';
+			if(!empty($this->align)) $align = 'align="'.$this->align.'"'; else $align = '';
 			if(isset($this->title)) echo "<h1 $align>".markup_text($this->title)."</h1>\n";
 			echo '<table '.$align.' width="100%" border=1>';
 			$i = 1;
