@@ -336,7 +336,7 @@ function strip_markups($str) {
 				break;
 
 				case 'mysql':
-				echo "<div id=\"stickybar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+				echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
 				echo "<table style=\"float: left;\" width=\"60%\" border=\"0\"><tr>\n";
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
@@ -384,7 +384,7 @@ function strip_markups($str) {
 
 				case 'php':
 				default:
-				echo "<div id=\"stickybar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
+				echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
 				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
