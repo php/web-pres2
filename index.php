@@ -132,7 +132,9 @@ Simply click the topic you wish to find presentations on to view all available p
 <option value="html" <?=($display_mode=='html')?'SELECTED':''?>>Fancy HTML (Best with Mozilla)</option>
 <option value="plainhtml" <?=($display_mode=='plainhtml')?'SELECTED':''?>>Plain HTML</option>
 <option value="flash" <?=($display_mode=='flash')?'SELECTED':''?>>Flash 5 (navbar only)</option>
-<option value="pdf" <?=($display_mode=='pdf')?'SELECTED':''?>>PDF (Barely working)</option>
+<option value="pdfus" <?=($display_mode=='pdfus')?'SELECTED':''?>>PDF (US-Letter)</option>
+<option value="pdfusl" <?=($display_mode=='pdfusl')?'SELECTED':''?>>PDF (US-Legal)</option>
+<option value="pdfa4" <?=($display_mode=='pdfa4')?'SELECTED':''?>>PDF (A4)</option>
 </select>
 </p>
 </form>

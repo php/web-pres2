@@ -11,9 +11,6 @@
 	$pdf_example_font = "Courier";
 	$jsKeyboard = true; // enable javascript handling of keyboard events
 
-	$pdf_x = 612;
-	$pdf_y = 792;
-
 // Convert em font sizing to flash font sizes
 function flash_fixsize($ht) {
 	global $flashFontScale;

@@ -122,7 +122,21 @@ HEADER;
 FOOTER;
 			break;
 
-		case 'pdf':
+		case 'pdfus':
+		case 'pdfusl':
+		case 'pdfa4':
+			$selected_display_mode = 'pdf';
+			switch($navmode) {
+				case 'pdfus': // US-Letter
+					$pdf_x = 612;  $pdf_y = 792;
+					break;
+				case 'pdfusl': // US-Legal
+					$pdf_x = 612;  $pdf_y = 1008;
+					break;
+				case 'pdfa4':  // A4
+					$pdf_x = 595;  $pdf_y = 842;
+					break;
+			}
 			// In PDF mode we loop through all the slides and make a single
 			// big multi-page PDF document.
 			$page_number = 0;
