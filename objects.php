@@ -1300,6 +1300,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					break;
 				case 'no-bullet':
 				case 'none':
+					$bullet='';
 					break;
 				case 'alpha':
 					$bullet = $objs[$coid]->alpha++;
