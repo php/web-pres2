@@ -17,12 +17,28 @@ function getFlashDimensions($font,$title,$size) {
 
 // {{{ my_new_pdf_page($pdf, $x, $y)
 function my_new_pdf_page($pdf, $x, $y) {
+	global $page_number;
+
+	$page_number++;
 	pdf_begin_page($pdf, $x, $y);
 	// Having the origin in the bottom left corner confuses the
 	// heck out of me, so let's move it to the top-left.
 	pdf_translate($pdf,0,$y);
 	pdf_scale($pdf, 1, -1);   // Reflect across horizontal axis
 	pdf_set_value($pdf,"horizscaling",-100); // Mirror
+}
+// }}}
+
+// {{{ my_pdf_page_number($pdf)
+function my_pdf_page_number($pdf) {
+	global $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $page_number, $page_index;
+
+	if(isset($page_index[$page_number]) && $page_index[$page_number] == 'titlepage') return;
+	pdf_set_font($pdf, "Helvetica" , -10, 'winansi');
+	$dx = pdf_stringwidth($pdf,"- $page_number -");
+	$x = (int)($pdf_x/2 - $dx/2);
+	$pdf_cy = pdf_get_value($pdf, "texty");
+	pdf_show_xy($pdf, "- $page_number -", $x, $pdf_y-20);
 }
 // }}}
 
@@ -280,7 +296,7 @@ TITLEPAGE;
 		function pdf() {
 			global 	$pdf, $pdf_x, $pdf_y, $slideNum, $maxSlideNum, 
 					$currentPres, $baseDir, $showScript, $pres, $objs,
-					$pdf_cx, $pdf_cy;
+					$pdf_cx, $pdf_cy, $page_index, $page_number;
 
 			$p = $pres[1];
 			$middle = (int)($pdf_y/2);
@@ -288,7 +304,24 @@ TITLEPAGE;
 			$pdf_cy = 25;  // top-margin
 			$pdf_cx = 40;
 		
-			if($slideNum) {  // No header on the titlepage
+			if($objs[1]->template == 'titlepage') {
+				pdf_set_font($pdf, "Helvetica" , -36, 'winansi');
+				pdf_show_boxed($pdf, $p->title, 10, $middle-250, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->event, 10, $middle-170, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->date, 10, $middle-90, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $middle-10, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->url, 10, $middle+70, $pdf_x-20, 40, 'center');
+
+				$page_index[$page_number] = 'titlepage';
+			} else { // No header on the title page
 				pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
 				pdf_show_boxed($pdf, "Slide $slideNum/$maxSlideNum", $pdf_cx, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'left');
 				if(isset($p->date)) $d = $p->date;
@@ -297,23 +330,8 @@ TITLEPAGE;
 				pdf_show_boxed($pdf, $d, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'right');
 				pdf_set_font($pdf, "Helvetica" , -24, 'winansi');
 				pdf_show_boxed($pdf, $this->title, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'center');
-			}
 
-			if($objs[1]->template == 'titlepage') {
-				pdf_set_font($pdf, "Helvetica" , -36, 'winansi');
-				pdf_show_boxed($pdf, $p->title, 10, $middle-200, $pdf_x-20, 40, 'center');
-
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->event, 10, $middle-120, $pdf_x-20, 40, 'center');
-
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->date, 10, $middle-40, $pdf_x-20, 40, 'center');
-
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $middle+40, $pdf_x-20, 40, 'center');
-
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, '<'.$p->url.'>', 10, $middle+120, $pdf_x-20, 40, 'center');
+				$page_index[$page_number] = $this->title;
 			}
 
 			$pdf_cy += 30;	
@@ -420,6 +438,7 @@ TITLEPAGE;
 			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')) $height+=10;
 
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
+				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
 				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
 				$pdf_cx = 40;
@@ -931,6 +950,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$height=10;	
 			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
+				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
 				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
 				$pdf_cx = 40;
@@ -1079,6 +1099,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$height=10;	
 			while(pdf_show_boxed($pdf, $this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
+				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
 				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
 				$pdf_cx = 40;
@@ -1244,7 +1265,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
+			global $pdf;
 
+			my_pdf_page_number($pdf);
 		}
 
 	}

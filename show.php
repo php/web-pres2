@@ -125,6 +125,7 @@ FOOTER;
 		case 'pdf':
 			// In PDF mode we loop through all the slides and make a single
 			// big multi-page PDF document.
+			$page_number = 0;
 			$pdf = pdf_new();
 			pdf_open_file($pdf);
 			pdf_set_info($pdf, "Author",isset($pres[1]->speaker)?$pres[1]->speaker:"Anonymous");
@@ -145,6 +146,36 @@ FOOTER;
 				}
 				pdf_end_page($pdf);
 			}
+
+			my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+			pdf_set_font($pdf, "Helvetica" , -20, 'winansi');
+			$dx = pdf_stringwidth($pdf, "Index");
+			$x = (int)($pdf_x/2 - $dx/2);
+			pdf_set_parameter($pdf, "underline", 'true');
+			pdf_show_xy($pdf,"Index",$x,60);
+			pdf_set_parameter($pdf, "underline", 'false');
+			$pdf_cy = pdf_get_value($pdf, "texty")+30;
+			$old_cy = $pdf_cy;
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			foreach($page_index as $pn=>$ti) {
+				if($ti=='titlepage') continue;
+				$ti.='    ';
+				while(pdf_stringwidth($pdf,$ti)<($pdf_x-$pdf_cx*2.5-140)) $ti.='.';
+				pdf_show_xy($pdf, $ti, $pdf_cx*2.5, $pdf_cy);
+				$dx = pdf_stringwidth($pdf, $pn);
+				pdf_show_xy($pdf, $pn, $pdf_x-2.5*$pdf_cx-$dx, $pdf_cy);
+				$pdf_cy+=15;
+				if($pdf_cy > ($pdf_y-50)) {
+					pdf_end_page($pdf);
+					pdf_begin_page($pdf, $pdf_x, $pdf_y);
+					pdf_translate($pdf,0,$pdf_y);
+					pdf_scale($pdf, 1, -1);
+					pdf_set_value($pdf,"horizscaling",-100);
+					$pdf_cy = $old_cy;
+					pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+				}
+			}
+			pdf_end_page($pdf);
 			pdf_close($pdf);
 			$data = pdf_get_buffer($pdf);
 			header('Content-type: application/pdf');
