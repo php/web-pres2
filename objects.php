@@ -107,6 +107,72 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 }
 // }}}
 
+/* {{{ my_pdf_paginated_text($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs, $align) {
+
+   Function displays and paginates a bunch of text.  Wordwrapping is also
+   done on long lines.  Top-down coordinates and a monospaced font are assumed.
+
+     $data  = text to display
+     $x     = width of page
+     $y     = height of page
+     $tm    = top-margin
+     $bm    = bottom-margin
+     $lm    = left-margin
+     $rm    = right-margin
+     $font  = font name
+     $fs    = font size
+     $align = alignment of the paragraph
+*/
+function my_pdf_paginated_text($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs, $align) {
+
+	pdf_set_font($pdf, $font, $fs, 'winansi');	
+
+	$cw = pdf_stringwidth($pdf,'m');
+	$linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
+
+	$pos = $i = 0;
+	$len = strlen($data);
+
+	pdf_set_text_pos($pdf, $lm, $tm);
+	
+	$np = true;
+	while($pos < $len) {
+		$nl = strpos(substr($data,$pos),"\n");
+		if($nl===0) {
+			if($np) { pdf_show($pdf, ""); $np = false; }
+			else pdf_continue_text($pdf, "");
+			$pos++;
+			continue;
+		}
+		if($nl!==false) $ln = substr($data,$pos,$nl);
+		else { 
+			$ln = substr($data,$pos);
+			$nl = $len-$pos;
+		}
+		if($nl>$linelen) { // Line needs to be wrapped
+			$ln = wordwrap($ln,$linelen);
+			$out = explode("\n", $ln);
+		} else {
+			$out = array($ln);	
+		}
+		foreach($out as $l) {
+			if($np) { pdf_show($pdf, $l); $np = false; }
+			else pdf_continue_text($pdf, $l);
+		}
+		$pos += $nl+1;
+		if(pdf_get_value($pdf, "texty") >= ($y-$bm)) {
+			my_pdf_page_number($pdf);
+			pdf_end_page($pdf);
+			my_new_pdf_page($pdf, $x, $y);
+
+			pdf_set_font($pdf, $font, $fs, 'winansi');	
+			pdf_set_text_pos($pdf, $lm, 60);
+			$np = true;
+		}
+		
+	}
+}
+// }}}
 // }}}
 
 	// {{{ Presentation List Classes
@@ -601,9 +667,17 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					$align = "justify";
 					break;
 			}
-			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
-			$height=10;	
-			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')) $height+=10;
+
+			pdf_save($pdf);
+			pdf_translate($pdf,0,$pdf_y);
+			pdf_scale($pdf,1,-1);
+			pdf_set_font($pdf, $pdf_font , 12, 'winansi');
+			$leading = pdf_get_value($pdf, "leading");
+			$height = $inc = 12+$leading;	
+
+			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_y-$pdf_cy, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')!=0) $height+=$inc;
+
+			pdf_restore($pdf);
 
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				my_pdf_page_number($pdf);
