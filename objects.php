@@ -198,14 +198,15 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 					echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\"></a>";
 					$offset+=2;
 				}
+				echo "<div align=\"center\" style=\"font-size: $this->titleSize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $this->titleColor;\">$this->title</a></div>";
+				echo "<div style=\"font-size: $navsize; float: right; margin: -2em 0 0 0;\">";
 				if(!empty($this->logo2)) $logo2 = $this->logo2;
 				else $logo2 = $pres[1]->logo2;
 				if (!empty($logo2)) {
-					echo "<img src=\"$logo2\" align=\"right\" style=\"float: right;\">";
+					echo "<img src=\"$logo2\" border=\"0\"><br/>";
 					$offset-=2;
 				}
-				echo "<div align=\"center\" style=\"font-size: $this->titleSize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $this->titleColor;\">$this->title</a></div>";
-				echo "<div style=\"font-size: $navsize; float: right; margin: -2em 0 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,width=300,height=$winH,left=".($winW-300).",top=0'); return false\">".($slideNum+1)."/".($maxSlideNum+1)."</a></div>";
+				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,width=300,height=$winH,left=".($winW-300).",top=0'); return false\">".($slideNum+1)."/".($maxSlideNum+1)."</a></div>";
 				if ($pres[1]->navbartopiclinks) {
 					echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $this->navColor;\">$prevTitle</a></div>";
 					echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none; color: $this->navColor;\">$nextTitle</a></div>";
