@@ -33,7 +33,7 @@
 	@list($currentPres,$slideNum) = explode('/',$presFile);
 	if(!$slideNum) $slideNum = 0;
 	if($slideNum<0) $slideNum = 0;
-	if(!$titlesLoaded) $titlesLoaded = 0;
+	if(!isset($titlesLoaded)) $titlesLoaded = 0;
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
