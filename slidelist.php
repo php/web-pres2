@@ -21,18 +21,17 @@ window.opener.location=url
 	$lastSection = $lastChapter = '';
 
 	foreach($_SESSION['titles'] as $k=>$v) {
+        $spacer = '';
 		if(!empty($v['section'])) {
 			$spacer = "&nbsp;&nbsp;&nbsp;&nbsp;";
 			if($v['section'] != $lastSection) {
 				echo "<tr><th colspan=2 align=left><font size=+2>$v[section]</font></th></tr>\n";
 			}
-		} else {
-			$spacer = '';
-		}
+		} 
 		if(!empty($v['chapter'])) {
+            $spacer .= "&nbsp;&nbsp;&nbsp;&nbsp;";
 			if($v['chapter'] != $lastChapter) {
 				echo "<tr><th colspan=2 align=left>$spacer$v[chapter]</th></tr>\n";
-				$spacer .= "&nbsp;&nbsp;&nbsp;&nbsp;";
 			}
 		} 
 		$lastSection = isset($v['section']) ? $v['section'] : '';
