@@ -44,14 +44,40 @@
 </head>
 <body>
 TOP;
-	echo "<h1>Available Presentations</h1>\n";
-	echo "<table><tr><th>ID</th><th>Title</th><th>Date</th><th>Location</th><th>Speaker</th><th>Slides</th></tr>\n";
+?>
+<div align="center"><font face="arial"><h1>Available Presentations</h1></font></div>
+<table align="center" border="0" cellpadding="1" cellspacing="0" valign="top" width="95%">
+	<tr>
+
+		<td bgcolor="#000000">
+			<table border="0" cellpadding="3" cellspacing="1" width="100%">
+				<tr bgcolor="#ccccff">
+					<th align="center" width="10%"><font face="arial" size="3">ID</font></th>
+					<th align="center" width="25%"><font face="arial" size="3">Title</font></th>
+					<th align="center" width="15%"><font face="arial" size="3">Date</font></th>
+
+					<th align="center" width="20%"><font face="arial" size="3">Location</font></th>
+					<th align="center" width="20%"><font face="arial" size="3">Speaker</font></th>
+					<th align="center" width="10%"><font face="arial" size="3">Slides</font></th>
+				</tr>
+<?
 	foreach($date as $i=>$date) {
 		echo <<<ROW
-  <tr><th align="left"><a href="$showScript/$i">$i</a></th><td>$title[$i]</td><td>$date</td><td>$location[$i]</td><td>$speaker[$i]</td><td align="right">$slidecount[$i]</td></tr>
+				<tr bgcolor="#ffffff">
+					<td align="left"><font face="arial" size="3"><b><a href="$showScript/$i">$i</a></b></font></td>
+					<td align="center"><font face="arial" size="3">$title[$i]</font></td>
+					<td align="center"><font face="arial" size="3">$date</font></td>
+					<td align="center"><font face="arial" size="3">$location[$i]</font></td>
+					<td align="center"><font face="arial" size="3">$speaker[$i]</font></td>
+					<td align="center"><font face="arial" size="3">$slidecount[$i]</font></td>
+				</tr>
+
 ROW;
 	}
-	echo "</table>\n";
 ?>
+			</table>
+		</td>
+	</tr>
+</table>
 </body>
 </html>
