@@ -186,7 +186,9 @@ function my_pdf_page_number($pdf) {
 					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
 				if(!empty($p->copyright)) {
 					for($i=10; $i>$parts; $i--) echo "<br />\n";
-					echo "<div align\=\"center\" style=\"font-size: 1em\">$p->copyright</div>\n";
+					$str = str_replace('(c)','&copy;',$p->copyright);
+					$str = str_replace('(R)','&reg;',$str);
+					echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
 				}	
 			}
 		}
@@ -274,7 +276,9 @@ function my_pdf_page_number($pdf) {
 					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
 				if(!empty($p->copyright)) {
 					for($i=10; $i>$parts; $i--) echo "<br />\n";
-					echo "<div align\=\"center\" style=\"font-size: 1em\">$p->copyright</div>\n";
+					$str = str_replace('(c)','&copy;',$p->copyright);
+					$str = str_replace('(R)','&reg;',$str);
+					echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
 				}	
 				
 			}
@@ -335,7 +339,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
 				if(!empty($p->copyright)) {
 					for($i=10; $i>$parts; $i--) echo "<br />\n";
-					echo "<div align\=\"center\" style=\"font-size: 1em\">$p->copyright</div>\n";
+					$str = str_replace('(c)','&copy;',$p->copyright);
+					$str = str_replace('(R)','&reg;',$str);
+					echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
 				}	
 				
 			}
@@ -412,7 +418,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					pdf_stroke($pdf);
 					pdf_set_font($pdf, $pdf_font , -10, 'winansi');
 					$x = (int)($pdf_x/2 - pdf_stringwidth($pdf, $p->copyright)/2);
-					pdf_show_xy($pdf, $p->copyright, $x, $pdf_y-45);
+					$str = str_replace('(c)',chr(0xa9), $p->copyright);
+					$str = str_replace('(R)',chr(0xae), $str);
+					pdf_show_xy($pdf, $str, $x, $pdf_y-45);
 				}
 				$page_index[$page_number] = 'titlepage';
 			} else { // No header on the title page
