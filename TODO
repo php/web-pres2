@@ -1,0 +1,31 @@
+Things to work on
+
+- Make the presentation listing page in index.php pretty.  Perhaps
+  add (+) buttons out in front of each one, and when clicked you 
+  would get a list of slides inside that presentation?
+
+- Stupid IE does not support fixed positioned div elements
+  Emulate it using Javascript.
+  See: http://javascriptkit.com/javatutors/static3.shtml
+  Or perhaps stick the navbar in a frame on IE.  Note though that
+  IE on the Mac does support fixed positioned div elements.
+
+- This thing probably needs a name
+
+- We need a way to print presentations nicely.  This might be done through
+  a conversion to Docbook-XML and then use all the existing tools to print
+  from there.  Or perhaps some other converter.  Basically, I figure, it 
+  would just be another set of rendering methods in objects.php
+
+- Calling all ming hackers - help us with some cool transitions for the navbar
+  and also the various individual slide components if people choose to use
+  the flash version.
+
+- We also need to pretty up the navbar flash widget.  All sorts of slick
+  things could be done in this thing.
+
+- A cooler help page would be nice.
+
+- a pop-up list of slide titles would be good so at any time during a
+  presentation you could get the list and navigate to any slide by 
+  clicking somewhere on the list.
