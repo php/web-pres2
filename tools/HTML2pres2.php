@@ -17,7 +17,7 @@ $exec = "tidy -asxml $f";
 $data = `$exec`;
 /* for debugging - just show it ! */ 
  $tree = new XML_Tree;
-   $tree ->getTreeFromString($data);
+   $tree->getTreeFromString($data);
    $tree->dump();
 
 class SDX_Parser {
@@ -127,7 +127,7 @@ class SDX_Parser {
     
     function _endElement($parser, $element) {
         $cdata     = $this->_cdataStack[$this->_level];
-        //echo "E:{$this->_level}:$element\n";
+         echo "E:{$this->_level}:$element:$cdata\n";
         if (method_exists($this, $element.'End')) {
         
             $this->flushBlurb();
@@ -198,7 +198,13 @@ class SDX_Parser {
             $s  = strpos($line, ' ');
             $left = substr($line,0,$s);
             $right = substr($line,$s+1);
-            $this->$left  = $right;
+            if (!$this->$left) {
+                $this->$left = '';
+            } else {
+                $this->$left .= ' ';
+            }
+            
+            $this->$left .= $right;
         }
         
     }
