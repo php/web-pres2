@@ -857,6 +857,11 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->$mode();
 		}
 	
+		function _highlight_none($fn) {
+			$data = file_get_contents($fn);
+			echo '<pre>' . htmlspecialchars($data) . "</pre>\n";
+		}
+	
 		// {{{ highlight()	
 		function highlight() {
 			global $slideDir;
@@ -873,30 +878,46 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					case 'system':
 						highlight_file($_html_filename);
 						break;
-					case 'shell':
-						$_html_file = file_get_contents($_html_filename);
-						echo '<pre>'.htmlspecialchars($_html_file)."</pre>\n";
-						break;
 					case 'c':
-						print `cat {$_html_filename} | c2html -cs`;
+						$prog = trim(`which c2html`);
+						if (!empty($prog)) {
+							print `cat {$_html_filename} | $prog -cs`;
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
 						break;
 					case 'perl':
-						print `cat {$_html_filename} | perl2html -cs`;
+						$prog = trim(`which perl2html`);
+						if (!empty($prog)) {
+							print `cat {$_html_filename} | $prog -cs`;
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
 						break;
 					case 'java':
-						print `cat {$_html_filename} | java2html -cs`;
+						$prog = trim(`which java2html`);
+						if (!empty($prog)) {
+							print `cat {$_html_filename} | java2html -cs`;
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
 						break;
 					case 'python':
-						print `py2html -stdout -format:rawhtml $_html_filename`;
+						$prog = trim(`which py2html`);
+						if (!empty($prog)) {
+							print `$prog -stdout -format:rawhtml $_html_filename`;
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
 						break;
 					case 'html':
 						$_html_file = file_get_contents($_html_filename);
 						echo $_html_file."\n";
 						break;
-							
+					
+					case 'shell':
 					default:
-						$_html_file = file_get_contents($_html_filename);
-						echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
+						$this->_highlight_none($_html_filename);
 						break;
 				}
 			} else {
