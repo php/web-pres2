@@ -211,7 +211,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						highlight_file($this->filename);
 						break;
 					default:
-						readfile($this->filename);
+						$file = file_get_contents($this->filename);
+						echo "<pre>".htmlspecialchars($file)."</pre>\n";
 						break;
 				}
 			} else {
@@ -220,7 +221,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						highlight_string($this->text);
 						break;
 					default:
-						echo $this->text;
+						echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
 						break;
 				}
 			}
