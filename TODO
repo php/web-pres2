@@ -1,11 +1,5 @@
 Things to work on
 
-- Stupid IE does not support fixed positioned div elements
-  Emulate it using Javascript.
-  See: http://javascriptkit.com/javatutors/static3.shtml
-  Or perhaps stick the navbar in a frame on IE.  Note though that
-  IE on the Mac does support fixed positioned div elements.
-
 - This thing probably needs a name
 
 - Calling all ming hackers - help us with some cool transitions for the navbar
