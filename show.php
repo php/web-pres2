@@ -167,10 +167,12 @@ p,li {
 	while(list($coid,$obj) = each($objs)) {
 		$obj->display();
 	}
-	echo "<pre>";
+	/*
+	echo "<pre>DEBUG";
 	print_r($pres);
 	print_r($objs);
 	echo "</pre>";
+	*/
 ?>
 </body>
 </html>
