@@ -241,6 +241,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->linktext = "Result";
 			$this->iwidth = '100%';
 			$this->iheight = '80%';
+			$this->localhost = false;
 		}
 
 		function display() {
@@ -289,6 +290,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						case 'link':
 						case 'embed':
 						case 'flash':
+						case 'system':
 							highlight_file($_html_filename);
 							break;
 						case 'shell':
@@ -374,6 +376,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
 type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight>\n";
 							break;
+						case 'system':
+							system("DISPLAY=localhost:0 $this->filename");
+							break;	
 						default:
 							include $_html_filename;
 							break;
