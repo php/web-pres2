@@ -14,17 +14,39 @@ $data = `$exec`;
  // $tree->dump();
 
 class SDX_Parser {
+    var $outputDir = '';
+
     function start($data) {
         $this->transform($data);
+        // make the subdirectories?
+        
+            
+        
         $fh = fopen ('slides.xml','w');
         fwrite($fh,$this->slideInfo);
         foreach($this->files as $f) {
-            fwrite($fh,"<slide>slides/gtk_design_strategies/{$f}</slide>\n");
+            fwrite($fh,"<slide>{$this->outputDir}/{$f}</slide>\n");
         }
         fwrite($fh,'</presentation>');
         fclose($fh);
         
     }
+    
+    function makeOutputDir() {
+        if (file_exists($this->outputDir)) {
+            return;
+        }
+        $parts= explode('/',$this->outputDir);
+        $dir ='';
+        foreach($parts as $dir) {
+            $fulldir .= $dir;
+            if (!file_exists($fulldir)) {
+                mkdir($fulldir);
+            }
+            $fulldir .= '/';
+        }
+    }
+    
     var $_caseFolding  = TRUE;
     function transform($xml) {
         // Don't process input when it contains no XML elements.
@@ -99,7 +121,7 @@ class SDX_Parser {
         $this->_cdataStack[$this->_level] .= $cdata;
     }
     
-     function bodyStart($a) {
+    function bodyStart($a) {
         echo "--START--\n";
 
         //echo "GOT BODY! $a";
@@ -114,12 +136,7 @@ class SDX_Parser {
     }
     function hrEnd($a) {  }
     
-    function h1Start($a) {
-        //print_r($a); 
-       
-
-
-    }
+    
     var $files = array();
     function h1End($a) {  
         if ($this->fh) {
@@ -127,14 +144,24 @@ class SDX_Parser {
         }
         $filename= preg_replace('/[^a-z0-9]+/i','_',$a) . '.xml';
         $this->files[] = $filename;
-        $this->fh = fopen($filename,'w');
+        $this->makeOutputDir();
+        $this->fh = fopen($this->outputDir.'/'.$filename,'w');
         
         $this->add('<?xml version="1.0" encoding="ISO-8859-1"?>');
         $this->add('<slide>');
         $this->add('<title>'.$a.'</title>',TRUE);
         $this->fontsize =0;
     }
-    
+    function h5End($a) {  // compiler settings
+        $parts = explode("\n",$a);
+        foreach($parts as $line) {
+            $s  = strpos($line, ' ');
+            $left = substr($line,0,$s);
+            $right = substr($line,$s+1);
+            $this->$left  = $right;
+        }
+        
+    }
     
     
     function pStart($a) {
@@ -189,19 +216,25 @@ class SDX_Parser {
     function imgStart($a){ 
         //print_r($a);
         // scale the image !
-        print_r($a);
-        preg_match('/width: ([0-9]+)px; height: ([0-9]+)px/i', $a['STYLE'],$ar);
-        print_r($ar);
-        $it = Image_Transform::factory('GD');
-        list($filename,$ext) = explode('.',$a['SRC']);
-        $it->load( getenv('PWD').'/'.$a['SRC'] );
-        print_r($it);
-        $it->scaleMaxX( $ar[1]);
+        
+        if ($a['STYLE']) {
+            //print_r($a);
+            preg_match('/width: ([0-9]+)px; height: ([0-9]+)px/i', $a['STYLE'],$ar);
+            print_r($ar);
+            $it = Image_Transform::factory('GD');
+            list($filename,$ext) = explode('.',$a['SRC']);
+            $it->load( getenv('PWD'). '/'.$a['SRC'] );
+            print_r($it);
+            $it->scaleMaxX( $ar[1]); 
+            $newfilename = $filename . '_'.$ar[1] .'.'. $ext;
+            $it->save(getenv('PWD').'/'.$this->outputDir .'/'.$newfilename);
+        } else {
+            copy( getenv('PWD'). '/'.$a['SRC'], getenv('PWD').'/'.$this->outputDir .'/'.$a['SRC']);
+            $newfilename = $a['SRC'];
+        }
         
         
-        
-        $newfilename = $filename . '_'.$ar[1] .'.'. $ext;
-        $it->save(getenv('PWD').'/'.$newfilename);
+       
         $this->add(' <image align="center" scale="30%" filename="'. $newfilename.'" />',TRUE);
     }
      
