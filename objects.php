@@ -89,10 +89,10 @@ function getFlashDimensions($font,$title,$size) {
 				else $logo1 = $pres[1]->logo1;
 				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
 				else $logo1url = $pres[1]->logoimage1url;				
-				echo "<a href='$logo1url'><img src='$logo1' border='0' align='left' style='float: left;'></a>";
+				if(!empty($logo1)) echo "<a href='$logo1url'><img src='$logo1' border='0' align='left' style='float: left;'></a>";
 				if(!empty($this->logo2)) $logo2 = $this->logo2;
 				else $logo2 = $pres[1]->logo2;
-				if ($logo2) {
+				if (!empty($logo2)) {
 					echo "<img src='$logo2' align='right' style='float: right;'>";
 				}
 				echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum' style='text-decoration: none; color: $this->titleColor;'>$this->title</a></div>";
