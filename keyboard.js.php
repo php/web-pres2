@@ -41,6 +41,10 @@ var effects = [];
 var currentEffect = 0;
 
 onload = function() {
+	<?if(!isset($_COOKIE['dims'])) {?>
+	get_dims();
+	<? } ?>
+
 	// make banner sticky on old Windows IEs
 	<?php 
 	if (!$css_supports_fixed) {

@@ -6,7 +6,7 @@
  function is called if we don't have the dimensions already, or on a
  resize event to fetch the new window dimensions.
 */?>
-<script language="JavaScript1.2" defer="defer">
+<script language="JavaScript" defer="defer">
 <!--
 function get_dims() {
     var winW = 1024;
@@ -16,14 +16,11 @@ function get_dims() {
         winW = window.innerWidth;
         winH = window.innerHeight;
     } else if (document.all) {
-        winW = document.body.clientWidth;
-        winH = document.body.clientHeight;
+	        winW = document.body.clientWidth;
+	        winH = document.body.clientHeight;
     }
     document.cookie="dims="+winW+"_"+winH;
-    top.location=top.location.href;
+    location.reload(false);
 }
-<?if(!isset($_COOKIE['dims'])) {?>
-get_dims();
-<? } ?>
 //-->
 </script>
