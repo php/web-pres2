@@ -213,7 +213,7 @@ function strip_markups($str) {
 			}
 			switch($pres[1]->template) {
 				default:
-				echo "<div class=\"sticky\" align=\"this->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
+				echo "<div class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
 				$offset=0;
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
