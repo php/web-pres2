@@ -1065,6 +1065,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				'html' => 'html',
 				'sql' => 'sql',
 				'java' => 'java',
+				'xml' => 'xml',
 				'c' => 'c'
 			);
 
@@ -1072,7 +1073,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 				if ($this->type == 'php') {
 					$p = pathinfo($this->filename);
-					$this->type = $temap[$p['extension']];
+					$this->type = @$temap[$p['extension']];
 				}
 				switch($this->type) {
 					case 'php':
@@ -1141,6 +1142,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						break;
 					
 					case 'shell':
+					case 'xml':
 					default:
 						$this->_highlight_none($_html_filename);
 						break;
