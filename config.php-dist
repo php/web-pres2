@@ -1,5 +1,7 @@
 <?php
-	$presentationDir = 'presentations';
+    include 'compat.php';
+    
+    $presentationDir = 'presentations';
 	$baseDir = '/';
 	$showScript = 'show.php';  // In case you want to ForceType a shorter one
 	$helpPage = 'help.php';
