@@ -36,7 +36,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->navbarbackground = 'url(trans.png) transparent fixed';
 			$this->navbartopiclinks = true;
 			$this->examplebackground = '#cccccc';
-			$this->outputbackground = '#ffff33';
+			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
 		}
