@@ -107,6 +107,21 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 }
 // }}}
 
+/* {{{ string markup_text($str)
+    *word*        Bold
+    _word_        underline
+    %word%        monospaced word (ie. %function()%)
+    |rrggbb|word| Colour a word
+*/
+function markup_text($str) {
+	$ret = preg_replace('/\*(\S+?)\*/','<strong>\1</strong>',$str);
+	$ret = preg_replace('/_(\S+?)_/','<u>\1</u>',$ret);
+	$ret = preg_replace('/%(\S+?)%/','<tt>\1</tt>',$ret);
+	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
+	return $ret;
+}
+// }}}
+
 // }}}
 
 	// {{{ Presentation List Classes
@@ -552,19 +567,19 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 
 		function html() {
 			if(!empty($this->title)) {
-				echo "<div align=\"$this->talign\" style=\"font-size: $this->fontsize; color: $this->titlecolor\">$this->title</div>\n";
+				echo "<div align=\"$this->talign\" style=\"font-size: $this->fontsize; color: $this->titlecolor\">".markup_text($this->title)."</div>\n";
 			}
 			if(!empty($this->text)) {
-				echo "<div align=\"$this->align\" style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$this->text</div><br />\n";
+				echo "<div align=\"$this->align\" style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">".markup_text($this->text)."</div><br />\n";
 			}
 		}
 
 		function plainhtml() {
 			if(!empty($this->title)) {
-				echo "<h1 align=\"$this->talign\"><font color=\"$this->titlecolor\">$this->title</font></h1>\n";
+				echo "<h1 align=\"$this->talign\"><font color=\"$this->titlecolor\">".markup_text($this->title)."</font></h1>\n";
 			}
 			if(!empty($this->text)) {
-				echo "<p align=\"$this->align\"><font color=\"$this->textcolor\">$this->text</font></p>\n";
+				echo "<p align=\"$this->align\"><font color=\"$this->textcolor\">".markup_text($this->text)."</font></p>\n";
 			}
 		}
 
@@ -657,7 +672,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
-			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
+			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
 			$size = getimagesize($this->filename);
 ?>
 <div align="<?=$this->align?>"
@@ -669,7 +684,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function plainhtml() {
-			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
+			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
 			$size = getimagesize($this->filename);
 ?>
 <div align="<?=$this->align?>"
@@ -859,7 +874,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				$$_html_key = $_html_val;
 			}
 
-			if(isset($this->title)) echo '<div style="font-size: '.(4*(float)$this->fontsize/3).'em;">'.$this->title."</div>\n";
+			if(isset($this->title)) echo '<div style="font-size: '.(4*(float)$this->fontsize/3).'em;">'.markup_text($this->title)."</div>\n";
 			if(!$this->hide) {
 				$_html_sz = (float) $this->fontsize;
 				if(!$_html_sz) $_html_sz = 0.1;
@@ -958,7 +973,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$$_html_key = $_html_val;
 			}
 
-			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
+			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
 			if(!$this->hide) {
 				if(!empty($pres[1]->examplebackground)) $_html_examplebackground = $pres[1]->examplebackground;
 				if(!empty($objs[1]->examplebackground)) $_html_examplebackground = $objs[1]->examplebackground;
@@ -1153,7 +1168,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		function html() {
 			if(isset($this->title)) {
 				if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
-				echo "<div $style>".$this->title."</div>\n";
+				echo "<div $style>".markup_text($this->title)."</div>\n";
 			}
 			echo '<ul>';
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
@@ -1161,7 +1176,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function plainhtml() {
-			if(isset($this->title)) echo "<h1>$this->title</h1>\n";
+			if(isset($this->title)) echo "<h1>".markup_text($this->title)."</h1>\n";
 			echo '<ul>';
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
 			echo '</ul>';
@@ -1225,14 +1240,14 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			    // we put the slide info in as an attribute so js can get it
 			    echo "<div id='$this->id' slide='true' style='position:relative;'>";
 			}
-			echo "<li style=\"$style\">".$this->text."</li>\n";
+			echo "<li style=\"$style\">".markup_text($this->text)."</li>\n";
 			if ($this->slide) {
 			    echo "</div>";
 			}
 		}
 
 		function plainhtml() {
-			echo "<li>".$this->text."</li>\n";
+			echo "<li>".markup_text($this->text)."</li>\n";
 		}
 
 		function flash() {
@@ -1410,11 +1425,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->bold) && $this->bold) $style .= 'font-weight: bold;';
 			else if(!empty($objs[$coid]->bold) && $objs[$coid]->bold) $style .= 'font-weight: bold;';
 
-			echo "<span style=\"$style\">".$this->text."</span>\n";
+			echo "<span style=\"$style\">".markup_text($this->text)."</span>\n";
 		}
 
 		function plainhtml() {
-			echo $this->text."\n";
+			echo markup_text($this->text)."\n";
 		}
 
 		function flash() {
