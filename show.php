@@ -216,6 +216,7 @@ function get_all_titles($pres) {
 		$r->parse();
 
 		$objs = $r->getObjects();
+		if(!$objs) continue;
 		$titles[$slideNum]['title'] = $objs[1]->title;
 		if(!empty($pres->slides[$slideNum]->Section)) {
 			$titles[$slideNum]['section'] = $pres->slides[$slideNum]->Section;
