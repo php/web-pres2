@@ -166,6 +166,7 @@ function strip_markups($str) {
 
 		function _slide() {
 			$this->title = 'No Title Text for this slide yet';
+			$this->subtitle = '';
 			$this->titleSize  = "3em";
 			$this->titleColor = '#ffffff';
 			$this->navcolor = '#EFEF52';
@@ -325,13 +326,22 @@ function strip_markups($str) {
 							$this->_highlight_none($_html_filename);
 						}
 						break;
+					case 'xml':
+						$prog = trim(`which code2html`);
+						if (!empty($prog)) {
+							print "<pre>";
+							print `$prog --no-header -lhtml $_html_filename`;
+							print "</pre>";
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
+						break;
 					case 'html':
 						$_html_file = file_get_contents($_html_filename);
 						echo $_html_file."\n";
 						break;
 					
 					case 'shell':
-					case 'xml':
 					default:
 						$this->_highlight_none($_html_filename);
 						break;
@@ -359,6 +369,18 @@ function strip_markups($str) {
 					case 'c':
 					    $text = str_replace('"', '\\"', $this->text);
 						print `echo "{$text}" | c2html -cs`;
+						break;
+					case 'xml':
+
+						$prog = trim(`which code2html`);
+						if (!empty($prog)) {
+						    $text = str_replace('"', '\\"', $this->text);
+							echo "<pre>\n";
+							print `echo "{$text}" | code2html -lhtml --no-header`;
+							echo "</pre>";
+						} else {
+							echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
+						}
 						break;
 
 					default:

@@ -194,6 +194,11 @@ FOOTER;
 <div align='center' class='navbar_title'><a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}{$this->showScript}/$currentPres/{$this->slideNum}' style='navbar_title_a'>
 ENDT;
             echo $slide->title."</a></div>";
+			if (isset($slide->subtitle)) {
+				echo <<<ENDST
+<div class="subtitle">{$slide->subtitle}</div>
+ENDST;
+			}
             echo "<div class='navbar_nr'>";
             echo <<<ENDD
 <a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php' class='navbar-title' onClick="window.open('http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=10,top=0'); return false">{$this->slideNum}/{$this->maxSlideNum}</a></div>
