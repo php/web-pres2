@@ -1171,6 +1171,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->fontsize    = '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
+			$this->num = 1;
+			$this->alpha = 'a';
 		}
 
 		function display() {
@@ -1246,6 +1248,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			global $objs, $coid;
 
 			$style='';
+			$type='';
 			$ml = $this->level;
 
 			if(!empty($this->marginleft)) $ml += (float)$this->marginleft;
@@ -1254,6 +1257,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if($ml) {
 				$style .= "margin-left: ".$ml."em;";
 			}
+
+			if(!empty($this->type)) $type = $this->type;
+			else if(!empty($objs[$coid]->type)) $type = $objs[$coid]->type;
 
 			if(!empty($this->fontsize)) $style .= "font-size: ".$this->fontsize.';';
 			else if(!empty($objs[$coid]->fontsize)) $style .= "font-size: ".(2*(float)$objs[$coid]->fontsize/3).'em;';
@@ -1268,26 +1274,50 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			    // we put the slide info in as an attribute so js can get it
 			    echo "<div id='$this->id' effect='$this->effect' style='position:relative;'>";
 			} 
-			if ($this->type) {
-				switch($this->type) {
+			switch($type) {
 				case 'numbered':
 				case 'number':
 				case 'decimal':
-					$style .= 'list-style-type: decimal';
+					$bullet = $objs[$coid]->num++;
 					break;
 				case 'no-bullet':
 				case 'none':
-					$style .= 'list-style-type: none';
 					break;
 				case 'alpha':
-					$style .= 'list-style-type: upper-alpha';
+					$bullet = $objs[$coid]->alpha++;
 					break;
-				case 'square':	
-					$style .= 'list-style-type: square';
+				case 'arrow':
+					$bullet = '&rarr;';
 					break;
-				}
+				case 'darrow':
+					$bullet = '&rArr;';
+					break;
+				case 'oplus':
+					$bullet = '&oplus;';
+					break;
+				case 'otimes':
+					$bullet = '&otimes;';
+					break;
+				case 'spades':
+					$bullet = '&spades;';
+					break;
+				case 'clubs':
+					$bullet = '&clubs;';
+					break;
+				case 'hearts':
+					$bullet = '&hearts;';
+					break;
+				case 'diams':
+					$bullet = '&diams;';
+					break;
+				default:
+					$bullet = '&bull;';
+					break;
 			}
-			echo "<li style=\"$style\">".markup_text($this->text)."</li>\n";
+
+			$style .= 'list-style-type: none; position: relative;';
+
+			echo "<li style=\"$style\">".'<tt>'.$bullet.'</tt> '.markup_text($this->text)."</li>\n";
 			if ($this->effect) {
 			    echo "</div>";
 			}

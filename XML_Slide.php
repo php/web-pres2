@@ -131,11 +131,17 @@ class XML_Slide extends XML_Parser
 
             /* Special case for array properties */
             case 'BULLET':
+			case 'ITEM':
+			case 'NUM':
+			case 'LI':
                 $this->objects[$this->coid]->bullets[] = new _bullet();
                 $idx = count($this->objects[$this->coid]->bullets) - 1;
                 $this->_add_attribs($this->objects[$this->coid]->bullets[$idx], $attribs);
 				$this->objects[$this->coid]->bullets[$idx]->level = $this->level;
-                $this->activeTag = $element;
+				if($element=='NUM') {
+					$this->objects[$this->coid]->bullets[$idx]->type = 'number';
+				}
+                $this->activeTag = 'BULLET'; 
 				$this->level++;
                 break; 
 			case 'CELL':
@@ -186,6 +192,9 @@ class XML_Slide extends XML_Parser
                 $this->coid = array_pop($this->stack);
                 break;
 			case 'BULLET':
+			case 'ITEM':
+			case 'NUM':
+			case 'LI':
 				$this->level--;
 				break;
         }
