@@ -57,6 +57,7 @@
 		if(isset($pres[1]->topic)) {
 			$pr[$i]['topic'] = $pres[1]->topic;
 			if(!empty($pres[1]->topic)){
+				if(!isset($topics[$pres[1]->topic]['count'])) $topics[$pres[1]->topic]['count'] = 0;
 				$topics[$pres[1]->topic]['count']++;
 			}
 		} else $pr[$i]['topic'] = '&nbsp;';

@@ -512,6 +512,8 @@ TITLEPAGE;
 			$pdf_cy = pdf_get_value($pdf, "texty")-5;
 
 			list($dx,$dy,$type) = getimagesize($this->filename);
+			$dx = $pdf_x*$dx/1024;
+			$dy = $pdf_x*$dy/1024;
 
 			switch($type) {
 				case 1:
@@ -543,8 +545,10 @@ TITLEPAGE;
 				}
 				pdf_save($pdf);
 				pdf_translate($pdf,0,$pdf_y);
+
+				$scale = $pdf_x/1024;
 				pdf_scale($pdf,1,-1);
-				pdf_place_image($pdf, $im, $x, $pdf_y-$pdf_cy-$dy, 1.0);
+				pdf_place_image($pdf, $im, $x, ($pdf_y-$pdf_cy-$dy), $scale);
 				pdf_restore($pdf);
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy+$dy);
 			}		

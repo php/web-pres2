@@ -24,8 +24,7 @@
 	if($slideNum<0) $slideNum = 0;
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
-?>
-<?
+
 	if(isset($dims)) {
 		list($winW, $winH) = explode('_',$dims);
 	}
