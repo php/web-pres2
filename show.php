@@ -77,6 +77,9 @@
 	else if(isset($pres[1]->navmode)) $navmode = $pres[1]->navmode;
 	else $navmode = 'html';
 
+	// Override with user-selected display mode
+	if(isset($selected_display_mode)) $navmode = $selected_display_mode;
+
 	switch($navmode) {
 		case 'html':
 		case 'flash':

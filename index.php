@@ -1,26 +1,36 @@
 <?php
-        if(strlen($PATH_INFO)) {
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: sw=4 ts=4 fdm=marker
+ * vim<600: sw=4 ts=4
+ */
+	if(strlen($PATH_INFO)) {
 	  $topic = trim(substr($PATH_INFO,1));
 	}
 
-        require_once 'config.php';
+	require_once 'config.php';
 	require_once 'XML_Presentation.php';
 
-        session_start();
+	session_start();
+	session_register('selected_display_mode');
+	
 	$topics = array();
 
 	$dir = opendir($presentationDir);
-	 while($file = readdir($dir)) {
+	while($file = readdir($dir)) {
 		if($file[0] != '.' && substr($file,-4) == '.xml') {
 			$i = substr($file, 0, strpos($file, '.'));
 			$ps[$i] = "$presentationDir/$file";
-		 }
-	 }
-	 closedir($dir);
+		}
+	}
+	closedir($dir);
 
-		$i = 0;
+	$i = 0;
 		
-		foreach($ps as $pres_id=>$filename) {
+	foreach($ps as $pres_id=>$filename) {
 
 		$p = &new XML_Presentation($filename);
 		$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
@@ -51,18 +61,18 @@
 			}
 		} else $pr[$i]['topic'] = '&nbsp;';
 
-		 if(isset($pres[1]->location)) {
-			 $pr[$i]['location'] = $pres[1]->location;
-		 } else $pr[$i]['location'] = '&nbsp;';
-		 $i++;
+		if(isset($pres[1]->location)) {
+			$pr[$i]['location'] = $pres[1]->location;
+		} else $pr[$i]['location'] = '&nbsp;';
+		$i++;
 	}
 	unset($pres);
 
 	// default options for the file..
-        $p = &new XML_Presentation("index.xml");
-        $p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");        
-        $p->parse();        
-        $pres = $p->getObjects();   
+	$p = &new XML_Presentation("index.xml");
+	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");        
+	$p->parse();        
+	$pres = $p->getObjects();   
 ?>
 
 <html>
@@ -70,25 +80,32 @@
 <base href="<?="http://$HTTP_HOST".$baseDir?>">
 <title>PHP Presents</title>
 <?php include("css.php"); ?>
+<script language="JavaScript1.2">
+<!--
+function change_mode() {
+	document.cookie="display_mode="+document.modes_form.modes.value;	
+	top.location=top.location.href;
+}
+-->
+</script>
 </head>
 <body>
 <?php
 
- echo "<div class='sticky' align='$this->titleAlign' style='width: 100%;'><div class='navbar'>";
+	echo "<div class='sticky' align='$this->titleAlign' style='width: 100%;'><div class='navbar'>";
 
-   $logo1 = $pres[1]->logo1;
-
- echo "<img src='$logo1' align='left' style='float: left;'>";
+	$logo1 = $pres[1]->logo1;
+	echo "<img src='$logo1' align='left' style='float: left;'>";
  
-   $logo2 = $pres[1]->logo2;
+	$logo2 = $pres[1]->logo2;
 
- if ($logo2) {
-   echo "<img src='$logo2' align='right' style='float: right;'>";
- }
+	if ($logo2) {
+		echo "<img src='$logo2' align='right' style='float: right;'>";
+	}
  
- echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'>$this->title</div>";
+	echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'>$this->title</div>";
 
- echo '</div></div>';
+	echo '</div></div>';
 ?>
 <br /><br /><br /><br /><br /><br />
 <div class="shadow" style="margin: 1em 4em 0.8em 3em;">
@@ -100,12 +117,22 @@ within this system.</p>
 Simply click the topic you wish to find presentations on to view all available presentations.
 </p>
 <?php 
-foreach($topics as $i => $topic) {
-	print('<p><a href="' . $baseDir . 'index.php/' . $i . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
-}
+	foreach($topics as $i => $topic) {
+		print('<p><a href="' . $baseDir . 'index.php/' . $i . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
+	}
 
 } else {
+	if(empty($display_mode)) $display_mode = 'html';
+	$selected_display_mode = $display_mode;
 ?>
+<form name="modes_form" action="<?=$PHP_SELF?>" method="POST">
+<p>Please select a display mode:
+<select name="modes" onChange="change_mode()">
+<option value="html" <?=($display_mode=='html')?'SELECTED':''?>>Fancy HTML (Best with Mozilla)</option>
+<option value="plainhtml" <?=($display_mode=='plainhtml')?'SELECTED':''?>>Plain HTML</option>
+</select>
+</p>
+</form>
 <p>The available presentations are...</p>
 <table align="center" class="index">
 <tr><th>Title</th><th>Date</th><th>Location</th><th>Speaker</th><th>Slides</th></tr>

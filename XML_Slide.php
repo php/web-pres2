@@ -1,6 +1,6 @@
 <?php
 // {{{ header
-// vim: set expandtab tabstop=4 shiftwidth=4 fdm=marker:
+// vim: set tabstop=4 shiftwidth=4 fdm=marker:
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
