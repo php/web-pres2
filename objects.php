@@ -723,6 +723,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 <img align="<?=$this->align?>" src="<?=$slideDir.$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
+			if(isset($this->clear)) echo "<br clear=\"".$this->clear."\"/>\n";
 
 		}
 
