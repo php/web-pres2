@@ -206,7 +206,8 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 					echo "<img src=\"$logo2\" border=\"0\"><br/>";
 					$offset-=2;
 				}
-				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,width=300,height=$winH,left=".($winW-300).",top=0'); return false\">".($slideNum)."/".($maxSlideNum)."</a></div>";
+				$slidelistH = $winH - 30;
+				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,width=300,height=$slidelistH,left=".($winW-300).",top=0'); return false\">".($slideNum)."/".($maxSlideNum)."</a></div>";
 				if ($pres[1]->navbartopiclinks) {
 					echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $this->navColor;\">$prevTitle</a></div>";
 					echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none; color: $this->navColor;\">$nextTitle</a></div>";
@@ -1221,7 +1222,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
 			if ($this->slide) {
-			    // we put the slide info in as an attribute to js can get it
+			    // we put the slide info in as an attribute so js can get it
 			    echo "<div id='$this->id' slide='true' style='position:relative;'>";
 			}
 			echo "<li style=\"$style\">".$this->text."</li>\n";

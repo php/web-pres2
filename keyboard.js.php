@@ -18,7 +18,7 @@ function keypressHandler(e){
         {
             if (sliders.length > 0 && currentSlider < sliders.length) {
 		try {
-                slide(sliders[currentSlider], sliders[currentSlider].getAttribute('gotox'), sliders[currentSlider].getAttribute('gotoy'), 0) ;
+                slide(sliders[currentSlider], sliders[currentSlider].getAttribute('gotox')-50, sliders[currentSlider].getAttribute('gotoy'), 0) ;
 		} catch (e) { alert(e);}
 		currentSlider = currentSlider+1;
             } else if (<?php echo $nextSlideNum; ?>) {
