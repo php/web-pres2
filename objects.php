@@ -1299,6 +1299,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function html() {
+		    $align = '';
 			if(!empty($this->align)) $align = 'align="'.$this->align.'"';
 			if(isset($this->title)) {
 				if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
