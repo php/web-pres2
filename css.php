@@ -1,5 +1,8 @@
 <?php
 require_once 'sniff.php';
+global $css_supports_fixed;
+
+if (empty($pres)) $pres[1] = $presentation;
 ?>
 <style title="Default" type="text/css">
 body {
