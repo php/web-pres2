@@ -279,7 +279,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
                         case 'perl':
                             print `cat {$this->filename} | perl2html -cs`;
                             break;
-						default:
+                        case 'java':
+                            print `cat {$this->filename} | java2html -cs`;
+                            break;
+                        default:
 							$_html_file = file_get_contents($this->filename);
 							echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
 							break;
