@@ -66,14 +66,14 @@ get_dims();
 ?>
 <style title="Default" type="text/css">
 body {
-	font-size: 12pt;
+	font-size: <?="$baseFontSize;\n"?>
 	margin-left:1.5em;
 	margin-right:0em;
 	margin-bottom:0em;
 }
 div.sticky {
 	margin: 0;
-<?if(strstr($HTTP_USER_AGENT,'MSIE')):?>
+<?if(strstr($HTTP_USER_AGENT,'MSIE')): // Need a much smarter check here ?>
 	position: absolute;
 <?else:?>
 	position: fixed;
@@ -94,12 +94,13 @@ div.navbar {
 	margin: 0 0 0 0;
 	height: 6em;
 	color: #ffffff;
-	font-family: tahoma, verdana, arial, helvetica, sans-serif;
+	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 }
 div.emcode {
 	background: #cccccc;
 	border: thin solid #000000;
 	padding: 0.5em;
+	font-family: monospace;
 }
 div.output {
 	font-family: monospace;
