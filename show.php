@@ -14,27 +14,18 @@
 	require_once 'XML_Slide.php';
 
 	session_start();
-	session_register('pres');
-	session_register('objs');
-	session_register('winH');
-	session_register('winW');
-	session_register('currentPres');
-	session_register('slideNum');
-	session_register('maxSlideNum');
-	session_register('prevTitle');
-	session_register('nextTitle');
 
 	$presFile = trim($_SERVER['PATH_INFO']);			
 	$presFile = trim($presFile,'/');			
 	$lastPres = null;
-	if(isset($currentPres)) {
-		$lastPres = $currentPres;
+	if(isset($_SESSION['currentPres'])) {
+		$lastPres = $_SESSION['currentPres'];
 	}
-	@list($currentPres,$slideNum) = explode('/',$presFile);
+	@list($_SESSION['currentPres'],$slideNum) = explode('/',$presFile);
 	if(!$slideNum) $slideNum = 0;
 	if($slideNum<0) $slideNum = 0;
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
-	$presFile = str_replace('..','',$currentPres);  // anti-hack
+	$presFile = str_replace('..','',$_SESSION['currentPres']);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
 	if(isset($_COOKIE['dims'])) {
@@ -46,7 +37,7 @@
 	$p->parse();
 	$pres = $p->getObjects();
 
-	if(empty($_SESSION['titles']) || $lastPres != $currentPres || $_SESSION['titlesLoaded'] < filemtime($presFile)) {
+	if(empty($_SESSION['titles']) || $lastPres != $_SESSION['currentPres'] || $_SESSION['titlesLoaded'] < filemtime($presFile)) {
 		$_SESSION['titles'] = get_all_titles($pres[1]);
 		$_SESSION['titlesLoaded'] = filemtime($presFile);
 	}
@@ -80,7 +71,7 @@
 	else if(isset($pres[1]->navmode)) $navmode = $pres[1]->navmode;
 	else $navmode = 'html';
 	// Override with user-selected display mode
-	if(isset($selected_display_mode)) $navmode = $selected_display_mode;
+	if(isset($_SESSION['selected_display_mode'])) $navmode = $_SESSION['selected_display_mode'];
 
 	switch($navmode) {
 		case 'html':
@@ -156,7 +147,7 @@ FOOTER;
 		case 'pdfus':
 		case 'pdfusl':
 		case 'pdfa4':
-			$selected_display_mode = 'pdf';
+			$_SESSION['selected_display_mode'] = 'pdf';
 			switch($navmode) {
 				case 'pdfus': // US-Letter
 					$pdf_x = 612;  $pdf_y = 792;
@@ -226,7 +217,7 @@ FOOTER;
 			pdf_close($pdf);
 			$data = pdf_get_buffer($pdf);
 			header('Content-type: application/pdf');
-			header("Content-disposition: inline; filename=$currentPres.pdf");
+			header('Content-disposition: inline; filename='.$_SESSION['currentPres'].'.pdf');
 			header("Content-length: " . strlen($data));
 			echo $data;
 			break;

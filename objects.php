@@ -249,10 +249,10 @@ function strip_markups($str) {
 		}
 
 		function display() {
-			global $pres, $selected_display_mode;
+			global $pres;
 			if(isset($pres[1]->navmode)) $mode = $pres[1]->navmode;
 			if(isset($this->navmode)) $mode = $this->navmode;
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 				
 			$this->$mode();
 
@@ -260,8 +260,9 @@ function strip_markups($str) {
 
 		function html() {
 			global 	$slideNum, $maxSlideNum, $winW, $winH, $prevTitle, 
-					$nextTitle, $currentPres, $baseDir, $showScript,
+					$nextTitle, $baseDir, $showScript,
 					$pres, $objs;
+			$currentPres = $_SESSION['currentPres'];
 			
 			$navsize = $this->navSize;
 			if ($pres[1]->navsize) $navsize = $pres[1]->navsize;
@@ -465,8 +466,9 @@ function strip_markups($str) {
 
 		function plainhtml() {
 			global 	$slideNum, $maxSlideNum, $winW, $prevTitle, 
-					$nextTitle, $currentPres, $baseDir, $showScript,
+					$nextTitle, $baseDir, $showScript,
 					$pres, $objs;
+			$currentPres = $_SESSION['currentPres'];
 			
 			$navsize = $this->navSize;
 			if ($pres[1]->navsize) $navsize = $pres[1]->navsize;
@@ -627,8 +629,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 
 		function pdf() {
 			global 	$pdf, $pdf_x, $pdf_y, $slideNum, $maxSlideNum, 
-					$currentPres, $baseDir, $showScript, $pres, $objs,
+					$baseDir, $showScript, $pres, $objs,
 					$pdf_cx, $pdf_cy, $page_index, $page_number, $pdf_font;
+			$currentPres = $_SESSION['currentPres'];
 
 			$p = $pres[1];
 			$middle = (int)($pdf_y/2) - 40;
@@ -747,20 +750,18 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
 		function html() {
-			global $show_speaker_notes;
-
-			if($this->type=='speaker' && !$show_speaker_notes) return;
+			if($this->type=='speaker' && !$_SESSION['show_speaker_notes']) return;
 			$effect = '';
 			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(!empty($this->title)) {
@@ -774,9 +775,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function plainhtml() {
-			global $show_speaker_notes;
-
-			if($this->type=='speaker' && !$show_speaker_notes) return;
+			if($this->type=='speaker' && !$_SESSION['show_speaker_notes']) return;
 			if(!empty($this->title)) {
 				if($this->type=='speaker') $this->titlecolor='#ff3322';
 				echo "<h1 align=\"$this->talign\"><font color=\"$this->titlecolor\">".markup_text($this->title)."</font></h1>\n";
@@ -878,12 +877,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -1034,12 +1033,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 	
@@ -1496,10 +1495,10 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 
-			if (isset($selected_display_mode)) {
-				$mode = $selected_display_mode;
+			if (isset($_SESSION['selected_display_mode'])) {
+				$mode = $_SESSION['selected_display_mode'];
 			} else if (isset($this->mode)) {
 				$mode = $this->mode;
 			} else if (isset($objs[1]->mode)) {
@@ -1540,12 +1539,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -1608,12 +1607,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -1844,12 +1843,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -1956,12 +1955,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -2045,12 +2044,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -2134,12 +2133,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	class _divide {
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 
@@ -2185,12 +2184,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	class _footer {
 
 		function display() {
-			global $objs, $pres, $selected_display_mode;
+			global $objs, $pres;
 			if(isset($this->mode)) $mode = $this->mode;
 			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
 			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
 			else $mode='html';
-			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			if(isset($_SESSION['selected_display_mode'])) $mode = $_SESSION['selected_display_mode'];
 			$this->$mode();
 		}
 

@@ -15,9 +15,6 @@
 	require_once 'XML_Presentation.php';
 
 	session_start();
-	session_register('selected_display_mode');
-	session_register('show_speaker_notes');
-#	$_SESSION['titles'] = null;
 	
 	$topics = array();
 	$ps = array();
@@ -138,8 +135,8 @@ Simply click the topic you wish to find presentations on to view all available p
 	else { 
 		list($display_mode,$form_speaker) = explode('|',$_COOKIE['display_mode']); 
 	}
-	$show_speaker_notes = ($form_speaker=='true');
-	$selected_display_mode = $display_mode;
+	$_SESSION['show_speaker_notes'] = ($form_speaker=='true');
+	$_SESSION['selected_display_mode'] = $display_mode;
 ?>
 <form name="modes_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 <p>Please select a display mode:

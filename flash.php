@@ -5,6 +5,7 @@ require_once 'objects.php';
 require_once 'config.php';
 
 session_start();
+$currentPres = $_SESSION['currentPres'];
 
 if (!extension_loaded('ming')) {
     if (!dl('php_ming.so')) {
