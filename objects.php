@@ -37,11 +37,13 @@ function getFlashDimensions($font,$title,$size) {
 
 		function _slide() {
 			$this->title = 'No Title Text for this slide yet';
-			$this->titleSize  = 18;
-			$this->titleColor = 'ffffff';
+			$this->titleSize  = "3em";
+			$this->titleColor = '#ffffff';
+			$this->navColor = '#EFEF52';
+			$this->navSize  = "2em";
 			$this->titleAlign = 'center';
 			$this->titleFont  = 'fonts/Arial.fdb';
-			$this->mode  = 'flash';
+			$this->mode  = 'html';
 		}
 
 		function display() {
@@ -50,9 +52,24 @@ function getFlashDimensions($font,$title,$size) {
 		}
 
 		function html() {
-?>
-<h1 align=<?=$this->titleAlign?>><?=$this->title?></h1>
-<?php
+			global $slideNum, $maxSlideNum, $winW, $prevTitle, $nextTitle, $currentPres, $baseDir, $showScript;
+			$prev = $next = 0;
+			if($slideNum < $maxSlideNum) {
+				$next = $slideNum+1;
+			}
+			if($slideNum > 0) {
+				$prev = $slideNum - 1;
+			}
+			echo <<<NAVBAR
+<div class="sticky" align="$this->titleAlign" style="width: $winW;">
+<div class="navbar">
+<img src="php_logo.gif" align="left" style="float: left;">
+<div style="font-size: $this->titleSize; margin: 0 2.5em 0 0;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum" style="text-decoration: none; color: $this->titleColor;">$this->title</a></div>
+<div style="float: left; font-size: $this->navSize;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev" style="text-decoration: none; color: $this->navColor;">$prevTitle</a></div>
+<div style="float: right; margin: 0 2em 0 0; color: $this->navColor; font-size: $this->navSize;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next" style="text-decoration: none; color: $this->navColor;">$nextTitle</a></div>
+</div>
+</div>
+NAVBAR;
 		}
 
 		function flash() {

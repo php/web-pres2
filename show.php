@@ -14,6 +14,8 @@
 	session_register('currentPres');
 	session_register('slideNum');
 	session_register('maxSlideNum');
+	session_register('prevTitle');
+	session_register('nextTitle');
 
 	$presFile = trim($PATH_INFO);			
 	$presFile = trim($presFile,'/');			
@@ -67,7 +69,6 @@ body {
 	font-size: 12pt;
 	margin-left:1.5em;
 	margin-right:0em;
-	margin-top:6em; 
 	margin-bottom:0em;
 }
 div.sticky {
@@ -84,6 +85,14 @@ div.shadow {
 	background: #777777;
 	padding: 0.5em;
 	margin: 0 1em 0 0;
+}
+div.navbar {
+	background: url(trans.png) transparent fixed;
+	padding: 0;
+	margin: 0 0 0 0;
+	height: 6em;
+	color: #ffffff;
+	font-family: tahoma, verdana, arial, helvetica, sans-serif;
 }
 div.emcode {
 	background: #cccccc;
@@ -122,24 +131,46 @@ p,li {
 	if($slideNum > $maxSlideNum) {
 		$slideNum = $maxSlideNum;
 	}
+	// Fetch info about previous slide
+	if($slideNum > 0) {
+		$r =& new XML_Slide($pres[1]->slides[$slideNum-1]->filename);
+		$r->parse();
+		$objs = $r->getObjects();
+		$prevTitle = $objs[1]->title;
+	} else $prevTitle = '';
+	if($slideNum < $maxSlideNum) {
+		$r =& new XML_Slide($pres[1]->slides[$slideNum+1]->filename);
+		$r->parse();
+		$objs = $r->getObjects();
+		$nextTitle = $objs[1]->title;
+	} else $nextTitle = '';
+
 	$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
 
 	$objs = $r->getObjects();
+
+	switch($pres[1]->navmode) {
+		case 'flash':
+			$body_style = "margin-top: 6em;";
+			break;
+
+		default:
+			$body_style = "margin-top: 6em;";
+			break;
+	}
 	
 ?>
-<body onResize="get_dims();">
+<body onResize="get_dims();" style="<?=$body_style?>">
 <?php
 	while(list($coid,$obj) = each($objs)) {
 		$obj->display();
 	}
-	/*
 	echo "<pre>";
 	print_r($pres);
 	print_r($objs);
 	echo "</pre>";
-	*/
 ?>
 </body>
 </html>
