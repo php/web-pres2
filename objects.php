@@ -1502,7 +1502,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->leader)) $leader = $this->leader;
 			else $leader='';
 			if(!empty($this->text)) {
-				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\">$this->text</a></div><br />\n";
+				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\">".markup_text($this->text)."</a></div><br />\n";
 			}
 		}
 
@@ -1511,7 +1511,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->leader)) $leader = $this->leader;
 			else $leader='';
 			if(!empty($this->text)) {
-				echo "$leader<a href=\"$this->href\">$this->text</a><br />\n";
+				echo "$leader<a href=\"$this->href\">".markup_text($this->text)."</a><br />\n";
 			}
 		}
 
