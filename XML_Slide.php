@@ -58,6 +58,8 @@ class XML_Slide extends XML_Parser
      */
     var $coid = 0;
 
+	var $level = 0;
+
     var $last_handler;
 
     var $stack = array();
@@ -132,7 +134,9 @@ class XML_Slide extends XML_Parser
                 $this->objects[$this->coid]->bullets[] = new _bullet();
                 $idx = count($this->objects[$this->coid]->bullets) - 1;
                 $this->_add_attribs($this->objects[$this->coid]->bullets[$idx], $attribs);
+				$this->objects[$this->coid]->bullets[$idx]->level = $this->level;
                 $this->activeTag = $element;
+				$this->level++;
                 break; 
 			case 'CELL':
                 $this->objects[$this->coid]->cells[] = new _cell();
@@ -181,6 +185,9 @@ class XML_Slide extends XML_Parser
 			case 'TABLE':
                 $this->coid = array_pop($this->stack);
                 break;
+			case 'BULLET':
+				$this->level--;
+				break;
         }
         $this->activeTag = '';
         $this->last_handler = 'end';

@@ -1229,6 +1229,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->text = '';
 			$this->effect = '';
 			$this->id = '';
+			$this->type = '';
 		}
 
 		function display() {
@@ -1245,13 +1246,21 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			global $objs, $coid;
 
 			$style='';
+			$ml = $this->level;
+
+			if(!empty($this->marginleft)) $ml += (float)$this->marginleft;
+			else if(!empty($objs[$coid]->marginleft)) $ml += (float)$objs[$coid]->marginleft;
+
+			if($ml) {
+				$style .= "margin-left: ".$ml."em;";
+			}
+
 			if(!empty($this->fontsize)) $style .= "font-size: ".$this->fontsize.';';
 			else if(!empty($objs[$coid]->fontsize)) $style .= "font-size: ".(2*(float)$objs[$coid]->fontsize/3).'em;';
-			if(!empty($this->marginleft)) $style .= "margin-left: ".$this->marginleft.';';
-			else if(!empty($objs[$coid]->marginleft)) $style .= "margin-left: ".$objs[$coid]->marginleft.';';
 
 			if(!empty($this->marginright)) $style .= "margin-right: ".$this->marginleft.';';
 			else if(!empty($objs[$coid]->marginright)) $style .= "margin-right: ".$objs[$coid]->marginright.';';
+
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
@@ -1259,6 +1268,25 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			    // we put the slide info in as an attribute so js can get it
 			    echo "<div id='$this->id' effect='$this->effect' style='position:relative;'>";
 			} 
+			if ($this->type) {
+				switch($this->type) {
+				case 'numbered':
+				case 'number':
+				case 'decimal':
+					$style .= 'list-style-type: decimal';
+					break;
+				case 'no-bullet':
+				case 'none':
+					$style .= 'list-style-type: none';
+					break;
+				case 'alpha':
+					$style .= 'list-style-type: upper-alpha';
+					break;
+				case 'square':	
+					$style .= 'list-style-type: square';
+					break;
+				}
+			}
 			echo "<li style=\"$style\">".markup_text($this->text)."</li>\n";
 			if ($this->effect) {
 			    echo "</div>";
