@@ -258,7 +258,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginright+1).'em '.
 					((float)$this->marginbottom).'em '.
 					((float)$this->marginleft).'em;'.
-					((isset($this->width)) ? "width: $this->width;" : "").
+					((!empty($this->width)) ? "width: $this->width;" : "").
 					'">';
 				if(!empty($objs[1]->examplebackground)) $_html_examplebackground = $objs[1]->examplebackground;
 				if(!empty($this->examplebackground)) $_html_examplebackground = $this->examplebackground;
@@ -325,7 +325,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginright+1).'em '.
 					((float)$this->marginbottom).'em '.
 					((float)$this->marginleft).'em;'.
-					((isset($this->rwidth)) ? "width: $this->rwidth;" : "").
+					((!empty($this->rwidth)) ? "width: $this->rwidth;" : "").
 					'">';
 				echo '<div class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
 					((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
