@@ -115,9 +115,9 @@ function getFlashDimensions($font,$title,$size) {
 <br />
 <div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
 <br />
-<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;$p->email&gt;</div>
+<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;<a href="mailto:$p->email">$p->email</a>&gt;</div>
 <br />
-<div align="center" style="font-size: $smallerfontsize;">$p->url</div>
+<div align="center" style="font-size: $smallerfontsize;"><a href="$p->url">$p->url</a></div>
 <br />
 TITLEPAGE;
 				
