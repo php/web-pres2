@@ -111,6 +111,7 @@ class XML_Slide extends XML_Parser
                 $this->stack[] = $this->coid;
                 $this->insideTag = $element;
                 $this->_add_attribs($this->objects[$this->coid], $attribs);
+                $this->activeTag = 'text';
                 break;
 
             /* Special case for array properties */

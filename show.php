@@ -87,7 +87,6 @@ div.sticky {
 div.shadow {
 	background: #777777;
 	padding: 0.5em;
-	margin: 0 1em 0 0;
 }
 div.navbar {
 	background: url(trans.png) transparent fixed;
@@ -145,7 +144,7 @@ p,li {
 		$r =& new XML_Slide($pres[1]->slides[$slideNum+1]->filename);
 		$r->parse();
 		$objs = $r->getObjects();
-		$nextTitle = $objs[1]->title;
+		$nextTitle = (isset($objs[1]->title)) ? $objs[1]->title : '';
 	} else $nextTitle = '';
 
 	$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);

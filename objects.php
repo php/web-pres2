@@ -123,13 +123,16 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		function _blurb() {
 			$this->font  = 'fonts/Arial.fdb';
 			$this->align = 'left';
-			$this->title      = "No Blurb Title";
-			$this->titleSize  = 16;
-			$this->titleColor = 'ff1122';
-			$this->text       = "No Blurb Text";
-			$this->textSize   = 14;
-			$this->textColor  = '000000';
-			$this->mode       = 'html';
+			$this->fontsize     = '4em';
+			$this->marginleft   = '1em';
+			$this->marginright  = '1em';
+			$this->margintop    = '0.2em';	
+			$this->marginbottom = '0em';	
+			$this->title        = '';
+			$this->titlecolor   = '#000000';
+			$this->text         = '';
+			$this->textcolor    = '#000000';
+			$this->mode         = 'html';
 		}
 
 		function display() {
@@ -137,11 +140,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
-?>
-<h1><?=$this->title?></h1>
-<blockquote><p><?=$this->text?></p></blockquote>
-<?php
-
+			if(!empty($this->title)) {
+				echo "<div style=\"font-size: $this->fontsize; color: $this->titlecolor\">$this->title</div>\n";
+			}
+			if(!empty($this->text)) {
+				echo "<div style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$this->text</div><br />\n";
+			}
 		}
 	}
 	// }}}
@@ -179,6 +183,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->mode = 'html';
 			$this->fontsize = '2em';
 			$this->rfontsize = '1.8em';
+			$this->marginright = '3em';
+			$this->marginleft = '3em';
+			$this->margintop = '0em';
+			$this->marginbottom = '0em';
 		}
 
 		function display() {
@@ -190,7 +198,13 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$sz = (float) $this->fontsize;
 			if(!$sz) $sz = 0.1;
 			$offset = (1/$sz).'em';
-			echo '<div class="shadow"><div class="emcode" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
+			echo '<div class="shadow" style="margin: '.
+				((float)$this->margintop).'em '.
+				((float)$this->marginright+1).'em '.
+				((float)$this->marginbottom).'em '.
+				((float)$this->marginleft).'em;'.
+				'">';
+			echo '<div class="emcode" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
 			if(!empty($this->filename)) highlight_file($this->filename);
 			else highlight_string($this->text);
 			echo "</div></div>\n";
@@ -198,8 +212,14 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				echo "<h2>Output</h2>\n";
 				$sz = (float) $this->rfontsize;
 				if(!$sz) $sz = 0.1;
-				$offset = (1/$sz).'em';
-				echo '<div class="shadow"><div class="output" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
+				$toffset = (1/$sz).'em';
+				echo '<div class="shadow" style="margin: '.
+					((float)$this->margintop).'em '.
+					((float)$this->marginright+1).'em '.
+					((float)$this->marginbottom).'em '.
+					((float)$this->marginleft).'em;'.
+					'">';
+				echo '<div class="output" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
 				if(!empty($this->filename)) include $this->filename;
 				else eval('?>'.$this->text);
 				echo "</div></div>\n";
@@ -212,6 +232,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 	class _list {
 		function _list() {
 			$this->mode = 'html';
+			$this->fontsize = '3em';
 		}
 
 		function display() {
