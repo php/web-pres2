@@ -57,14 +57,12 @@ get_dims();
 <? } ?>
 -->
 </script>
-<? if(isset($dims)) {
+<?
+	if(isset($dims)) {
 		list($winW, $winH) = explode('_',$dims);
-   }
-/* The stylesheet will move out into its own file soon,
-   it is just a bit easier working with an embedded one
-   for now while it changes often. */
-?>
-<?php
+	}
+
+
 	error_reporting(E_ALL);
 
 	require_once 'XML_Presentation.php';
@@ -84,14 +82,14 @@ get_dims();
 	// Fetch info about previous slide
 	$prevSlideNum = $nextSlideNum = 0;
 	if($slideNum > 0) {
-                $prevSlideNum = $slideNum-1;
+		$prevSlideNum = $slideNum-1;
 		$r =& new XML_Slide($pres[1]->slides[$slideNum-1]->filename);
 		$r->parse();
 		$objs = $r->getObjects();
 		$prevTitle = $objs[1]->title;
 	} else $prevTitle = '';
 	if($slideNum < $maxSlideNum) {
-                $nextSlideNum = $slideNum+1;
+		$nextSlideNum = $slideNum+1;
 		$r =& new XML_Slide($pres[1]->slides[$slideNum+1]->filename);
 		$r->parse();
 		$objs = $r->getObjects();
@@ -114,6 +112,12 @@ get_dims();
 			break;
 	}
 	
+
+
+/* The stylesheet will move out into its own file soon,
+   it is just a bit easier working with an embedded one
+   for now while it changes often. */
+
 ?>
 <style title="Default" type="text/css">
 body {
@@ -143,7 +147,7 @@ div.navbar {
 	background: url(trans.png) transparent fixed;
 	padding: 4;
 	margin: 0;
-        <?php if (!isset($pres[1]->jskeyboard) || !$pres[1]->jskeyboard) { ?>height: 6em;<?php } ?>
+	<?php if (!isset($pres[1]->jskeyboard) || !$pres[1]->jskeyboard) { ?>height: 6em;<?php } ?>
 	color: #ffffff;
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 }
@@ -174,31 +178,11 @@ a:hover {
 </style>
 </head>
 <body onResize="get_dims();" style="<?=$body_style?>">
-<?if(isset($pres[1]->jskeyboard) && $pres[1]->jskeyboard) { ?>
-<script language="JavaScript1.2">
-<!--
-if(!document.all){
-	window.captureEvents(Event.KEYUP);
-}else{
-	document.onkeypress = keypressHandler;
-}
-function keypressHandler(e){
-	var e;
-	if(document.all) { //it's IE
-		e = window.event.keyCode;
-	}else{
-		e = e.which;
+<?
+	if(isset($pres[1]->jskeyboard) && $pres[1]->jskeyboard) { 
+		include 'keyboard.js.php';
 	}
-	if (e == 39 && <?php echo $nextSlideNum; ?>) /* right arrow */
-		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum"; ?>';
-	if (e == 37 && <?php echo $prevSlideNum+1; ?>) /* left arrow */
-		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlideNum"; ?>';
-}
-window.onkeyup = keypressHandler;
--->
-</script>
-<? } ?>
-<?php
+
 	while(list($coid,$obj) = each($objs)) {
 		$obj->display();
 	}
