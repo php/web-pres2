@@ -871,6 +871,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->marginleft = "auto";
 			$this->marginright = "auto";
 			$this->effect = '';
+			$this->width = '';
+			$this->height = '';
 		}
 
 		function display() {
@@ -889,10 +891,16 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$effect = '';
 			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
-			$size = getimagesize($slideDir.$this->filename);
+			if ($this->width) {
+				$size = "width=\"{$this->width}\" height=\"{$this->height}\"";
+			} else {
+				$size = getimagesize($slideDir.$this->filename);
+				$size = $size[3];
+			}
+
 ?>
 <div <?=$effect?> align="<?=$this->align?>" style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
-<img align="<?=$this->align?>" src="<?=$slideDir.$this->filename?>" <?=$size[3]?>>
+<img align="<?=$this->align?>" src="<?=$slideDir.$this->filename?>" <?=$size?>>
 </div>
 <?php
 			if(isset($this->clear)) echo "<br clear=\"".$this->clear."\"/>\n";
@@ -903,11 +911,16 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			global $slideDir;
 
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
-			$size = getimagesize($slideDir.$this->filename);
+			if ($this->width) {
+				$size = "width=\"{$this->width}\" height=\"{$this->height}\"";
+			} else {
+				$size = getimagesize($slideDir.$this->filename);
+				$size = $size[3];
+			}
 ?>
 <div align="<?=$this->align?>"
  style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
-<img src="<?=$slideDir.$this->filename?>" <?=$size[3]?>>
+<img src="<?=$slideDir.$this->filename?>" <?=$size?>>
 </div>
 <?php
 		}
@@ -930,7 +943,13 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 			$cw = pdf_stringwidth($pdf,'m');  // em unit width
 
-			list($dx,$dy,$type) = getimagesize($slideDir.$this->filename);
+			if ($this->width) {
+				$dx = $this->height;
+				$dy = $this->width;
+				list(,,$type) = getimagesize($slideDir.$this->filename);
+			} else {
+				list($dx,$dy,$type) = getimagesize($slideDir.$this->filename);
+			}
 			$dx = $pdf_x*$dx/1024;
 			$dy = $pdf_x*$dy/1024;
 
