@@ -7,7 +7,7 @@
  * vim600: sw=4 ts=4 fdm=marker
  * vim<600: sw=4 ts=4
  */
-	if(strlen($PATH_INFO)) {
+	if(!empty($PATH_INFO)) {
 	  $topic = trim(substr($PATH_INFO,1));
 	}
 
