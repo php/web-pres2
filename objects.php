@@ -1938,7 +1938,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(empty($this->text)) $this->text = $this->href;
 			if(!empty($this->leader)) $leader = $this->leader;
 			else $leader='';
-            if (empty($this->target)) $this->target = '_self';
+			if (empty($this->target)) $this->target = '_self';
 			if(!empty($this->text)) {
 				echo "$leader<a href=\"$this->href\" target=\"{$this->target}\">".markup_text($this->text)."</a><br />\n";
 			}
