@@ -85,6 +85,9 @@
 	switch($navmode) {
 		case 'html':
 		case 'flash':
+			// facilitate caching
+			header("Last-Modified: " . date("r", filemtime($slideDir)));
+
 			echo <<<HEADER
 <html>
 <head>
