@@ -1350,6 +1350,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		function pdf() {
 			global $pdf, $pdf_cx, $pdf_cy, $pdf_font;
 
+			if (!isset($this->bullets)) return;
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
