@@ -40,7 +40,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
-			$this->logoimage1url = $baseDir . '/index.php';
+			$this->logoimage1url = $HTTP_HOST . $baseDir . '/index.php';
 		}
 	}
 
