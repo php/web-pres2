@@ -307,7 +307,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
                             print `cat {$_html_filename} | java2html -cs`;
                             break;
                         case 'python':
-                            print `/usr/bin/py2html -stdout -format:rawhtml $_html_filename`;
+                            print `py2html -stdout -format:rawhtml $_html_filename`;
                             break;
 						case 'html':
 							$_html_file = file_get_contents($_html_filename);
