@@ -229,6 +229,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->result = false;
 			$this->width = '';
 			$this->condition = '';
+			$this->linktext = "Result";
+			$this->iwidth = '100%';
+			$this->iheight = '80%';
 		}
 
 		function display() {
@@ -273,6 +276,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					switch($this->type) {
 						case 'php':
 						case 'genimage':
+						case 'iframe':
+						case 'link':
+						case 'embed':
 							highlight_file($_html_filename);
 							break;
 						case 'shell':
@@ -335,6 +341,15 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					switch($this->type) {
 						case 'genimage':
 							echo "<img src=\"$this->filename\">\n";
+							break;
+						case 'iframe':
+							echo "<iframe width=\"$this->iwidth\" height=\"$this->iheight\" src=\"$this->filename\"><a href=\"$this->filename\" class=\"resultlink\">$this->linktext</a></iframe>\n";
+							break;
+						case 'link':
+							echo "<a href=\"$this->filename\" class=\"resultlink\">$this->linktext</a><br />\n";
+							break;	
+						case 'embed':
+							echo "<embed src=\"$this->filename\" class=\"resultlink\" width=\"800\" height=\"800\"></embed><br />\n";
 							break;
 						default:
 							include $_html_filename;
