@@ -24,6 +24,7 @@ function getFlashDimensions($font,$title,$size) {
 
 			$this->title = 'No Title Text for this presentation yet';
 			$this->navmode  = 'flash';
+			$this->navsize=NULL; // nav bar font size
 			$this->template = 'php';
 			$this->jskeyboard = $jsKeyboard;
 			$this->logo1 = 'images/php_logo.gif';
@@ -76,6 +77,10 @@ function getFlashDimensions($font,$title,$size) {
 			global 	$slideNum, $maxSlideNum, $winW, $prevTitle, 
 					$nextTitle, $currentPres, $baseDir, $showScript,
 					$pres, $objs;
+			
+			$navsize = $this->navSize;
+			if ($pres[1]->navsize) $navsize = $pres[1]->navsize;
+			
 			$prev = $next = 0;
 			if($slideNum < $maxSlideNum) {
 				$next = $slideNum+1;
@@ -98,8 +103,8 @@ function getFlashDimensions($font,$title,$size) {
 				}
 				echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum' style='text-decoration: none; color: $this->titleColor;'>$this->title</a></div>";
 				if ($pres[1]->navbartopiclinks) {
-					echo "<div style='float: left; margin: -0.2em 2em 0 0; font-size: $this->navSize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev' style='text-decoration: none; color: $this->navColor;'>$prevTitle</a></div>";
-					echo "<div style='float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $this->navSize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next' style='text-decoration: none; color: $this->navColor;'>$nextTitle</a></div>";
+					echo "<div style='float: left; margin: -0.2em 2em 0 0; font-size: $navsize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev' style='text-decoration: none; color: $this->navColor;'>$prevTitle</a></div>";
+					echo "<div style='float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $navsize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next' style='text-decoration: none; color: $this->navColor;'>$nextTitle</a></div>";
 				}
 				echo '</div></div>';
 				break;
