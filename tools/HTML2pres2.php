@@ -16,9 +16,9 @@ $f=  $_SERVER['argv'][1];
 $exec = "tidy -asxml $f";
 $data = `$exec`;
 /* for debugging - just show it ! */ 
-//$tree = new XML_Tree;
- //$tree ->getTreeFromString($data);
- // $tree->dump();
+ $tree = new XML_Tree;
+   $tree ->getTreeFromString($data);
+   $tree->dump();
 
 class SDX_Parser {
     var $outputDir = '';
@@ -30,7 +30,18 @@ class SDX_Parser {
             
         
         $fh = fopen ('slides.xml','w');
-        fwrite($fh,$this->slideInfo);
+        fwrite($fh,'<?xml version="1.0" encoding="ISO-8859-1"?>'."\n");
+        fwrite($fh,"<presentation {$this->presentation}>\n");
+        fwrite($fh,"<title>{$this->title}</title>\n");
+        fwrite($fh,"<topic>{$this->topic}</topic>\n");
+        fwrite($fh,"<event>{$this->event}</event>\n");
+        fwrite($fh,"<location>{$this->location}</location>\n");
+        fwrite($fh,"<date>{$this->date}</date>\n");
+        fwrite($fh,"<speaker>{$this->speaker}</speaker>\n");
+        fwrite($fh,"<company>{$this->company}</company>\n");
+        fwrite($fh,"<email>{$this->email}</email>\n");
+        fwrite($fh,"<url>{$this->url}</url>\n");
+  
         foreach($this->files as $f) {
             fwrite($fh,"<slide>{$this->outputDir}/{$f}</slide>\n");
         }
@@ -118,13 +129,19 @@ class SDX_Parser {
         $cdata     = $this->_cdataStack[$this->_level];
         //echo "E:{$this->_level}:$element\n";
         if (method_exists($this, $element.'End')) {
+        
+            $this->flushBlurb();
             call_user_func(array(&$this,$element.'End'),$cdata);
         }
         $this->_level--;
     }    
 
     function _characterData($parser, $cdata) {
-        //echo "C:{$this->_level}:$cdata\n";
+        //echo "C:{$this->_elementStack[$this->_level]}:$cdata\n";
+        if (!method_exists($this, $this->_elementStack[$this->_level] .'End') && (trim($cdata) != '')) {
+            //echo "GOT CDATA for {$this->_elementStack[$this->_level]}";
+            $this->blurb .= $cdata;
+        }
         $this->_cdataStack[$this->_level] .= $cdata;
     }
     
@@ -133,11 +150,27 @@ class SDX_Parser {
 
         //echo "GOT BODY! $a";
     }
-    function bodyEnd($a) {
-           echo "--END--\n"; 
+    //function bodyEnd($a) {
+    //       echo "--END--\n"; 
+    //}
+    var $blurb = '';
+    function bodyCdata($a) {
+        //echo "ADD BLURB $a\n";
+        $this->blurb .= $a;
     }
+    
+    function flushBlurb() {
+        if (trim($this->blurb) == '') {
+            return;
+        }
+        //echo "FB: {$this->blurb}\n";
+        $this->add("<blurb>{$this->blurb}</blurb>",TRUE);
+        $this->blurb = '';
+    }
+    
     function hrStart($a) {
         //print_r($a); 
+        $this->flushBlurb();
         $this->add('</slide>');
 
     }
@@ -171,22 +204,9 @@ class SDX_Parser {
     }
     
     
-    function pStart($a) {
-       
-        if (!$this->inLI) {
-            $this->add('<blurb>');
-        } 
-        
-        
-    }
-    function pEnd($a) {
-        $this->add($a);
-         
-        if (!$this->inLI) {
-            $this->add('</blurb>');
-        }
-        
-    } 
+    
+    function h6End($a) { }  //comments
+    function titleEnd($a) { }  //comments
      
     var $fontsize =0;
     function smallStart() {
@@ -223,7 +243,7 @@ class SDX_Parser {
     function imgStart($a){ 
         //print_r($a);
         // scale the image !
-        
+        $this->flushBlurb();
         if ($a['STYLE']) {
             //print_r($a);
             preg_match('/width: ([0-9]+)px; height: ([0-9]+)px/i', $a['STYLE'],$ar);
@@ -248,9 +268,9 @@ class SDX_Parser {
     
     
     var $slideInfo = '';
-    function addressEnd($a) {
-        $this->slideInfo .= $a . "\n";
-    }
+    //function addressEnd($a) {
+    //    $this->slideInfo .= $a . "\n";
+    //}
     
     var $indent =0;
     function add($str, $noIndent=FALSE) {
