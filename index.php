@@ -32,7 +32,13 @@
 
 		@closedir($dir);
 	}
-
+    
+    if (!$ps) {
+        echo "Could not find any slides (xml files) in \$presentationDir $presentationDir<BR>";
+        echo "Please modify config.php<BR>";
+        exit;
+    }
+    
 	$i = 0;
 		
 	foreach($ps as $pres_id=>$filename) {
