@@ -17,7 +17,7 @@ window.opener.location=url
 <?php
 	echo "<table border=0><tr><th> # </th><td>Slide Title</td></tr>\n";
 	$lastSection = $lastChapter = '';
-	foreach($titles as $k=>$v) {
+	foreach($_SESSION['titles'] as $k=>$v) {
 		if(!empty($v['section'])) {
 			$spacer = "&nbsp;&nbsp;&nbsp;&nbsp;";
 			if($v['section'] != $lastSection) {
