@@ -48,6 +48,11 @@ class XML_Presentation extends XML_Parser
     var $activeTag = '';
 
     /**
+     * @var string
+     */
+    var $activeSection = '';
+
+    /**
      * @var array
      */
     var $objects = array();
@@ -115,9 +120,18 @@ class XML_Presentation extends XML_Parser
 				$idx = count($this->objects[$this->coid]->slides)-1;
                 $this->_add_attribs($this->objects[$this->coid]->slides[$idx], $attribs);
                 $this->activeTag = $element;
+				if(!empty($this->activeSection)) {
+					$this->objects[$this->coid]->slides[$idx]->Section = $this->activeSection;
+				}
                 break; 
 
             /* Everything else can't */
+			case 'SECTION':
+				if(!empty($attribs['NAME'])) {
+					$this->activeSection = $attribs['NAME'];
+				}
+				break;
+
             default:
                 $this->activeTag = $element;
                 $this->_add_attribs($this->objects[$this->coid], $attribs, strtolower($element));
@@ -147,6 +161,9 @@ class XML_Presentation extends XML_Parser
             case 'PRESENTATION':
                 $this->coid = array_pop($this->stack);
                 break;
+			case 'SECTION':
+				$this->activeSection = '';
+				break;
         }
         $this->activeTag = '';
         $this->last_handler = 'end';

@@ -61,11 +61,11 @@
 	$prevSlideNum = $nextSlideNum = 0;
 	if($slideNum > 0) {
 		$prevSlideNum = $slideNum-1;
-		$prevTitle = $titles[$prevSlideNum];
+		$prevTitle = $titles[$prevSlideNum]['title'];
 	} else $prevTitle = '';
 	if($slideNum < $maxSlideNum) {
 		$nextSlideNum = $slideNum+1;
-		$nextTitle = $titles[$nextSlideNum];
+		$nextTitle = $titles[$nextSlideNum]['title'];
 	} else $nextTitle = '';
 
 	$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
@@ -212,7 +212,10 @@ function get_all_titles($pres) {
 		$r->parse();
 
 		$objs = $r->getObjects();
-		$titles[] = $objs[1]->title;
+		$titles[$slideNum]['title'] = $objs[1]->title;
+		if(!empty($pres->slides[$slideNum]->Section)) {
+			$titles[$slideNum]['section'] = $pres->slides[$slideNum]->Section;
+		}
 	}
 	return($titles);
 }
