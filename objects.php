@@ -112,12 +112,16 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
     _word_        underline
     %word%        monospaced word (ie. %function()%)
     |rrggbb|word| Colour a word
+	^N^           Superscript
+	@N@           Subscript
 */
 function markup_text($str) {
 	$ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$str);
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','<tt>\1</tt>',$ret);
 	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
+	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','<sup>\1</sup>',$ret);
+	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','<sub>\1</sub>',$ret);
 	return $ret;
 }
 // }}}
@@ -128,6 +132,8 @@ function strip_markups($str) {
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','\1',$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','\1',$ret);
 	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','\2',$ret);
+	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','\1',$ret);
+	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','\1',$ret);
 	return $ret;
 } 
 // }}}
