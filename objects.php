@@ -1236,12 +1236,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
-			if ($this->slide) {
+			if ($this->effect) {
 			    // we put the slide info in as an attribute so js can get it
-			    echo "<div id='$this->id' slide='true' style='position:relative;'>";
+			    echo "<div id='$this->id' effect='$this->effect' style='position:relative;'>";
 			} 
 			echo "<li style=\"$style\">".markup_text($this->text)."</li>\n";
-			if ($this->slide) {
+			if ($this->effect) {
 			    echo "</div>";
 			}
 		}
