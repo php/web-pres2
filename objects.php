@@ -377,22 +377,31 @@ TITLEPAGE;
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y;
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
 
 			if(isset($this->title)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
 				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "\n");
-				$cy = pdf_get_value($pdf, "texty")+30;
-			} else $cy = pdf_get_value($pdf, "texty");
+			}
+			$pdf_cy = pdf_get_value($pdf, "texty")-5;
 
 			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			$height=10;	
+			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx-20), $height, 'left', 'blind')) $height+=10;
 
-			$height=14;	
-			while(pdf_show_boxed($pdf, $this->text, 60, $cy, $pdf_x-30, $height, 'left', 'blind')) $height+=10;
-			pdf_show_boxed($pdf, $this->text, 60, $cy, $pdf_x-30, $height, 'justify');
-			$cy+=$height;
-			pdf_set_text_pos($pdf, 40, $cy);
+			if( ($pdf_cy + $height) > $pdf_y-40 ) {
+				pdf_end_page($pdf);
+				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+				$pdf_cx = 40;
+				$pdf_cy = 60;
+			}
+
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_show_boxed($pdf, str_replace("\n",'',$this->text), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, 'justify');
+			pdf_continue_text($pdf, "\n");
 		}
 
 	}
@@ -772,9 +781,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf;
+			global $pdf, $pdf_cx, $pdf_cy;
 
 			if(isset($this->title)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
 				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "");
@@ -842,7 +853,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 			$pdf_cy = pdf_get_value($pdf, "texty");
 		
-			$height=14;	
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			$height=10;	
 			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				pdf_end_page($pdf);
