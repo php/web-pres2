@@ -19,7 +19,7 @@ class html extends display {
 
     function _presentation(&$presentation) {
         global $pres, $browser_is_IE;
-    		    		
+
         // Determine if we should cache
         // need to fix this check
         $cache_ok = 1;
@@ -188,6 +188,23 @@ FOOTER;
             <?	
             break;
 
+        case 'css':
+            echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
+            echo <<<ENDT
+<div align='center' class='navbar_title'><a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}{$this->showScript}/$currentPres/{$this->slideNum}' style='navbar_title_a'>
+ENDT;
+            echo $slide->title."</a></div>";
+            echo "<div class='navbar_nr'>";
+            echo <<<ENDD
+<a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php' class='navbar-title' onClick="window.open('http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height={$slidelistH},left=10,top=0'); return false">{$this->slideNum}/{$this->maxSlideNum}</a></div>
+ENDD;
+            if ($this->pres->navbartopiclinks) {
+                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
+                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
+            }
+            echo '</div></div><div class="mainarea">';
+            break;
+
         case 'php':
         default:
             echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
@@ -270,6 +287,11 @@ FOOTER;
     }
 
     function _blurb(&$blurb) {
+        if ($this->pres->template == 'css') {
+            echo "<div class='blurb'>".markup_text($blurb->text)."</div>";
+            return;
+        }
+
         if($blurb->type=='speaker' && !$_SESSION['show_speaker_notes']) return;
         $effect = '';
         if($blurb->effect) $effect = "effect=\"$blurb->effect\"";
@@ -291,22 +313,22 @@ FOOTER;
             $size = "width=\"{$image->width}\" height=\"{$image->height}\"";
         } else {
             $size = getimagesize($this->slideDir.$image->filename);
-        	if (!empty($image->scale)) {
-				$width = $size[0] * $image->scale;
-				$height = $size[1] * $image->scale;
-	            $size = "width=\"{$width}\" height=\"{$height}\"";
-			} else {
-	            $size = $size[3];
-        	}
+            if (!empty($image->scale)) {
+                $width = $size[0] * $image->scale;
+                $height = $size[1] * $image->scale;
+                $size = "width=\"{$width}\" height=\"{$height}\"";
+            } else {
+                $size = $size[3];
+            }
         }
 ?>
 <div <?=$effect?> align="<?=$image->align?>" style="margin-left: <?=$image->marginleft?>; margin-right: <?=$image->marginright?>;">
 <img align="<?=$image->align?>" src="<?=$this->slideDir.$image->filename?>" <?=$size?>>
 </div>
 <?php
-			if(isset($image->clear)) echo "<br clear=\"".$image->clear."\"/>\n";
+        if(isset($image->clear)) echo "<br clear=\"".$image->clear."\"/>\n";
 
-		}
+    }
 
     // Because we are eval()'ing code from slides, obfuscate all local 
     // variables so we don't get run over
@@ -420,12 +442,12 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
     function _list(&$list) {
         if (!isset($list->bullets)) return;
         $align = '';
-        if(isset($list->title)) {
+        if ( ($this->pres->template != 'css') && ( isset($list->title) )) {
             if(!empty($list->fontsize)) $style = "font-size: ".$list->fontsize.';';
             if(!empty($list->align)) $align = 'align="'.$list->align.'"';
             echo "<div $align style=\"$style\">".markup_text($list->title)."</div>\n";
         }
-        echo '<ul>';
+        echo '<ul class="pres">';
         while(list($k,$bul)=each($list->bullets)) { $bul->display(); }
         echo '</ul>';
     }
@@ -536,8 +558,12 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         $style .= 'list-style-type: none;';
 
         $markedText = ($bullet->text == '&nbsp;') ? $bullet->text : markup_text(htmlspecialchars($bullet->text));
-           
-        echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
+
+        if ($this->pres->template = 'css') {
+            echo "<li class='pres_bullet'>$markedText</li>";
+        } else {
+            echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
+        }
     }
 
     function _table(&$table) {
