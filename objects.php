@@ -1487,6 +1487,46 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	}
 	// }}}
 
+	// {{{ Break Class
+	class _break {
+		function _break() {
+			$this->lines = 1;
+		}
+
+		function display() {
+			global $objs, $pres, $selected_display_mode;
+
+			if (isset($selected_display_mode)) {
+				$mode = $selected_display_mode;
+			} else if (isset($this->mode)) {
+				$mode = $this->mode;
+			} else if (isset($objs[1]->mode)) {
+				$mode = $objs[1]->mode;
+			} else if (isset($pres[1]->mode)) {
+				$mode = $pres[1]->mode;
+			} else {
+				$mode = 'html';
+			}
+
+			$this->$mode();
+		}
+
+		function html() {
+			echo str_repeat("<br/>\n", $this->lines);
+		}
+
+		function plainhtml() {
+			$this->html();
+		}
+
+		function flash() {
+			$this->html();
+		}
+
+		function pdf() { }
+	}
+	// }}}
+
 	// {{{ List Class
 	class _list {
 		function _list() {
