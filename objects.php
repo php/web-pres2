@@ -56,13 +56,13 @@ function getFlashDimensions($font,$title,$size) {
 		}
 
 		function flash() {
-			global $coid, $winW, $winH;
+			global $coid, $winW, $winH, $baseDir;
 
 			list($dx,$dy) = getFlashDimensions($this->titleFont,$this->title,$this->titleSize);
 			$dx = $winW;  // full width
 ?>
 <div align="<?=$this->titleAlign?>" class="sticky">
-<embed src="/pres2/flash.php/<?echo time()?>?type=title&dy=<?=$dy?>&dx=<?=$dx?>&coid=<?=$coid?>" quality=high loop=false 
+<embed src="<?=$baseDir?>flash.php/<?echo time()?>?type=title&dy=<?=$dy?>&dx=<?=$dx?>&coid=<?=$coid?>" quality=high loop=false 
 pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"
 type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 </embed>
