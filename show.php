@@ -86,7 +86,7 @@
 		case 'html':
 		case 'flash':
 			// facilitate caching
-			header("Last-Modified: " . date("r", filemtime($slideDir)));
+                        header("Last-Modified: " . date("r", filemtime($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename)));
 
 			echo <<<HEADER
 <html>
