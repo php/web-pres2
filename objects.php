@@ -86,7 +86,7 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 			$ln = wordwrap($ln,$linelen);
 			$out = explode("\n", $ln);
 		} else {
-			$out[0] = $ln;	
+			$out = array($ln);	
 		}
 		foreach($out as $l) {
 			if($np) { pdf_show($pdf, $l); $np = false; }
