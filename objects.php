@@ -20,7 +20,7 @@ function getFlashDimensions($font,$title,$size) {
 	// {{{ Presentation List Classes
 	class _presentation {
 		function _presentation() {
-			global $baseFontSize, $jsKeyboard;
+			global $baseFontSize, $jsKeyboard, $baseDir;
 
 			$this->title = 'No Title Text for this presentation yet';
 			$this->navmode  = 'flash';
