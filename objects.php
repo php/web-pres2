@@ -40,7 +40,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
-			$this->logoimage1url = '/index.php';
+			$this->logoimage1url = $baseDir . '/index.php';
 		}
 	}
 
@@ -61,7 +61,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->navColor = '#EFEF52';
 			$this->navSize  = "2em";
 			$this->titleAlign = 'center';
-			$this->titleFont  = 'fonts/Arial.fdb';
+			$this->titleFont  = 'fonts/Verdana.fdb';
 			$this->template   = 'php';
 			$this->mode  = 'html';
 		}
@@ -146,7 +146,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 	class _blurb {
 
 		function _blurb() {
-			$this->font  = 'fonts/Arial.fdb';
+			$this->font  = 'fonts/Verdana.fdb';
 			$this->align = 'left';
 			$this->fontsize     = '2.66em';
 			$this->marginleft   = '1em';
