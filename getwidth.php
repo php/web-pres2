@@ -6,7 +6,7 @@
  function is called if we don't have the dimensions already, or on a
  resize event to fetch the new window dimensions.
 */?>
-<script language="JavaScript1.2">
+<script language="JavaScript1.2" defer="defer">
 <!--
 function get_dims() {
     var winW = 1024;

@@ -1,7 +1,11 @@
+<?php
+require_once 'sniff.php';
+?>
 <style title="Default" type="text/css">
 body {
 	font-size: <?php echo $pres[1]->basefontsize; ?>;
-	margin-left:1.5em;
+	margin-top:0em;
+	margin-left:0em;
 	margin-right:0em;
 	margin-bottom:0em;
 	<?php
@@ -14,7 +18,7 @@ body {
 }
 div.sticky {
 	margin: 0;
-<?if(strstr($_SERVER['HTTP_USER_AGENT'],'MSIE')): // Need a much smarter check here ?>
+<?php if(!$css_supports_fixed): // Need a much smarter check here ?>
 	position: absolute;
 <?else:?>
 	position: fixed;
@@ -27,7 +31,7 @@ div.sticky {
 }
 div.bsticky {
 	margin: 0;
-<?if(strstr($_SERVER['HTTP_USER_AGENT'],'MSIE')): // Need a much smarter check here ?>
+<?php if(!$css_supports_fixed): // Need a much smarter check here ?>
 	position: absolute;
 <?else:?>
 	position: fixed;

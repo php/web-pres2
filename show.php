@@ -2,6 +2,7 @@
 	error_reporting(E_ALL);
 
 	require_once 'config.php';
+	require_once 'sniff.php';
 
 	set_time_limit(0);  // PDF generation can take a while
 	if(!strlen($_SERVER['PATH_INFO'])) {
@@ -108,7 +109,7 @@ HEADER;
 				$body_style = "margin-top: 5em;";
 				break;
 			default:
-				$body_style = "margin-top: 8em;";
+				$body_style = "margin-top: " . ($browser_is_IE ? "0px" : "8em") . ";";
 				break;
 			}
 			include 'getwidth.php';
