@@ -114,10 +114,10 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
     |rrggbb|word| Colour a word
 */
 function markup_text($str) {
-	$ret = preg_replace('/\b\*([\S ]+?)\*\b/','<strong>\1</strong>',$str);
+	$ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$str);
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','<tt>\1</tt>',$ret);
-	$ret = preg_replace('/\b\|([0-9a-fA-F]+?)\|(\S+?)\|\b/','<font color="\1">\2</font>',$ret);
+	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
 	return $ret;
 }
 // }}}
@@ -675,9 +675,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
 			$size = getimagesize($this->filename);
 ?>
-<div align="<?=$this->align?>"
- style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
-<img src="<?=$this->filename?>" <?=$size[3]?>>
+<div align="<?=$this->align?>" style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
+<img align="<?=$this->align?>" src="<?=$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
 
