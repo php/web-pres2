@@ -23,7 +23,8 @@ function getFlashDimensions($font,$title,$size) {
 			global $baseFontSize, $jsKeyboard, $baseDir ,$HTTP_HOST;
 
 			$this->title = 'No Title Text for this presentation yet';
-			$this->navmode  = 'flash';
+			$this->navmode  = 'html';
+			$this->mode  = 'html';
 			$this->navsize=NULL; // nav bar font size
 			$this->template = 'php';
 			$this->jskeyboard = $jsKeyboard;
@@ -65,13 +66,15 @@ function getFlashDimensions($font,$title,$size) {
 			$this->titleAlign = 'center';
 			$this->titleFont  = 'fonts/Verdana.fdb';
 			$this->template   = 'php';
-			$this->mode  = 'html';
 			$this->layout = '';
 		}
 
 		function display() {
-			if(isset($this->titleMode)) $this->{$this->titleMode}();
-			else $this->{$this->mode}();
+			global $pres;
+			if(isset($pres[1]->navmode)) $mode = $pres[1]->navmode;
+			if(isset($this->navmode)) $mode = $this->navmode;
+			$this->$mode();
+
 		}
 
 		function html() {
@@ -143,6 +146,79 @@ TITLEPAGE;
 			}
 		}
 
+		function plainhtml() {
+			global 	$slideNum, $maxSlideNum, $winW, $prevTitle, 
+					$nextTitle, $currentPres, $baseDir, $showScript,
+					$pres, $objs;
+			
+			$navsize = $this->navSize;
+			if ($pres[1]->navsize) $navsize = $pres[1]->navsize;
+			
+			$prev = $next = 0;
+			if($slideNum < $maxSlideNum) {
+				$next = $slideNum+1;
+			}
+			if($slideNum > 0) {
+				$prev = $slideNum - 1;
+			}
+			switch($pres[1]->template) {
+				default:
+				echo "<table border=0 width=\"100%\"><tr rowspan=2><td width=1>";
+				if(!empty($this->logo1)) $logo1 = $this->logo1;
+				else $logo1 = $pres[1]->logo1;
+				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
+				else $logo1url = $pres[1]->logoimage1url;				
+				if(!empty($logo1)) echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\"></a>\n";
+				echo "</td>\n";
+				if ($pres[1]->navbartopiclinks) {
+					echo "<td align=\"left\">";
+					if($prevTitle) echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none;\"><font size=+2>Previous: $prevTitle</font></a></td>\n";
+					echo "<td align=\"right\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none;\"><font size=+2>Next: $nextTitle</font></a></td>";
+				}
+				echo "<td rowspan=2 width=1>";
+				if(!empty($this->logo2)) $logo2 = $this->logo2;
+				else $logo2 = $pres[1]->logo2;
+				if (!empty($logo2)) {
+					echo "<img src=\"$logo2\" align=\"right\">\n";
+				}
+				echo "</td>\n";
+				echo "<tr><th colspan=3 align=\"center\"><font size=+4>$this->title</font></th></table>\n";
+
+				break;
+			}
+
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				case '2columns':
+					echo "<table width=\"100%\"><tr><td valign=\"top\">\n";
+					break;
+				case 'box':
+					echo "<table><tr><td>\n";
+					break;
+			}
+
+			// Automatic slides
+			if($objs[1]->template == 'titlepage') {
+				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
+				$smallerfontsize = (2*(float)$basefontsize/3).'em';
+				$p = $pres[1];
+				echo <<<TITLEPAGE
+<br /><br /><br /><br />
+<div align="center" style="font-size: $basefontsize;">$p->title</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->event</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;<a href="mailto:$p->email">$p->email</a>&gt;</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;"><a href="$p->url">$p->url</a></div>
+<br />
+TITLEPAGE;
+				
+			}
+		}
+
 		function flash() {
 			global $coid, $winW, $winH, $baseDir;
 
@@ -176,11 +252,16 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->titlecolor   = '#000000';
 			$this->text         = '';
 			$this->textcolor    = '#000000';
-			$this->mode         = 'html';
 		}
 
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
@@ -191,6 +272,15 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				echo "<div style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$this->text</div><br />\n";
 			}
 		}
+
+		function plainhtml() {
+			if(!empty($this->title)) {
+				echo "<h1><font color=\"$this->titlecolor\">$this->title</font></h1>\n";
+			}
+			if(!empty($this->text)) {
+				echo "<p><font color=\"$this->textcolor\">$this->text</font></p>\n";
+			}
+		}
 	}
 	// }}}
 
@@ -198,17 +288,33 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 	class _image {
 		function _image() {
 			$this->filename = '';
-			$this->mode = 'html';
 			$this->align = 'left';
 			$this->marginleft = "auto";
 			$this->marginright = "auto";
 		}
 
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
+			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
+			$size = getimagesize($this->filename);
+?>
+<div align="<?=$this->align?>"
+ style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
+<img src="<?=$this->filename?>" <?=$size[3]?>>
+</div>
+<?php
+
+		}
+
+		function plainhtml() {
 			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
 			$size = getimagesize($this->filename);
 ?>
@@ -227,7 +333,6 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		function _example() {
 			$this->filename = '';
 			$this->type = 'php';
-			$this->mode = 'html';
 			$this->fontsize = '2em';
 			$this->rfontsize = '1.8em';
 			$this->marginright = '3em';
@@ -245,9 +350,81 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
+	
+		// {{{ highlight()	
+		function highlight() {
+			if(!empty($this->filename)) {
+				$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+				switch($this->type) {
+					case 'php':
+					case 'genimage':
+					case 'iframe':
+					case 'link':
+					case 'embed':
+					case 'flash':
+					case 'system':
+						highlight_file($_html_filename);
+						break;
+					case 'shell':
+						$_html_file = file_get_contents($_html_filename);
+						echo '<pre>'.htmlspecialchars($_html_file)."</pre>\n";
+						break;
+					case 'c':
+						print `cat {$_html_filename} | c2html -cs`;
+						break;
+					case 'perl':
+						print `cat {$_html_filename} | perl2html -cs`;
+						break;
+					case 'java':
+						print `cat {$_html_filename} | java2html -cs`;
+						break;
+					case 'python':
+						print `py2html -stdout -format:rawhtml $_html_filename`;
+						break;
+					case 'html':
+						$_html_file = file_get_contents($_html_filename);
+						echo $_html_file."\n";
+						break;
+							
+					default:
+						$_html_file = file_get_contents($_html_filename);
+						echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
+						break;
+				}
+			} else {
+				switch($this->type) {
+					case 'php':
+						highlight_string($this->text);
+						break;
+					case 'shell':
+						echo '<pre>'.htmlspecialchars($this->text)."</pre>\n";
+						break;
+					case 'html':
+						echo $this->text."\n";
+						break;
+					case 'perl':
+						print `echo "{$this->text}" | perl2html -cs`;
+						break;
+					case 'c':
+						print `echo "{$this->text}" | c2html -cs`;
+						break;
 
+					default:
+						echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
+						break;
+				}
+			}
+		}
+		// }}}
+
+		// {{{ html()
 		// Because we are eval()'ing code from slides, obfuscate all local 
 		// variables so we don't get run over
 		function html() {
@@ -273,6 +450,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginleft).'em;'.
 					((!empty($this->width)) ? "width: $this->width;" : "").
 					'">';
+				if(!empty($pres[1]->examplebackground)) $_html_examplebackground = $pres[1]->examplebackground;
 				if(!empty($objs[1]->examplebackground)) $_html_examplebackground = $objs[1]->examplebackground;
 				if(!empty($this->examplebackground)) $_html_examplebackground = $this->examplebackground;
 
@@ -281,67 +459,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((!empty($_html_examplebackground)) ? "background: $_html_examplebackground;" : '').
 					'">';
 
-				if(!empty($this->filename)) {
-					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
-					switch($this->type) {
-						case 'php':
-						case 'genimage':
-						case 'iframe':
-						case 'link':
-						case 'embed':
-						case 'flash':
-						case 'system':
-							highlight_file($_html_filename);
-							break;
-						case 'shell':
-							$_html_file = file_get_contents($_html_filename);
-							echo '<pre>'.htmlspecialchars($_html_file)."</pre>\n";
-							break;
-                        case 'c':
-                            print `cat {$_html_filename} | c2html -cs`;
-                            break;
-                        case 'perl':
-                            print `cat {$_html_filename} | perl2html -cs`;
-                            break;
-                        case 'java':
-                            print `cat {$_html_filename} | java2html -cs`;
-                            break;
-                        case 'python':
-                            print `py2html -stdout -format:rawhtml $_html_filename`;
-                            break;
-						case 'html':
-							$_html_file = file_get_contents($_html_filename);
-							echo $_html_file."\n";
-							break;
-							
-                        default:
-							$_html_file = file_get_contents($_html_filename);
-							echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
-							break;
-					}
-				} else {
-					switch($this->type) {
-						case 'php':
-							highlight_string($this->text);
-							break;
-						case 'shell':
-							echo '<pre>'.htmlspecialchars($this->text)."</pre>\n";
-							break;
-						case 'html':
-							echo $this->text."\n";
-							break;
-                        case 'perl':
-                            print `echo "{$this->text}" | perl2html -cs`;
-                            break;
-                        case 'c':
-                            print `echo "{$this->text}" | c2html -cs`;
-                            break;
+				$this->highlight();
 
-						default:
-							echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
-							break;
-					}
-				}
 				echo "</div></div>\n";
 			}
 			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
@@ -352,6 +471,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
 					global ${$this->global};
 				}
+				if(!empty($pres[1]->outputbackground)) $_html_outputbackground = $pres[1]->outputbackground;
 				if(!empty($objs[1]->outputbackground)) $_html_outputbackground = $objs[1]->outputbackground;
 				if(!empty($this->outputbackground)) $_html_outputbackground = $this->outputbackground;
 				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\">\n";
@@ -403,20 +523,94 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				if(!empty($this->anchor)) echo "</a>\n";
 			}
 		}
+		/// }}}
+
+		// {{{ plainhtml()
+		function plainhtml() {
+			global $pres, $objs;
+			// Bring posted variables into the function-local namespace 
+			// so examples will work
+			foreach($_POST as $_html_key => $_html_val) {
+				$$_html_key = $_html_val;
+			}
+			foreach($_SERVER as $_html_key => $_html_val) {
+				$$_html_key = $_html_val;
+			}
+
+			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
+			if(!$this->hide) {
+				if(!empty($pres[1]->examplebackground)) $_html_examplebackground = $pres[1]->examplebackground;
+				if(!empty($objs[1]->examplebackground)) $_html_examplebackground = $objs[1]->examplebackground;
+				if(!empty($this->examplebackground)) $_html_examplebackground = $this->examplebackground;
+
+				echo "<table bgcolor=\"$_html_examplebackground\"><tr><td>\n";
+				$this->highlight();
+				echo "</td></tr></table>\n";
+			}
+			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
+					global ${$this->global};
+				}
+				if(!empty($pres[1]->outputbackground)) $_html_outputbackground = $pres[1]->outputbackground;
+				if(!empty($objs[1]->outputbackground)) $_html_outputbackground = $objs[1]->outputbackground;
+				if(!empty($this->outputbackground)) $_html_outputbackground = $this->outputbackground;
+				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\">\n";
+				echo "<br /><table bgcolor=\"$_html_outputbackground\"><tr><td>\n";
+
+				if(!empty($this->filename)) {
+					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					switch($this->type) {
+						case 'genimage':
+							echo "<img src=\"$this->filename\">\n";
+							break;
+						case 'iframe':
+						case 'link':
+						case 'embed':
+							echo "<a href=\"$this->filename\">$this->linktext</a><br />\n";
+							break;
+						case 'flash':
+							echo "<embed src=\"$this->filename?".time()." quality=high loop=true
+pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
+type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight>\n";
+							break;
+						case 'system':
+							system("DISPLAY=localhost:0 $this->filename");
+							break;	
+						default:
+							include $_html_filename;
+							break;
+					}
+				} else {
+					switch($this->type) {
+						default:
+							eval('?>'.$this->text);
+							break;
+					}
+				}
+				echo "</td></tr></table>\n";
+				if(!empty($this->anchor)) echo "</a>\n";
+			}
+		}
+		// }}}
+
 	}
 	// }}}
 
 	// {{{ List Class
 	class _list {
 		function _list() {
-			$this->mode        = 'html';
 			$this->fontsize    = '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
 		}
 
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
@@ -428,6 +622,13 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
 			echo '</ul>';
 		}
+
+		function plainhtml() {
+			if(isset($this->title)) echo "<h1>$this->title</h1>\n";
+			echo '<ul>';
+			while(list($k,$bul)=each($this->bullets)) $bul->display();
+			echo '</ul>';
+		}
 	}
 	// }}}
 
@@ -435,14 +636,18 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	class _bullet {
 
 		function _bullet() {
-			$this->mode = 'html';
 			$this->text = '';
 			$this->slide = '';
 			$this->id = '';
 		}
 
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
@@ -470,6 +675,10 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			}
 		}
 
+		function plainhtml() {
+			echo "<li>".$this->text."</li>\n";
+		}
+
 	}
 	// }}}
 
@@ -485,11 +694,15 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->marginright  = '0em';
 			$this->margintop    = '0em';	
 			$this->marginbottom = '0em';	
-			$this->mode         = 'html';
 		}
 
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
@@ -498,6 +711,15 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			else $leader='';
 			if(!empty($this->text)) {
 				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\">$this->text</a></div><br />\n";
+			}
+		}
+
+		function plainhtml() {
+			if(empty($this->text)) $this->text = $this->href;
+			if(!empty($this->leader)) $leader = $this->leader;
+			else $leader='';
+			if(!empty($this->text)) {
+				echo "$leader<a href=\"$this->href\">$this->text</a><br />\n";
 			}
 		}
 	}
@@ -520,12 +742,13 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	// {{{ Divider Class
 	class _divide {
 
-		function _divide() {
-			$this->mode         = 'html';
-		}
-
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
@@ -538,18 +761,30 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					break;
 			}
 		}
+
+		function plainhtml() {
+			global $objs;
+
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				case '2columns':
+					echo "</td>\n<td valign=\"top\">\n";
+					break;
+			}
+		}
 	}
 	// }}}
 
 	// {{{ Footer Class
 	class _footer {
 
-		function _footer() {
-			$this->mode         = 'html';
-		}
-
 		function display() {
-			$this->{$this->mode}();
+			global $objs, $pres;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			$this->$mode();
 		}
 
 		function html() {
@@ -559,6 +794,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
 				default:
 					echo "</div>\n";
+					break;
+			}
+		}
+
+		function plainhtml() {
+			global $objs;
+
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				default:
+					echo "</td></tr></table>\n";
 					break;
 			}
 		}

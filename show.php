@@ -28,35 +28,6 @@
 <html>
 <head>
 <base href="<?="http://$HTTP_HOST".$baseDir?>">
-<?/*
- A bit of fancy footwork to get the browser's inside dimensions in
- pixels.  Should work on both NS4+ and IE4+.  If it doesn't we default
- it to something sane.  The dimensions are returned to the server via
- a Javascript cookie so as to not muck up our nice clean URL.  The 
- function is called if we don't have the dimensions already, or on a
- resize event to fetch the new window dimensions.
-*/?>
-<script language="JavaScript1.2">
-<!--
-function get_dims() {
-	var winW = 1024;
-	var winH = 650;
-
-	if (window.innerWidth) { 
-		winW = window.innerWidth;
-		winH = window.innerHeight;
-	} else if (document.all) {
-		winW = document.body.clientWidth;
-		winH = document.body.clientHeight;
-	}
-	document.cookie="dims="+winW+"_"+winH;
-	top.location=top.location.href;
-}
-<?if(!isset($dims)) {?>
-get_dims();
-<? } ?>
--->
-</script>
 <?
 	if(isset($dims)) {
 		list($winW, $winH) = explode('_',$dims);
@@ -102,28 +73,23 @@ get_dims();
 
 	$objs = $r->getObjects();
 
-	switch($pres[1]->navmode) {
+	if(isset($objs[1]->navmode)) $navmode = $objs[1]->navmode;
+	else if(isset($pres[1]->navmode)) $navmode = $pres[1]->navmode;
+	else $navmode = 'html';
+
+	switch($navmode) {
+		case 'html':
 		case 'flash':
 			$body_style = "margin-top: 7em;";
-			break;
-
-		default:
-			$body_style = "margin-top: 7em;";
+			include 'getwidth.php';
+			include $pres[1]->stylesheet;
+			/* the following includes scripts necessary for various animations */
+			if($pres[1]->animate || $pres[1]->jskeyboard) include 'keyboard.js.php';
+			echo '</head>';
+			echo "<body onResize=\"get_dims();\" style=\"$body_style\">\n";
 			break;
 	}
-	
 
-	/* default is css.php */
-	include $pres[1]->stylesheet;
-	
-	/* the following includes scripts necessary for various animations */
-	if($pres[1]->animate || $pres[1]->jskeyboard) { 
-		include 'keyboard.js.php';
-	}
-?>
-</head>
-<body onResize="get_dims();" style="<?=$body_style?>">
-<?
 	while(list($coid,$obj) = each($objs)) {
 		$obj->display();
 	}
