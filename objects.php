@@ -334,6 +334,7 @@ TITLEPAGE;
 		function _blurb() {
 			$this->font  = 'fonts/Verdana.fdb';
 			$this->align = 'left';
+			$this->talign = 'left';
 			$this->fontsize     = '2.66em';
 			$this->marginleft   = '1em';
 			$this->marginright  = '1em';
@@ -358,19 +359,19 @@ TITLEPAGE;
 
 		function html() {
 			if(!empty($this->title)) {
-				echo "<div style=\"font-size: $this->fontsize; color: $this->titlecolor\">$this->title</div>\n";
+				echo "<div align=\"$this->talign\" style=\"font-size: $this->fontsize; color: $this->titlecolor\">$this->title</div>\n";
 			}
 			if(!empty($this->text)) {
-				echo "<div style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$this->text</div><br />\n";
+				echo "<div align=\"$this->align\" style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$this->text</div><br />\n";
 			}
 		}
 
 		function plainhtml() {
 			if(!empty($this->title)) {
-				echo "<h1><font color=\"$this->titlecolor\">$this->title</font></h1>\n";
+				echo "<h1 align=\"$this->talign\"><font color=\"$this->titlecolor\">$this->title</font></h1>\n";
 			}
 			if(!empty($this->text)) {
-				echo "<p><font color=\"$this->textcolor\">$this->text</font></p>\n";
+				echo "<p align=\"$this->align\"><font color=\"$this->textcolor\">$this->text</font></p>\n";
 			}
 		}
 
@@ -382,17 +383,41 @@ TITLEPAGE;
 			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
 
 			if(isset($this->title)) {
-				$pdf_cy = pdf_get_value($pdf, "texty");
-				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
 				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				$dx = pdf_stringwidth($pdf,$this->title);
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				switch($this->talign) {
+					case 'center':
+						$x = (int)($pdf_x/2 - $dx/2);
+						break;
+					case 'right':
+						$x = $pdf_x - $dx - $pdf_cx;
+						break;
+					default:
+					case 'left':
+						$x = $pdf_cx;
+						break;
+				}
+				pdf_set_text_pos($pdf,$x,$pdf_cy);
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "\n");
 			}
 			$pdf_cy = pdf_get_value($pdf, "texty")-5;
 
+			switch(strtolower($this->align)) {
+				case 'right':
+					$align = 'right';
+					break;
+				case 'center':
+					$align = 'center';
+					break;
+				default:
+					$align = "justify";
+					break;
+			}
 			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
 			$height=10;	
-			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx-20), $height, 'left', 'blind')) $height+=10;
+			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')) $height+=10;
 
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				pdf_end_page($pdf);
@@ -402,7 +427,7 @@ TITLEPAGE;
 			}
 
 			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
-			pdf_show_boxed($pdf, str_replace("\n",'',$this->text), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, 'justify');
+			pdf_show_boxed($pdf, str_replace("\n",' ',$this->text), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, $align);
 			pdf_continue_text($pdf, "\n");
 		}
 
