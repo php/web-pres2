@@ -184,11 +184,16 @@ switch($display_mode) {
 		break;
 }
 ?>
-<p>The available presentations are...</p>
+<p>The available presentations are... (most recent first)</p>
 <table align="center" class="index">
 <tr><th>Title</th><th>Date</th><th>Location</th><th>Speaker</th><th>Slides</th></tr>
 <?php
 $prnum = sizeof($pr);
+
+function cmp($a,$b) {
+	return strtotime($a['date']) < strtotime($b['date']);
+}
+usort($pr,'cmp');
 
 for($j=0; $j < $prnum; $j++) {
 
