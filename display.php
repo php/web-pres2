@@ -451,7 +451,11 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             if(!empty($list->align)) $align = 'align="'.$list->align.'"';
             echo "<div $align style=\"$style\">".markup_text($list->title)."</div>\n";
         }
-        echo '<ul class="pres">';
+		if (isset($list->class)) {
+	        echo "<ul class='{$list->class}'>";
+		} else {
+	        echo '<ul class="pres">';
+		}
         while(list($k,$bul)=each($list->bullets)) { $bul->display(); }
         echo '</ul>';
     }

@@ -131,6 +131,7 @@ within this system.</p>
 Simply click the topic you wish to find presentations on to view all available presentations.
 </p>
 <?php 
+	ksort($topics);
 	foreach($topics as $i => $topic) {
 		print('<p><a href="' . $baseDir . 'index.php/' . urlencode($i) . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
 	}
