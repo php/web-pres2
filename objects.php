@@ -552,6 +552,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->titlecolor   = '#000000';
 			$this->text         = '';
 			$this->textcolor    = '#000000';
+			$this->effect       = '';
 		}
 
 		function display() {
@@ -566,11 +567,13 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
+			$effect = '';
+			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(!empty($this->title)) {
-				echo "<div align=\"$this->talign\" style=\"font-size: $this->fontsize; color: $this->titlecolor\">".markup_text($this->title)."</div>\n";
+				echo "<div $effect align=\"$this->talign\" style=\"font-size: $this->fontsize; color: $this->titlecolor\">".markup_text($this->title)."</div>\n";
 			}
 			if(!empty($this->text)) {
-				echo "<div align=\"$this->align\" style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">".markup_text($this->text)."</div><br />\n";
+				echo "<div $effect align=\"$this->align\" style=\"font-size: ".(2*(float)$this->fontsize/3)."em; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">".markup_text($this->text)."</div><br />\n";
 			}
 		}
 
@@ -659,6 +662,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->align = 'left';
 			$this->marginleft = "auto";
 			$this->marginright = "auto";
+			$this->effect = '';
 		}
 
 		function display() {
@@ -672,10 +676,11 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
+			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
 			$size = getimagesize($this->filename);
 ?>
-<div align="<?=$this->align?>" style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
+<div <?=$effect?> align="<?=$this->align?>" style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
 <img align="<?=$this->align?>" src="<?=$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
@@ -781,6 +786,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->iwidth = '100%';
 			$this->iheight = '80%';
 			$this->localhost = false;
+			$this->effect = '';
 		}
 
 		function display() {
@@ -864,6 +870,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		// variables so we don't get run over
 		function html() {
 			global $pres, $objs;
+			$_html_effect = '';
+			if($this->effect) $_html_effect = "effect=\"$this->effect\"";
 			// Bring posted variables into the function-local namespace 
 			// so examples will work
 			foreach($_POST as $_html_key => $_html_val) {
@@ -878,7 +886,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				$_html_sz = (float) $this->fontsize;
 				if(!$_html_sz) $_html_sz = 0.1;
 				$_html_offset = (1/$_html_sz).'em';
-				echo '<div class="shadow" style="margin: '.
+				echo '<div '.$_html_effect.' class="shadow" style="margin: '.
 					((float)$this->margintop).'em '.
 					((float)$this->marginright+1).'em '.
 					((float)$this->marginbottom).'em '.
@@ -917,7 +925,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginleft).'em;'.
 					((!empty($this->rwidth)) ? "width: $this->rwidth;" : "").
 					'">';
-				echo '<div class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
+				echo '<div '.$_html_effect.' class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
 					((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
 					"\">\n";
 				if(!empty($this->filename)) {
@@ -1208,7 +1216,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 		function _bullet() {
 			$this->text = '';
-			$this->slide = '';
+			$this->effect = '';
 			$this->id = '';
 		}
 

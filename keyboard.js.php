@@ -23,7 +23,8 @@ function keypressHandler(e) {
 					} catch (e) { alert(e); }
 					break;
 				case 'hide':
-					effects[currentEffect].setAttribute('style','position:relative;visibility:visible;');	
+					oldstyle = effects[currentEffect].getAttribute('oldstyle');
+					effects[currentEffect].setAttribute('style',oldstyle+'visibility:visible;');	
 					break;
 			}
 			currentEffect = currentEffect+1;
@@ -51,7 +52,9 @@ onload = function() {
 				divs[i].setAttribute('gotoy',0);
 				divs[i].setAttribute('style','position:relative;left:-<?=$winW+10?>;top:0;');
 			} else if(divs[i].getAttribute('effect') == 'hide') {
-				divs[i].setAttribute('style','position:relative;visibility:hidden;');
+				style = divs[i].getAttribute('style');
+				divs[i].setAttribute('style',style+'visibility:hidden;');
+				divs[i].setAttribute('oldstyle',style);
 			}
 			effects[effects.length] = divs[i];
 	    }
