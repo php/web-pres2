@@ -15,11 +15,18 @@ function keypressHandler(e) {
 		e = e.which;
 	}
 	if (e == 39) { /* right arrow */
-		if (sliders.length > 0 && currentSlider < sliders.length) {
-			try {
-				slide(sliders[currentSlider], sliders[currentSlider].getAttribute('gotox')-50, sliders[currentSlider].getAttribute('gotoy'), 0) ;
-			} catch (e) { alert(e); }
-			currentSlider = currentSlider+1;
+		if (effects.length > 0 && currentEffect < effects.length) {
+			switch(effects[currentEffect].getAttribute('effect')) {
+				case 'slide':
+					try {
+						slide(effects[currentEffect], effects[currentEffect].getAttribute('gotox')-50, effects[currentEffect].getAttribute('gotoy'), 0) ;
+					} catch (e) { alert(e); }
+					break;
+				case 'hide':
+					effects[currentEffect].setAttribute('style','position:relative;visibility:visible;');	
+					break;
+			}
+			currentEffect = currentEffect+1;
 		} else if (<?php echo $nextSlideNum; ?>) {
 			top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum"; ?>';
 		}
@@ -29,8 +36,8 @@ function keypressHandler(e) {
 }
 window.onkeyup = keypressHandler;
 
-var sliders = [];
-var currentSlider = 0;
+var effects = [];
+var currentEffect = 0;
 
 onload = function() {
 	// find any div objects with an effect attribute 
@@ -43,8 +50,10 @@ onload = function() {
 				divs[i].setAttribute('gotox',divs[i].offsetLeft);
 				divs[i].setAttribute('gotoy',0);
 				divs[i].setAttribute('style','position:relative;left:-<?=$winW+10?>;top:0;');
-				sliders[sliders.length] = divs[i];
+			} else if(divs[i].getAttribute('effect') == 'hide') {
+				divs[i].setAttribute('style','position:relative;visibility:hidden;');
 			}
+			effects[effects.length] = divs[i];
 	    }
 	}
 }
