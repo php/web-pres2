@@ -1269,6 +1269,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
 			$this->border = 0;
+			$this->columns = 2;
 		}
 
 		function display() {
