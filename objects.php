@@ -330,6 +330,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						case 'html':
 							echo $this->text."\n";
 							break;
+                        case 'perl':
+                            print `echo "{$this->text}" | perl2html -cs`;
+                            break;
+                        case 'c':
+                            print `echo "{$this->text}" | c2html -cs`;
+                            break;
 
 						default:
 							echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
