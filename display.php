@@ -343,7 +343,7 @@ FOOTER;
 
             echo "</div></div>\n";
         }
-        if($example->result && (empty($example->condition) || (!empty($example->condition) && isset(${$example->condition})))) {
+        if($example->result && (empty($example->condition) || isset(${$example->condition})) && (empty($example->required_extension) || extension_loaded($example->required_extension))) {
             if(!$example->hide) echo '<div style="font-size: '.(4*(float)$example->fontsize/3)."em;\">Output</div>\n";
             $_html_sz = (float) $example->rfontsize;
             if(!$_html_sz) $_html_sz = 0.1;
@@ -803,7 +803,7 @@ FOOTER;
             $example->highlight($this->slideDir);
             echo "</td></tr></table>\n";
         }
-        if($example->result && (empty($example->condition) || (!empty($example->condition) && isset(${$example->condition})))) {
+        if($example->result && (empty($example->condition) || isset(${$example->condition})) && (empty($example->required_extension) || extension_loaded($example->required_extension))) {
             if(!$example->hide) {
                 echo "<h2>Output</h2>\n";
             }
@@ -1448,7 +1448,7 @@ class pdf extends display {
             
         }			
         $this->pdf_cy = pdf_get_value($this->pdf, "texty");
-        if($example->result && $example->type!='iframe' && (empty($example->condition) || (!empty($example->condition) && isset(${$example->condition})))) {
+        if($example->result && $example->type != 'iframe' && (empty($example->condition) || isset(${$example->condition})) && (empty($example->required_extension) || extension_loaded($example->required_extension))) {
             if(!$example->hide) {
                 $this->pdf_cy = pdf_get_value($this->pdf, "texty");
                 pdf_set_text_pos($this->pdf,$this->pdf_cx+20,$this->pdf_cy);  // Force to left-margin
