@@ -6,6 +6,12 @@ require_once 'config.php';
 
 session_start();
 
+if (!extension_loaded('ming')) {
+    if (!dl('php_ming.so')) {
+        exit;
+    }
+}
+
 $m = new SWFMovie();
 
 /*
