@@ -4,6 +4,13 @@ dl('gd.so');
  
 require_once('XML/Tree.php');
 require_once('Image/Transform.php');
+
+if (@$_POST || @$_GET) {
+    echo "No hacking please";
+    exit;
+}
+
+
 $f=  $_SERVER['argv'][1];
  
 $exec = "tidy -asxml $f";
