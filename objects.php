@@ -699,6 +699,13 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			}
 			if(isset($im)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
+				if(($pdf_cy + $dy) > ($pdf_y-60)) {
+					my_pdf_page_number($pdf);
+					pdf_end_page($pdf);
+					my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+					$pdf_cx = 40;
+					$pdf_cy = 60;
+				}
 				switch($this->align) {
 					case 'right':
 						$x = $pdf_x - $dx - $pdf_cx;
