@@ -90,13 +90,20 @@
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$baseDir">
 HEADER;
-			$body_style = "margin-top: 7em;";
+			switch($pres[1]->template) {
+			case 'simple':
+				$body_style = "margin-top: 1em;";
+				break;
+			default:
+				$body_style = "margin-top: 7em;";
+				break;
+			}
 			include 'getwidth.php';
 			include $pres[1]->stylesheet;
 			/* the following includes scripts necessary for various animations */
 			if($pres[1]->animate || $pres[1]->jskeyboard) include 'keyboard.js.php';
 			echo '</head>';
-			echo "<body onResize=\"get_dims();\" style=\"$body_style\">\n";
+			echo "<body onResize=\"get_dims();\" style=\"".$body_style."\">\n";
 			while(list($coid,$obj) = each($objs)) {
 				$obj->display();
 			}
