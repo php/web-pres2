@@ -755,6 +755,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				pdf_continue_text($pdf, "\n");
 			}
 			$pdf_cy = pdf_get_value($pdf, "texty")-5;
+			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
+			$cw = pdf_stringwidth($pdf,'m');  // em unit width
 
 			list($dx,$dy,$type) = getimagesize($slideDir.$this->filename);
 			$dx = $pdf_x*$dx/1024;
@@ -794,6 +796,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					default:
 						$x = $pdf_cx;
 						break;
+				}
+				if(isset($this->marginleft)) {
+					$x+= ((int)$this->marginleft) * $cw;
+				}
+				if(isset($this->marginright)) {
+					$x-= ((int)$this->marginright) * $cw;
 				}
 				pdf_save($pdf);
 				pdf_translate($pdf,0,$pdf_y);
