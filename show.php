@@ -31,6 +31,12 @@
 	if(isset($_COOKIE['dims'])) {
 		list($winW, $winH) = explode('_',$_COOKIE['dims']);
 	}
+	if (!isset($winW)) {
+		$winW = 0;
+	}
+	if (!isset($winH)) {
+		$winH = 0;
+	}
 
 	$p =& new XML_Presentation($presFile);
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
