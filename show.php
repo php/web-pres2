@@ -21,7 +21,7 @@
 	// Figure out which presentation file to read and slide to show
 	$presFile = trim(trim($_SERVER['PATH_INFO']),'/');
 	if (substr($presFile,-4) == ".pdf") {
-		$navmode = 'pdf';
+		$navmode = 'pdfus';
 		$presFile = substr($presFile, 0, -4);
 	}
 	$lastPres = null;
