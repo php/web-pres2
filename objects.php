@@ -22,6 +22,7 @@ function getFlashDimensions($font,$title,$size) {
 		function _presentation() {
 			$this->title = 'No Title Text for this presentation yet';
 			$this->navmode  = 'flash';
+			$this->template = 'php';
 		}
 	}
 
@@ -43,6 +44,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->navSize  = "2em";
 			$this->titleAlign = 'center';
 			$this->titleFont  = 'fonts/Arial.fdb';
+			$this->template   = 'php';
 			$this->mode  = 'html';
 		}
 
@@ -52,7 +54,9 @@ function getFlashDimensions($font,$title,$size) {
 		}
 
 		function html() {
-			global $slideNum, $maxSlideNum, $winW, $prevTitle, $nextTitle, $currentPres, $baseDir, $showScript;
+			global 	$slideNum, $maxSlideNum, $winW, $prevTitle, 
+					$nextTitle, $currentPres, $baseDir, $showScript,
+					$pres, $objs;
 			$prev = $next = 0;
 			if($slideNum < $maxSlideNum) {
 				$next = $slideNum+1;
@@ -60,7 +64,9 @@ function getFlashDimensions($font,$title,$size) {
 			if($slideNum > 0) {
 				$prev = $slideNum - 1;
 			}
-			echo <<<NAVBAR
+			switch($pres[1]->template) {
+				default:
+				echo <<<NAVBAR
 <div class="sticky" align="$this->titleAlign" style="width: $winW;">
 <div class="navbar">
 <img src="php_logo.gif" align="left" style="float: left;">
@@ -70,6 +76,27 @@ function getFlashDimensions($font,$title,$size) {
 </div>
 </div>
 NAVBAR;
+				break;
+			}
+			if($objs[1]->template == 'titlepage') {
+				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
+				$smallerfontsize = (2*(float)$basefontsize/3).'em';
+				$p = $pres[1];
+				echo <<<TITLEPAGE
+<br /><br /><br /><br />
+<div align="center" style="font-size: $basefontsize;">$p->title</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->event</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;$p->email&gt;</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->url</div>
+<br />
+TITLEPAGE;
+				
+			}
 		}
 
 		function flash() {
