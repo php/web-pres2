@@ -140,13 +140,16 @@ a:hover {
 		$slideNum = $maxSlideNum;
 	}
 	// Fetch info about previous slide
+	$prevSlideNum = $nextSlideNum = 0;
 	if($slideNum > 0) {
+                $prevSlideNum = $slideNum-1;
 		$r =& new XML_Slide($pres[1]->slides[$slideNum-1]->filename);
 		$r->parse();
 		$objs = $r->getObjects();
 		$prevTitle = $objs[1]->title;
 	} else $prevTitle = '';
 	if($slideNum < $maxSlideNum) {
+                $nextSlideNum = $slideNum+1;
 		$r =& new XML_Slide($pres[1]->slides[$slideNum+1]->filename);
 		$r->parse();
 		$objs = $r->getObjects();
@@ -171,6 +174,30 @@ a:hover {
 	
 ?>
 <body onResize="get_dims();" style="<?=$body_style?>">
+<?if(isset($jsKeyboard) && $jsKeyboard) { ?>
+<script language="JavaScript1.2">
+<!--
+if(!document.all){
+	window.captureEvents(Event.KEYUP);
+}else{
+	document.onkeypress = keypressHandler;
+}
+function keypressHandler(e){
+	var e;
+	if(document.all) { //it's IE
+		e = window.event.keyCode;
+	}else{
+		e = e.which;
+	}
+	if (e == 39 && <?php echo $nextSlideNum; ?>) /* right arrow */
+		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum"; ?>';
+	if (e == 37 && <?php echo $prevSlideNum; ?>) /* right arrow */
+		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlideNum"; ?>';
+}
+window.onkeyup = keypressHandler;
+-->
+</script>
+<? } ?>
 <?php
 	while(list($coid,$obj) = each($objs)) {
 		$obj->display();
