@@ -42,7 +42,7 @@ onload = function() {
 		//alert("slide "+sliderdiv[i].id+" at "+sliderdiv[i].offsetLeft+","+sliderdiv[i].offsetTop+"\n");
 		sliderdiv[i].setAttribute('gotox',sliderdiv[i].offsetLeft);
 		sliderdiv[i].setAttribute('gotoy',0);
-                sliderdiv[i].setAttribute('style','position:relative;left:-1024;top:0;');
+                sliderdiv[i].setAttribute('style','position:relative;left:-<?=$winW+10?>;top:0;');
 		sliders[sliders.length] = sliderdiv[i];
 	    }
 	}
