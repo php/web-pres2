@@ -25,5 +25,5 @@ function get_dims() {
 <?if(!isset($_COOKIE['dims'])) {?>
 get_dims();
 <? } ?>
--->
+//-->
 </script>

@@ -44,7 +44,7 @@ onload = function() {
 	// find any div objects with an effect attribute 
 	var divs = document.getElementsByTagName('div');
 	for (var i=0; i < divs.length; i++) {
-		if (divs[i].hasAttribute('effect')) {
+		if (divs[1].hasAttribute && divs[i].hasAttribute('effect')) {
 			// ok, add this to our slider array
 			//alert("slide "+divs[i].id+" at "+divs[i].offsetLeft+","+divs[i].offsetTop+"\n");
 			if(divs[i].getAttribute('effect') == 'slide') {
@@ -60,5 +60,5 @@ onload = function() {
 	    }
 	}
 }
--->
+//-->
 </script>
