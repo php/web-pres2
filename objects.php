@@ -42,6 +42,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
 			$this->logoimage1url = 'http://' . $HTTP_HOST . $baseDir . '/index.php';
+			$this->animate=false;
 		}
 	}
 
@@ -419,6 +420,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		function _bullet() {
 			$this->mode = 'html';
 			$this->text = '';
+			$this->slide = '';
+			$this->id = '';
 		}
 
 		function display() {
@@ -440,7 +443,14 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
+			if ($this->slide) {
+			    // we put the slide info in as an attribute to js can get it
+			    echo "<div id='$this->id' slide='true' style='position:relative;'>";
+			}
 			echo "<li style=\"$style\">".$this->text."</li>\n";
+			if ($this->slide) {
+			    echo "</div>";
+			}
 		}
 
 	}

@@ -115,14 +115,15 @@ get_dims();
 
 	/* default is css.php */
 	include $pres[1]->stylesheet;
+	
+	/* the following includes scripts necessary for various animations */
+	if($pres[1]->animate || $pres[1]->jskeyboard) { 
+		include 'keyboard.js.php';
+	}
 ?>
 </head>
 <body onResize="get_dims();" style="<?=$body_style?>">
 <?
-	if(isset($pres[1]->jskeyboard) && $pres[1]->jskeyboard) { 
-		include 'keyboard.js.php';
-	}
-
 	while(list($coid,$obj) = each($objs)) {
 		$obj->display();
 	}
