@@ -41,9 +41,9 @@ var effects = [];
 var currentEffect = 0;
 
 onload = function() {
-	<?if(!isset($_COOKIE['dims'])) {?>
+	<?php if(!isset($_COOKIE['dims'])) {?>
 	get_dims();
-	<? } ?>
+	<?php } ?>
 
 	// make banner sticky on old Windows IEs
 	<?php 
@@ -61,7 +61,7 @@ onload = function() {
 			if(divs[i].getAttribute('effect') == 'slide') {
 				divs[i].setAttribute('gotox',divs[i].offsetLeft);
 				divs[i].setAttribute('gotoy',0);
-				divs[i].setAttribute('style','position:relative;left:-<?=$this->winW+10?>;top:0;');
+				divs[i].setAttribute('style','position:relative;left:-<?php echo $this->winW+10?>;top:0;');
 			} else if(divs[i].getAttribute('effect') == 'hide') {
 				style = divs[i].getAttribute('style');
 				divs[i].setAttribute('style',style+'visibility:hidden;');

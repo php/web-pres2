@@ -108,17 +108,17 @@ FOOTER;
             }
             ?>
             <td align="center">
-            <?echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
+            <?php echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
             </td>
             </tr></table>
             <br />
             <table style="float: right">
               <tr>
-              <td class="c1"><b><?= $this->pres->title ?></b></td>
+              <td class="c1"><b><?php echo $this->pres->title ?></b></td>
               <td><img src="images/vline.gif" hspace="5" /></td>
-              <td class="c1"><?= date('Y-m-d') ?></td>
+              <td class="c1"><?php echo date('Y-m-d') ?></td>
               <td><img src="images/blank.gif" width="5" /></td>
-              <td><? if( $this->slideNum > 0){
+              <td><?php if( $this->slideNum > 0){
                          $prevSlide = $this->slideNum - 1;
                          echo "<a title=\"$this->prevTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
@@ -127,8 +127,8 @@ FOOTER;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a title="<?= $this->slideNum.' of '.$this->maxSlideNum?>" href="<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $this->winW-300 ?>,top=0'); return false" class="linka"><?= $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
-                  <td><? if( !empty($this->nextSlideNum) )
+              <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+                  <td><?php if( !empty($this->nextSlideNum) )
                     echo "<a title=\"$this->nextTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
                 ?></td>
@@ -136,9 +136,9 @@ FOOTER;
               </tr>
             </table>
             <br clear="left" />
-            <hr style="margin-left: 0; margin-right: 0; border: 0; color: <?=$titlecolor?>; background-color: <?=$titlecolor?>; height: 2px">
+            <hr style="margin-left: 0; margin-right: 0; border: 0; color: <?php echo $titlecolor?>; background-color: <?php echo $titlecolor?>; height: 2px">
             </div></div>
-            <?	
+            <?php
             break;
 
         case 'mysql':
@@ -155,17 +155,17 @@ FOOTER;
             }
             ?>
             <td align="center">
-            <b style="color: CC6600; font-size: 1.5em; font-family: arial, helvetica, verdana"><?= markup_text($slide->title) ?></b>
+            <b style="color: CC6600; font-size: 1.5em; font-family: arial, helvetica, verdana"><?php echo markup_text($slide->title) ?></b>
             </td>
             </tr></table>
             <br />
             <table style="float: right">
               <tr>
-              <td class="c1"><b><?= $this->pres->title ?></b></td>
+              <td class="c1"><b><?php echo $this->pres->title ?></b></td>
               <td><img src="images/vline.gif" hspace="5" /></td>
-              <td class="c1"><?= date('Y-m-d') ?></td>
+              <td class="c1"><?php echo date('Y-m-d') ?></td>
               <td><img src="images/blank.gif" width="5" /></td>
-              <td><? if( $this->slideNum > 0){
+              <td><?php if( $this->slideNum > 0){
                          $prevSlide = $this->slideNum - 1;
                          echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
@@ -174,8 +174,8 @@ FOOTER;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a href="<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $this->winW-300 ?>,top=0'); return false" class="linka"><?= $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
-                  <td><? if( !empty($this->nextSlideNum) )
+              <a href="<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+                  <td><?php if( !empty($this->nextSlideNum) )
                     echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
                 ?></td>
@@ -185,7 +185,7 @@ FOOTER;
             <br clear="left" />
             <hr style="border: 0; color: #CC6600; background-color: #CC6600; height: 2px">
             </div></div>
-            <?	
+            <?php
             break;
 
         case 'css':
@@ -322,8 +322,8 @@ ENDD;
             }
         }
 ?>
-<div <?=$effect?> align="<?=$image->align?>" style="margin-left: <?=$image->marginleft?>; margin-right: <?=$image->marginright?>;">
-<img align="<?=$image->align?>" src="<?=$this->slideDir.$image->filename?>" <?=$size?>>
+<div <?php echo $effect?> align="<?php echo $image->align?>" style="margin-left: <?php echo $image->marginleft?>; margin-right: <?php echo $image->marginright?>;">
+<img align="<?php echo $image->align?>" src="<?php echo $this->slideDir.$image->filename?>" <?php echo $size?>>
 </div>
 <?php
         if(isset($image->clear)) echo "<br clear=\"".$image->clear."\"/>\n";
@@ -658,7 +658,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                 <img style="margin-bottom: -0.3em" src="images/bottomswoop.gif" width="100%" height="50" />
                 <span class="c4">&copy; Copyright 2002 MySQL AB</span>
                 </div>
-                <?
+                <?php
                 }
                 break;
 /* (this seemed too intrusive)
@@ -666,9 +666,9 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                 if($this->nextTitle) {
                 ?>
                 <span class="C5">
-                    <?echo 'next: '.markup_text($this->nextTitle);?>
+                    <?php echo 'next: '.markup_text($this->nextTitle);?>
                 </span>
-                <?
+                <?php
                 }
                 break;
 */
@@ -814,8 +814,8 @@ FOOTER;
             $size = $size[3];
         }
 ?>
-<div align="<?=$image->align?>" style="margin-left: <?=$image->marginleft?>; margin-right: <?=$image->marginright?>;">
-<img src="<?=$this->slideDir.$image->filename?>" <?=$size?>>
+<div align="<?php echo $image->align?>" style="margin-left: <?php echo $image->marginleft?>; margin-right: <?php echo $image->marginright?>;">
+<img src="<?php echo $this->slideDir.$image->filename?>" <?php echo $size?>>
 </div>
 <?php
     }
@@ -967,10 +967,10 @@ class flash extends html {
 		list($dx,$dy) = getFlashDimensions($slide->titleFont,$slide->title,flash_fixsize($slide->titleSize));
         $dx = $this->winW;  // full width
 ?>
-<div align="<?=$slide->titleAlign?>" class="sticky" id="stickyBar">
-<embed src="<?=$this->baseDir?>flash.php/<?echo time()?>?type=title&dy=<?=$dy?>&dx=<?=$dx?>&coid=<?=$this->coid?>" quality=high loop=false 
+<div align="<?php echo $slide->titleAlign?>" class="sticky" id="stickyBar">
+<embed src="<?php echo $this->baseDir?>flash.php/<?php echo time()?>?type=title&dy=<?php echo $dy?>&dx=<?php echo $dx?>&coid=<?php echo $this->coid?>" quality=high loop=false 
 pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"
-type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
+type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo $dy?>">
 </embed>
 </div>
 <?php

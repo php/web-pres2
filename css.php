@@ -23,9 +23,9 @@ div.sticky {
 	margin: 0;
 <?php if(!$css_supports_fixed): // Need a much smarter check here ?>
 	position: absolute;
-<?else:?>
+<?php else:?>
 	position: fixed;
-<?endif?>
+<?php endif?>
 	top: 0em;
 	left: 0em;
 	right: auto;
@@ -36,9 +36,9 @@ div.bsticky {
 	margin: 0;
 <?php if(!$css_supports_fixed): // Need a much smarter check here ?>
 	position: absolute;
-<?else:?>
+<?php else:?>
 	position: fixed;
-<?endif?>
+<?php endif?>
 	top: auto; 
 	left: 0em;
 	right: auto;
