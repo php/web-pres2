@@ -1103,6 +1103,14 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							$this->_highlight_none($_html_filename);
 						}
 						break;
+					case 'sql':
+						$prog = trim(`which code2html`);
+						if (!empty($prog)) {
+							print `$prog --no-header -lsql $_html_filename`;
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
+						break;
 					case 'html':
 						$_html_file = file_get_contents($_html_filename);
 						echo $_html_file."\n";
@@ -1371,6 +1379,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					case 'perl':
 					case 'java':
 					case 'python':
+					case 'sql':
 					case 'html':
 					default:
 						if($_html_file[strlen($_html_file)-1] != "\n") $_html_file .= "\n";
