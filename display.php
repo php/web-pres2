@@ -71,7 +71,7 @@ FOOTER;
         $currentPres = $_SESSION['currentPres'];
         
         $navsize = $slide->navSize;
-        if ($this->pres->navsize) $navsize = $pres->navsize;
+        if (isset($this->pres->navsize)) $navsize = $pres->navsize;
 
         $titlesize = $slide->titleSize;
         if (isset($pres->titlesize)) $titlesize = $pres->titlesize;
