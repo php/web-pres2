@@ -113,69 +113,9 @@ get_dims();
 	}
 	
 
-
-/* The stylesheet will move out into its own file soon,
-   it is just a bit easier working with an embedded one
-   for now while it changes often. */
-
+	/* default is css.php */
+	include $pres[1]->stylesheet;
 ?>
-<style title="Default" type="text/css">
-body {
-	font-size: <?="$baseFontSize;\n"?>
-	margin-left:1.5em;
-	margin-right:0em;
-	margin-bottom:0em;
-}
-div.sticky {
-	margin: 0;
-<?if(strstr($HTTP_USER_AGENT,'MSIE')): // Need a much smarter check here ?>
-	position: absolute;
-<?else:?>
-	position: fixed;
-<?endif?>
-	top: 0em;
-	left: 0em;
-	right: auto;
-	bottom: auto;
-	width: auto;
-}
-div.shadow {
-	background: #777777;
-	padding: 0.5em;
-}
-div.navbar {
-	background: url(trans.png) transparent fixed;
-	padding: 4;
-	margin: 0;
-	<?php if (!isset($pres[1]->jskeyboard) || !$pres[1]->jskeyboard) { ?>height: 6em;<?php } ?>
-	color: #ffffff;
-	font-family: verdana, tahoma, arial, helvetica, sans-serif;
-}
-div.emcode {
-	background: #cccccc;
-	border: thin solid #000000;
-	padding: 0.5em;
-	font-family: monospace;
-}
-div.output {
-	font-family: monospace;
-	background: #cccc55;
-	border: thin solid #000000;
-	padding: 0.5em;
-}
-h1 {
-	font-size: 2em;
-}
-p,li {
-	font-size: 2.6em;
-}
-a {
-	text-decoration: none;
-}
-a:hover {
-	text-decoration: underline;
-}
-</style>
 </head>
 <body onResize="get_dims();" style="<?=$body_style?>">
 <?

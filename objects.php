@@ -23,6 +23,16 @@ function getFlashDimensions($font,$title,$size) {
 			$this->title = 'No Title Text for this presentation yet';
 			$this->navmode  = 'flash';
 			$this->template = 'php';
+			$this->jskeyboard = false;
+			$this->logo1 = 'php_logo.gif';
+			$this->logo2 = NULL;
+			$this->basefontsize = "8pt";
+			$this->backgroundcol = false;
+			$this->backgroundfixed = false;
+			$this->backgroundimage = false;
+			$this->navbarbackground = 'url(trans.png) transparent fixed';
+			$this->navbartopiclinks = true;
+			$this->stylesheet = 'css.php';
 		}
 	}
 
@@ -68,11 +78,11 @@ function getFlashDimensions($font,$title,$size) {
 				default:
 				echo "<div class='sticky' align='$this->titleAlign' style='width: 100%;'><div class='navbar'>";
 				echo "<img src='{$pres[1]->logo1}' align='left' style='float: left;'>";
-				if (isset($pres[1]->logo2)) {
+				if ($pres[1]->logo2) {
 					echo "<img src='{$pres[1]->logo2}' align='right' style='float: right;'>";
 				}
 				echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum' style='text-decoration: none; color: $this->titleColor;'>$this->title</a></div>";
-				if (!isset($pres[1]->jskeyboard) || !$pres[1]->jskeyboard) {
+				if ($pres[1]->navbartopiclinks) {
 					echo "<div style='float: left; margin: -0.2em 2em 0 0; font-size: $this->navSize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev' style='text-decoration: none; color: $this->navColor;'>$prevTitle</a></div>";
 					echo "<div style='float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $this->navSize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next' style='text-decoration: none; color: $this->navColor;'>$nextTitle</a></div>";
 				}
