@@ -224,7 +224,7 @@ TITLEPAGE;
 		function flash() {
 			global $objs,$pres,$coid, $winW, $winH, $baseDir;
 
-			list($dx,$dy) = getFlashDimensions($this->titleFont,$this->title,fixsize($this->titleSize));
+			list($dx,$dy) = getFlashDimensions($this->titleFont,$this->title,flash_fixsize($this->titleSize));
 			$dx = $winW;  // full width
 ?>
 <div align="<?=$this->titleAlign?>" class="sticky">
@@ -266,6 +266,39 @@ TITLEPAGE;
 			}
 		}
 
+		function pdf() {
+			global $pdf, $pdf_x, $pdf_y, $slideNum, $currentPres, $baseDir, $showScript, $pres, $objs;
+
+			$p = $pres[1];
+			$middle = (int)($pdf_y/2);
+
+			if($slideNum) {  // No header on the titlepage
+				pdf_set_font($pdf, "Helvetica" , 12, 'winansi');
+				pdf_show_boxed($pdf, "Slide $slideNum", 10, $pdf_y-100, $pdf_x-20, 72, 'left');
+				pdf_show_boxed($pdf, $p->date, 10, $pdf_y-100, $pdf_x-20, 72, 'right');
+				pdf_set_font($pdf, "Helvetica" , 18, 'winansi');
+				pdf_show_boxed($pdf, $this->title, 10, $pdf_y-100, $pdf_x-20, 72, 'center');
+			}
+
+			if($objs[1]->template == 'titlepage') {
+				pdf_set_font($pdf, "Helvetica" , 36, 'winansi');
+				pdf_show_boxed($pdf, $p->title, 10, $middle+200, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
+				pdf_show_boxed($pdf, $p->event, 10, $middle+120, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
+				pdf_show_boxed($pdf, $p->date, 10, $middle+40, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
+				pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $middle-40, $pdf_x-20, 40, 'center');
+
+				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
+				pdf_show_boxed($pdf, '<'.$p->url.'>', 10, $middle-120, $pdf_x-20, 40, 'center');
+			}
+		
+			pdf_set_text_pos($pdf, 40, $pdf_y-80);
+		}
 	}
 	// }}}
 
@@ -319,6 +352,25 @@ TITLEPAGE;
 			$this->html();
 		}
 
+		function pdf() {
+			global $pdf, $pdf_x, $pdf_y;
+
+			if(isset($this->title)) {
+				pdf_set_font($pdf, "Helvetica" , 16, 'winansi');
+				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, "\n");
+				$cy = pdf_get_value($pdf, "texty")-30;
+			} else $cy = pdf_get_value($pdf, "texty");
+
+			pdf_set_font($pdf, "Helvetica" , 12, 'winansi');
+
+			$height=14;	
+			while(pdf_show_boxed($pdf, $this->text, 60, $cy, $pdf_x-30, $height, 'left', 'blind')) $height+=10;
+			pdf_show_boxed($pdf, $this->text, 60, $cy, $pdf_x-30, $height, 'justify');
+			$cy-=$height;
+			pdf_set_text_pos($pdf, 40, $cy);
+		}
+
 	}
 	// }}}
 
@@ -366,6 +418,10 @@ TITLEPAGE;
 
 		function flash() {
 			$this->html();
+		}
+
+		function pdf() {
+
 		}
 
 	}
@@ -643,6 +699,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 		// }}}
 
+		// {{{ pdf()
+		function pdf() {
+
+		}
+		// }}}
+
 	}
 	// }}}
 
@@ -685,6 +747,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->html();
 		}
 
+		function pdf() {
+			global $pdf;
+
+			if(isset($this->title)) {
+				pdf_set_font($pdf, "Helvetica" , 16, 'winansi');
+				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, "");
+			}
+			while(list($k,$bul)=each($this->bullets)) $bul->display();
+			
+		}
 	}
 	// }}}
 
@@ -740,7 +813,19 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->html();
 		}
 
+		function pdf() {
+			global $pdf, $pdf_x, $pdf_y;
 
+			$cy = pdf_get_value($pdf, "texty");
+			pdf_set_font($pdf, "Helvetica" , 12, 'winansi');
+		
+			$height=14;	
+			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $cy, $pdf_x-30, $height, 'left', 'blind')) $height+=10;
+			pdf_show_boxed($pdf, 'o '.$this->text, 60, $cy-$height, $pdf_x-30, $height, 'left');
+			$cy-=$height;
+			pdf_set_text_pos($pdf, 40, $cy);
+			
+		}
 	}
 	// }}}
 
@@ -790,6 +875,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->html();
 		}
 
+		function pdf() {
+
+		}
 	}
 	// }}}
 
@@ -846,6 +934,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->html();
 		}
 
+		function pdf() {
+
+		}
 	}
 	// }}}
 
@@ -886,6 +977,10 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 		function flash() {
 			$this->html();
+		}
+
+		function pdf() {
+
 		}
 
 	}

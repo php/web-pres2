@@ -7,5 +7,7 @@
 	$helpPage = 'help.php';
 	$baseFontSize = '12pt';
 	$flashFontScale = 18;
+    $pdf_x = 612;  // US-Letter papersize
+    $pdf_y = 792;  // A4 would be 595x842
 	$jsKeyboard = true; // enable javascript handling of keyboard events
 ?>

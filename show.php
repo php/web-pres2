@@ -106,10 +106,33 @@ HEADER;
 FOOTER;
 			break;
 		case 'pdf':
-			echo "<pre>DEBUG";
-			print_r($pres);
-			print_r($objs);
-			echo "</pre>";
+			// In PDF mode we loop through all the slides and make a single
+			// big multi-page PDF document.
+			$pdf = pdf_new();
+			pdf_open_file($pdf);
+			pdf_set_info($pdf, "Author",$pres[1]->speaker);
+			pdf_set_info($pdf, "Title",$pres[1]->title);
+			pdf_set_info($pdf, "Creator", "See Author");
+			pdf_set_info($pdf, "Subject", $pres[1]->topic);
+
+			while(list($slideNum,$slide) = each($pres[1]->slides)) {
+				$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
+				$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
+				$r->parse();
+
+				$objs = $r->getObjects();
+				pdf_begin_page($pdf, $pdf_x, $pdf_y);  // US-Letter for now A4=595x842
+				while(list($coid,$obj) = each($objs)) {
+					$obj->display();
+				}
+				pdf_end_page($pdf);
+			}
+			pdf_close($pdf);
+			$data = pdf_get_buffer($pdf);
+			header('Content-type: application/pdf');
+			header("Content-disposition: inline; filename=$currentPres.pdf");
+			header("Content-length: " . strlen($data));
+			echo $data;
 			break;
 	}
 ?>
