@@ -71,13 +71,13 @@ FOOTER;
         $currentPres = $_SESSION['currentPres'];
         
         $navsize = $slide->navSize;
-        if (isset($this->pres->navsize)) $navsize = $pres->navsize;
+        if (isset($this->pres->navsize)) $navsize = $this->pres->navsize;
 
         $titlesize = $slide->titleSize;
-        if (isset($pres->titlesize)) $titlesize = $pres->titlesize;
+        if (isset($this->pres->titlesize)) $titlesize = $this->pres->titlesize;
 
         $titlecolor = $slide->titleColor;
-        if (isset($pres->titlecolor)) $titlecolor = $pres->titlecolor;
+        if (isset($this->pres->titlecolor)) $titlecolor = $this->pres->titlecolor;
         
         $prev = $next = 0;
         if($this->slideNum < $this->maxSlideNum) {
@@ -88,7 +88,7 @@ FOOTER;
         }
         $slidelistH = $this->winH - 30;
         $offset=0;
-        switch($slide->template) {
+        switch($this->pres->template) {
         case 'simple':
             $slide->titleColor = '#000000';
             echo "<div align=\"$slide->titleAlign\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
@@ -98,9 +98,9 @@ FOOTER;
             echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
             echo "<table style=\"float: left;\" width=\"60%\" border=\"0\" cellpadding=0 cellspacing=0><tr>\n";
             if(!empty($slide->logo1)) $logo1 = $slide->logo1;
-            else $logo1 = $pres->logo1;
+            else $logo1 = $this->pres->logo1;
             if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $pres->logoimage1url;				
+            else $logo1url = $this->pres->logoimage1url;				
             if(!empty($logo1)) {
                 $size = getimagesize($logo1);
                 echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0em; margin-left: 0em;\"></a></td>";
@@ -108,13 +108,13 @@ FOOTER;
             }
             ?>
             <td align="center">
-            <?echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
+            <?echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
             </td>
             </tr></table>
             <br />
             <table style="float: right">
               <tr>
-              <td class="c1"><b><?= $pres->title ?></b></td>
+              <td class="c1"><b><?= $this->pres->title ?></b></td>
               <td><img src="images/vline.gif" hspace="5" /></td>
               <td class="c1"><?= date('Y-m-d') ?></td>
               <td><img src="images/blank.gif" width="5" /></td>
@@ -145,12 +145,12 @@ FOOTER;
             echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
             echo "<table style=\"float: left;\" width=\"60%\" border=\"0\"><tr>\n";
             if(!empty($slide->logo1)) $logo1 = $slide->logo1;
-            else $logo1 = $pres->logo1;
+            else $logo1 = $this->pres->logo1;
             if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $pres->logoimage1url;				
+            else $logo1url = $this->pres->logoimage1url;				
             if(!empty($logo1)) {
                 $size = getimagesize($logo1);
-                echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0.5em; margin-left: 1em;\" alt=\"".$pres->slides[$this->slideNum]->filename."\"></a></td>";
+                echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0.5em; margin-left: 1em;\" alt=\"".$this->pres->slides[$this->slideNum]->filename."\"></a></td>";
                 $offset+=2;
             }
             ?>
@@ -161,7 +161,7 @@ FOOTER;
             <br />
             <table style="float: right">
               <tr>
-              <td class="c1"><b><?= $pres->title ?></b></td>
+              <td class="c1"><b><?= $this->pres->title ?></b></td>
               <td><img src="images/vline.gif" hspace="5" /></td>
               <td class="c1"><?= date('Y-m-d') ?></td>
               <td><img src="images/blank.gif" width="5" /></td>
