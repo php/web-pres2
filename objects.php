@@ -26,14 +26,14 @@ function getFlashDimensions($font,$title,$size) {
 			$this->navmode  = 'flash';
 			$this->template = 'php';
 			$this->jskeyboard = $jsKeyboard;
-			$this->logo1 = 'php_logo.gif';
+			$this->logo1 = 'images/php_logo.gif';
 			$this->logo2 = NULL;
 			$this->basefontsize = $baseFontSize;
 			$this->backgroundcol = false;
 			$this->backgroundfixed = false;
 			$this->backgroundimage = false;
 			$this->backgroundrepeat = false;
-			$this->navbarbackground = 'url(trans.png) transparent fixed';
+			$this->navbarbackground = 'url(images/trans.png) transparent fixed';
 			$this->navbartopiclinks = true;
 			$this->examplebackground = '#cccccc';
 			$this->outputbackground = '#eeee33';
