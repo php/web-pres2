@@ -36,22 +36,22 @@ switch($type) {
 		// Space bar or Enter takes us to the next slide
 		if($slideNum < $maxSlideNum) {
 			$next = $slideNum+1;
-			$b->addAction(new SWFAction("getURL('http://$HTTP_HOST$baseDir$showScript/$currentPres/$next','_self');"), swfbutton_keypress(' '));
-			$b->addAction(new SWFAction("getURL('http://$HTTP_HOST$baseDir$showScript/$currentPres/$next','_self');"), swfbutton_keypress(chr(13)));
+			$b->addAction(new SWFAction("getURL('http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next','_self');"), swfbutton_keypress(' '));
+			$b->addAction(new SWFAction("getURL('http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next','_self');"), swfbutton_keypress(chr(13)));
 		}
 
 		// Backspace or DEL bar takes us to the previous slide
 		if($slideNum > 0) {
 			$prev = $slideNum - 1;
-			$b->addAction(new SWFAction("getURL('http://$HTTP_HOST$baseDir$showScript/$currentPres/$prev','_self');"), swfbutton_keypress(chr(8)));
-			$b->addAction(new SWFAction("getURL('http://$HTTP_HOST$baseDir$showScript/$currentPres/$prev','_self');"), swfbutton_keypress(chr(127)));
+			$b->addAction(new SWFAction("getURL('http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev','_self');"), swfbutton_keypress(chr(8)));
+			$b->addAction(new SWFAction("getURL('http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev','_self');"), swfbutton_keypress(chr(127)));
 		}
 
 		// ESC reloads the current slide
-		$b->addAction(new SWFAction("getURL('http://$HTTP_HOST$baseDir$showScript/$currentPres/$slideNum','_self');"), swfbutton_keypress(chr(27)));
+		$b->addAction(new SWFAction("getURL('http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum','_self');"), swfbutton_keypress(chr(27)));
 
 		// ? brings up the help page
-		$b->addAction(new SWFAction("getURL('http://$HTTP_HOST$baseDir$helpPage','_blank');"), swfbutton_keypress('?'));
+		$b->addAction(new SWFAction("getURL('http://$_SERVER[HTTP_HOST]$baseDir$helpPage','_blank');"), swfbutton_keypress('?'));
 
 		$f = new SWFFont($objs[$coid]->titleFont);
 		$m->setBackground(0x66, 0x66, 0x99);

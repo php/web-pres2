@@ -7,8 +7,8 @@
  * vim600: sw=4 ts=4 fdm=marker
  * vim<600: sw=4 ts=4
  */
-	if(!empty($PATH_INFO)) {
-	  $topic = trim(substr($PATH_INFO,1));
+	if(!empty($_SERVER['PATH_INFO'])) {
+	  $topic = trim(substr($_SERVER['PATH_INFO'],1));
 	}
 
 	require_once 'config.php';
@@ -79,7 +79,7 @@
 
 <html>
 <head>
-<base href="<?="http://$HTTP_HOST".$baseDir?>">
+<base href="<?="http://$_SERVER[HTTP_HOST]".$baseDir?>">
 <title>PHP Presents</title>
 <?php include("css.php"); ?>
 <script language="JavaScript1.2">
@@ -124,10 +124,10 @@ Simply click the topic you wish to find presentations on to view all available p
 	}
 
 } else {
-	if(empty($display_mode)) $display_mode = 'html';
+	if(empty($_COOKIE['display_mode'])) { $display_mode = 'html'; } else { $display_mode = $_COOKIE['display_mode']; }
 	$selected_display_mode = $display_mode;
 ?>
-<form name="modes_form" action="<?=$PHP_SELF?>" method="POST">
+<form name="modes_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 <p>Please select a display mode:
 <select name="modes" onChange="change_mode()">
 <option value="html" <?=($display_mode=='html')?'SELECTED':''?>>Fancy HTML (Best with Mozilla)</option>

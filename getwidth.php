@@ -22,7 +22,7 @@ function get_dims() {
     document.cookie="dims="+winW+"_"+winH;
     top.location=top.location.href;
 }
-<?if(!isset($dims)) {?>
+<?if(!isset($_COOKIE['dims'])) {?>
 get_dims();
 <? } ?>
 -->

@@ -14,7 +14,7 @@ body {
 }
 div.sticky {
 	margin: 0;
-<?if(strstr($HTTP_USER_AGENT,'MSIE')): // Need a much smarter check here ?>
+<?if(strstr($_SERVER['HTTP_USER_AGENT'],'MSIE')): // Need a much smarter check here ?>
 	position: absolute;
 <?else:?>
 	position: fixed;

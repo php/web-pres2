@@ -4,8 +4,8 @@
 	require_once 'config.php';
 
 	set_time_limit(0);  // PDF generation can take a while
-	if(!strlen($PATH_INFO)) {
-		header('Location: http://'.$HTTP_HOST.$baseDir);
+	if(!strlen($_SERVER['PATH_INFO'])) {
+		header('Location: http://'.$_SERVER['HTTP_HOST'].$baseDir);
 		exit;
 	}
 
@@ -25,7 +25,7 @@
 	session_register('titles');
 	session_register('titlesLoaded');
 
-	$presFile = trim($PATH_INFO);			
+	$presFile = trim($_SERVER['PATH_INFO']);			
 	$presFile = trim($presFile,'/');			
 	if(isset($currentPres)) {
 		$lastPres = $currentPres;
@@ -37,8 +37,8 @@
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
-	if(isset($dims)) {
-		list($winW, $winH) = explode('_',$dims);
+	if(isset($_COOKIE['dims'])) {
+		list($winW, $winH) = explode('_',$_COOKIE['dims']);
 	}
 
 	$p =& new XML_Presentation($presFile);
@@ -86,7 +86,7 @@
 			echo <<<HEADER
 <html>
 <head>
-<base href="http://$HTTP_HOST$baseDir">
+<base href="http://$_SERVER[HTTP_HOST]$baseDir">
 HEADER;
 			$body_style = "margin-top: 7em;";
 			include 'getwidth.php';
@@ -114,7 +114,7 @@ FOOTER;
 			echo <<<HEADER
 <html>
 <head>
-<base href="http://$HTTP_HOST$baseDir">
+<base href="http://$_SERVER[HTTP_HOST]$baseDir">
 </head>
 <body>
 HEADER;

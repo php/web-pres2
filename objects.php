@@ -137,7 +137,7 @@ function strip_markups($str) {
 	// {{{ Presentation List Classes
 	class _presentation {
 		function _presentation() {
-			global $baseFontSize, $jsKeyboard, $baseDir ,$HTTP_HOST;
+			global $baseFontSize, $jsKeyboard, $baseDir;
 
 			$this->title = 'No Title Text for this presentation yet';
 			$this->navmode  = 'html';
@@ -159,7 +159,7 @@ function strip_markups($str) {
 			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
-			$this->logoimage1url = 'http://' . $HTTP_HOST . $baseDir . '/index.php';
+			$this->logoimage1url = 'http://' . $_SERVER['HTTP_HOST'] . $baseDir . '/index.php';
 			$this->animate=false;
 		}
 	}
