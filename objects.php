@@ -24,15 +24,15 @@ function format_tt($arg) {
 }
 
 /* {{{ string markup_text($str)
-	*word*        Bold
-	_word_        underline
-	%word%        monospaced word (ie. %function()%)
-	~word~        italics
+	*word*		Bold
+	_word_		underline
+	%word%		monospaced word (ie. %function()%)
+	~word~		italics
 	|rrggbb|word| Colour a word
-	^N^           Superscript
-	@N@           Subscript
-	**word**      Blink
-	#id#          Entity
+	^N^		   Superscript
+	@N@		   Subscript
+	**word**	  Blink
+	#id#		  Entity
 */
 function markup_text($str) {
   $ret = $str;
@@ -81,7 +81,7 @@ function add_line_numbers($text)
 	$format = '%'.$lnwidth."d: %s\n";
 	$lined_text = '';
 	while (list ($num, $line) = each ($lines)) {
-	        $lined_text .= sprintf($format, $num + 1, $line);
+			$lined_text .= sprintf($format, $num + 1, $line);
 	}
 	return $lined_text;
 }
@@ -117,12 +117,12 @@ function strip_markups($str) {
 
 	// {{{ Presentation List Classes
 	class _tag {
-	    function display() {
-	        global $mode;
-	        
-	        $class = get_class($this);
-	        $mode->$class($this);
-	    }
+		function display() {
+			global $mode;
+			
+			$class = get_class($this);
+			$mode->$class($this);
+		}
 	}
 	
 	class _presentation extends _tag {
@@ -187,17 +187,17 @@ function strip_markups($str) {
 			$this->font  = 'fonts/Verdana.fdb';
 			$this->align = 'left';
 			$this->talign = 'left';
-			$this->fontsize     = '2.66em';
+			$this->fontsize	 = '2.66em';
 			$this->marginleft   = '1em';
 			$this->marginright  = '1em';
-			$this->margintop    = '0.2em';	
+			$this->margintop	= '0.2em';	
 			$this->marginbottom = '0em';	
-			$this->title        = '';
+			$this->title		= '';
 			$this->titlecolor   = '#000000';
-			$this->text         = '';
-			$this->textcolor    = '#000000';
-			$this->effect       = '';
-			$this->type         = '';
+			$this->text		 = '';
+			$this->textcolor	= '#000000';
+			$this->effect	   = '';
+			$this->type		 = '';
 		}
 
 	}
@@ -363,18 +363,18 @@ function strip_markups($str) {
 						echo $this->text."\n";
 						break;
 					case 'perl':
-					    $text = str_replace('"', '\\"', $this->text);
+						$text = str_replace('"', '\\"', $this->text);
 						print `echo "{$text}" | perl2html -cs`;
 						break;
 					case 'c':
-					    $text = str_replace('"', '\\"', $this->text);
+						$text = str_replace('"', '\\"', $this->text);
 						print `echo "{$text}" | c2html -cs`;
 						break;
 					case 'xml':
 
 						$prog = trim(`which code2html`);
 						if (!empty($prog)) {
-						    $text = str_replace('"', '\\"', $this->text);
+							$text = str_replace('"', '\\"', $this->text);
 							echo "<pre>\n";
 							print `echo "{$text}" | code2html -lhtml --no-header`;
 							echo "</pre>";
@@ -403,10 +403,22 @@ function strip_markups($str) {
 	}
 	// }}}
 
+	// {{{ Div Class
+	class _div extends _tag {
+		function _div() {
+			$this->effect = '';
+		}
+	}
+
+	class _div_end extends _tag {
+		/* empty */
+	}
+	// }}}
+
 	// {{{ List Class
 	class _list extends _tag {
 		function _list() {
-			$this->fontsize    = '3em';
+			$this->fontsize	= '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
 			$this->num = 1;
@@ -432,7 +444,7 @@ function strip_markups($str) {
 	// {{{ Table Class
 	class _table extends _tag {
 		function _table() {
-			$this->fontsize    = '3em';
+			$this->fontsize	= '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
 			$this->border = 0;
@@ -463,11 +475,11 @@ function strip_markups($str) {
 		function _link() {
 			$this->href  = '';
 			$this->align = 'left';
-			$this->fontsize     = '2em';
-			$this->textcolor    = '#000000';
+			$this->fontsize	 = '2em';
+			$this->textcolor	= '#000000';
 			$this->marginleft   = '0em';
 			$this->marginright  = '0em';
-			$this->margintop    = '0em';	
+			$this->margintop	= '0em';	
 			$this->marginbottom = '0em';	
 		}
 
@@ -486,13 +498,13 @@ function strip_markups($str) {
 
 	// {{{ Divider Class
 	class _divide extends _tag {
-	    /* empty */
+		/* empty */
 	}
 	// }}}
 
 	// {{{ Footer Class
 	class _footer extends _tag {
-	    /* empty */
+		/* empty */
 	}
 	// }}}
 ?>
