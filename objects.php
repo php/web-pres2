@@ -1099,7 +1099,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 		// {{{ pdf()
 		function pdf() {
-			global $pres, $objs, $pdf, $pdf_cx, $pdf_cy, $pdf_x, $pdf_y, $pdf_font, $pdf_example_font, $slideDir;
+			global $pres, $objs, $pdf, $pdf_cx, $pdf_cy, $pdf_x, $pdf_y, $pdf_font, $pdf_example_font, $slideDir, $baseDir;
 
 			// Bring posted variables into the function-local namespace 
 			// so examples will work
@@ -1166,7 +1166,48 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 					switch($this->type) {
 						case 'genimage':
-							// need some trick to fetch the generated image here
+							$fn = tempnam("/tmp","pres2");
+							$img = file_get_contents("http://localhost/".$baseDir.$slideDir.$this->filename,"r");
+							$fp_out = fopen($fn,"wb");
+							fwrite($fp_out,$img);
+							fclose($fp_out);
+							list($dx,$dy,$type) = getimagesize($fn);
+							$dx = $pdf_x*$dx/1024;
+							$dy = $pdf_x*$dy/1024;
+
+							switch($type) {
+								case 1:
+									$im = pdf_open_gif($pdf, $fn);
+									break;
+								case 2:
+									$im = pdf_open_jpeg($pdf, $fn);
+									break;
+								case 3:
+									$im = pdf_open_png($pdf, $fn);
+									break;
+								case 7:
+									$im = pdf_open_tiff($pdf, $fn);
+									break;
+							}
+							if(isset($im)) {
+								$pdf_cy = pdf_get_value($pdf, "texty");
+								if(($pdf_cy + $dy) > ($pdf_y-60)) {
+									my_pdf_page_number($pdf);
+									pdf_end_page($pdf);
+									my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+									$pdf_cx = 40;
+									$pdf_cy = 60;
+								}
+								pdf_save($pdf);
+								pdf_translate($pdf,0,$pdf_y);
+
+								$scale = $pdf_x/1024;
+								pdf_scale($pdf,1,-1);
+								pdf_place_image($pdf, $im, $pdf_cx, ($pdf_y-$pdf_cy-$dy), $scale);
+								pdf_restore($pdf);
+								pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy+$dy);
+							}
+							unlink($fn);
 							break;
 						case 'iframe':
 						case 'link':
