@@ -145,6 +145,11 @@ Simply click the topic you wish to find presentations on to view all available p
 <p>Please select a display mode:
 <select name="modes" onChange="change_mode()">
 <option value="html" <?=($display_mode=='html')?'SELECTED':''?>>Fancy HTML (Best with Mozilla)</option>
+<option value="plainhtml" <?=($display_mode=='plainhtml')?'SELECTED':''?>>Plain HTML</option>
+<option value="flash" <?=($display_mode=='flash')?'SELECTED':''?>>Flash 5 (navbar only)</option>
+<option value="pdfus" <?=($display_mode=='pdfus')?'SELECTED':''?>>PDF (US-Letter)</option>
+<option value="pdfusl" <?=($display_mode=='pdfusl')?'SELECTED':''?>>PDF (US-Legal)</option>
+<option value="pdfa4" <?=($display_mode=='pdfa4')?'SELECTED':''?>>PDF (A4)</option>
 </select>
 <br />
 Show Speaker Notes: <input type="checkbox" name="speaker" <?=$speaker?'checked':''?> onChange="change_mode()">
