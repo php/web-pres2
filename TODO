@@ -17,11 +17,7 @@ Things to work on
 
 - A cooler help page would be nice.
 
-- a pop-up list of slide titles would be good so at any time during a
-  presentation you could get the list and navigate to any slide by 
-  clicking somewhere on the list.  Perhaps some Javascript trickery is
-  required for the HTML navbar.  For the flash one, just a new key event
-  will do the trick.
+- Someone want to pretty up slidelist.php?
 
 - Perhaps a pop-up widget to change $baseFontSize on the fly?  The base font
   size that works on one machine may not work at all on another.  So a quick
