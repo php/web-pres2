@@ -258,10 +258,10 @@ function strip_markups($str) {
 			if ($pres[1]->navsize) $navsize = $pres[1]->navsize;
 
 			$titlesize = $this->titleSize;
-			if ($pres[1]->titlesize) $titlesize = $pres[1]->titlesize;
+			if (isset($pres[1]->titlesize)) $titlesize = $pres[1]->titlesize;
 
 			$titlecolor = $this->titleColor;
-			if ($pres[1]->titlecolor) $titlecolor = $pres[1]->titlecolor;
+			if (isset($pres[1]->titlecolor)) $titlecolor = $pres[1]->titlecolor;
 			
 			$prev = $next = 0;
 			if($slideNum < $maxSlideNum) {
