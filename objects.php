@@ -149,7 +149,7 @@ function strip_markups($str) {
 			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
-			$this->logoimage1url = 'http://' . $_SERVER['HTTP_HOST'] . $baseDir . '/index.php';
+			$this->logoimage1url = 'http://' . $_SERVER['HTTP_HOST'] . $baseDir;
 			$this->animate=false;
 		}
 	}
