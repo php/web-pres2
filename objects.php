@@ -414,6 +414,7 @@ function strip_markups($str) {
 			$this->marginright = '0em';
 			$this->border = 0;
 			$this->columns = 2;
+			$this->bgcolor = null;
 		}
 
 	}

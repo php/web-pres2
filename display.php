@@ -552,7 +552,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         if(!empty($table->width)) {
             $width = $table->width;
         }
-        echo '<table '.$align.' width="'.$width.'" border="'.$table->border.'">';
+        echo '<table '.$align.' width="'.$width.'" border="'.$table->border.'" '.(isset($table->bgcolor)?"bgcolor=\"{$table->bgcolor}\"":'').'>';
         while(list($k,$cell)=each($table->cells)) {
             if(!($i % $table->columns)) {
                 echo "<tr>\n";
@@ -1164,6 +1164,7 @@ class pdf extends display {
     }
 
     function _slide(&$slide) {
+		global $pres;
         $currentPres = $_SESSION['currentPres'];
 
         $p = $this->objs[1];
@@ -1171,8 +1172,8 @@ class pdf extends display {
 
         $this->pdf_cy = 25;  // top-margin
         $this->pdf_cx = 40;
-    
         if($this->objs[1]->template == 'titlepage') {
+			$p = $pres;
             $loc = $middle - 80 * ( !empty($p->title) + !empty($p->event) +
                                     !empty($p->date) + 
                                     (!empty($p->speaker)||!empty($p->email)) +
@@ -1341,7 +1342,6 @@ class pdf extends display {
         $this->pdf_cy = pdf_get_value($this->pdf, "texty")-5;
         pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
         $cw = pdf_stringwidth($this->pdf,'m');  // em unit width
-
         if ($image->width) {
             $dx = $image->height;
             $dy = $image->width;
@@ -1354,7 +1354,8 @@ class pdf extends display {
 
         switch($type) {
             case 1:
-                $im = pdf_open_gif($this->pdf, $this->slideDir.$image->filename);
+				if(!strstr($image->filename,'blank')) 
+	                $im = pdf_open_gif($this->pdf, $this->slideDir.$image->filename);
                 break;
             case 2:
                 $im = pdf_open_jpeg($this->pdf, $this->slideDir.$image->filename);
