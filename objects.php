@@ -65,7 +65,6 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 
 	$pos = $i = 0;
 	$len = strlen($data);
-	$data = str_replace("\t",'    ',$data);  // 4-space tabs - should probably be an attribute
 	pdf_set_text_pos($pdf, $lm, $tm);
 	
 	$np = true;
@@ -89,6 +88,7 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 			$out = array($ln);	
 		}
 		foreach($out as $l) {
+			$l = str_replace("\t",'    ',$l);  // 4-space tabs - should probably be an attribute
 			if($np) { pdf_show($pdf, $l); $np = false; }
 			else pdf_continue_text($pdf, $l);
 		}
