@@ -1296,17 +1296,23 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				case 'numbered':
 				case 'number':
 				case 'decimal':
-					$bullet = $objs[$coid]->num++;
+					$bullet = $objs[$coid]->num++ . '.';
 					break;
 				case 'no-bullet':
 				case 'none':
 					$bullet='';
 					break;
 				case 'alpha':
-					$bullet = $objs[$coid]->alpha++;
+					$bullet = $objs[$coid]->alpha++ . '.';
+					break;
+				case 'ALPHA':
+					$bullet = strtoupper($objs[$coid]->alpha++) . '.';
 					break;
 				case 'arrow':
 					$bullet = '&rarr;';
+					break;
+				case 'asterisk':
+					$bullet = '&lowast;';
 					break;
 				case 'darrow':
 					$bullet = '&rArr;';
@@ -1328,6 +1334,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					break;
 				case 'diams':
 					$bullet = '&diams;';
+					break;
+				case 'lozenge':
+					$bullet = '&loz;';
 					break;
 				default:
 					$bullet = '&bull;';
