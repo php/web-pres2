@@ -456,7 +456,54 @@ TITLEPAGE;
 		}
 
 		function pdf() {
+			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_y;
 
+			if(isset($this->title)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
+				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, "\n");
+			}
+			$pdf_cy = pdf_get_value($pdf, "texty")-5;
+
+			list($dx,$dy,$type) = getimagesize($this->filename);
+
+			switch($type) {
+				case 1:
+					$im = pdf_open_gif($pdf, $this->filename);
+					break;
+				case 2:
+					$im = pdf_open_jpeg($pdf, $this->filename);
+					break;
+				case 3:
+					$im = pdf_open_png($pdf, $this->filename);
+					break;
+				case 7:
+					$im = pdf_open_tiff($pdf, $this->filename);
+					break;
+			}
+			if(isset($im)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				switch($this->align) {
+					case 'right':
+						$x = $pdf_x - $dx - $pdf_cx;
+						break;
+					case 'center':
+						$x = (int)($pdf_x/2 - $dx/2);
+						break;
+					case 'left':
+					default:
+						$x = $pdf_cx;
+						break;
+				}
+				pdf_save($pdf);
+				pdf_translate($pdf,0,$pdf_y);
+				pdf_scale($pdf,1,-1);
+				pdf_place_image($pdf, $im, $x, $pdf_y-$pdf_cy-$dy, 1.0);
+				pdf_restore($pdf);
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy+$dy);
+			}		
 		}
 
 	}
