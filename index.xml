@@ -1,6 +1,6 @@
 <presentation>
 <title>PHP Presentation System</title>
-<!-- <backgroundcol>#EEEE33</backgroundcol> -->
+<backgroundcol>#FFFFFF</backgroundcol>
 <basefontsize>4pt</basefontsize>
 <navbartopiclinks>0</navbartopiclinks>
 <navcolor></navcolor>
