@@ -273,6 +273,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							$_html_file = file_get_contents($this->filename);
 							echo nl2br(htmlspecialchars($_html_file))."\n";
 							break;
+                        case 'c':
+                            print `cat {$this->filename} | c2html -cs`;
+                            break;
+                        case 'perl':
+                            print `cat {$this->filename} | perl2html -cs`;
+                            break;
 						default:
 							$_html_file = file_get_contents($this->filename);
 							echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
