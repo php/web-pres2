@@ -127,7 +127,7 @@ FOOTER;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a title="<?= $this->slideNum.' of '.$this->maxSlideNum?>" href="<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $this->winW-300 ?>,top=0'); return false" class="linka"><?= $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+              <a title="<?= $this->slideNum.' of '.$this->maxSlideNum?>" href="<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $this->winW-300 ?>,top=0'); return false" class="linka"><?= $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
                   <td><? if( !empty($this->nextSlideNum) )
                     echo "<a title=\"$this->nextTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
@@ -174,7 +174,7 @@ FOOTER;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a href="<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $this->winW-300 ?>,top=0'); return false" class="linka"><?= $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+              <a href="<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $this->winW-300 ?>,top=0'); return false" class="linka"><?= $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
                   <td><? if( !empty($this->nextSlideNum) )
                     echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
@@ -207,7 +207,7 @@ FOOTER;
                 echo "<img src=\"$logo2\" border=\"0\"><br/>";
                 $offset-=2;
             }
-            echo "<a href=\"http://$_SERVER[HTTP_HOST]{$this->baseDir}slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('http://$_SERVER[HTTP_HOST]{$this->baseDir}slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
+            echo "<a href=\"http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
             if ($this->pres->navbartopiclinks) {
                 echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navColor;\">".markup_text($this->prevTitle)."</a></div>";
                 echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navColor;\">".markup_text($this->nextTitle)."</a></div>";
