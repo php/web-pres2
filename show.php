@@ -2,6 +2,9 @@
 	error_reporting(E_ALL);
 
 	require_once 'config.php';
+	$c = compact('presentationDir', 'baseDir', 'showScript', 'helpPage', 'baseFontSize', 
+	             'flashFontScale', 'pdfFontScale', 'pdfResourceFile', 'pdf_font', 
+	             'pdf_font_bold', 'pdf_example_font', 'jsKeyboard', 'css_supports_fixed');
 	require_once 'sniff.php';
 
 	set_time_limit(0); // PDF generation can take a while
