@@ -259,11 +259,18 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginleft).'em;'.
 					((isset($this->width)) ? "width: $this->width;" : "").
 					'">';
-				echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;\">\n";
+				echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
+					(($this->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
+					'">';
+
 				if(!empty($this->filename)) {
 					switch($this->type) {
 						case 'php':
 							highlight_file($this->filename);
+							break;
+						case 'shell':
+							$_html_file = file_get_contents($this->filename);
+							echo nl2br(htmlspecialchars($_html_file))."\n";
 							break;
 						default:
 							$_html_file = file_get_contents($this->filename);
@@ -275,6 +282,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						case 'php':
 							highlight_string($this->text);
 							break;
+						case 'shell':
+							echo nl2br(htmlspecialchars($this->text))."\n";
+							break;
+
 						default:
 							echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
 							break;
