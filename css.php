@@ -26,7 +26,7 @@ div.sticky {
 	width: auto;
 }
 div.shadow {
-	background: #777777;
+	background: <?php echo $pres[1]->shadowbackground; ?>;
 	padding: 0.5em;
 }
 div.navbar {
@@ -38,14 +38,14 @@ div.navbar {
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 }
 div.emcode {
-	background: #cccccc;
+	background: <?php echo $pres[1]->examplebackground; ?>;
 	border: thin solid #000000;
 	padding: 0.5em;
 	font-family: monospace;
 }
 div.output {
 	font-family: monospace;
-	background: #dddd66;
+	background: <?php echo $pres[1]->outputbackground; ?>;
 	border: thin solid #000000;
 	padding: 0.5em;
 }
