@@ -36,6 +36,7 @@ div.navbar {
         height: <?php echo $pres[1]->navbarheight; ?>;
 	color: #ffffff;
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
+	z-index: 99;
 }
 div.emcode {
 	background: <?php echo $pres[1]->examplebackground; ?>;
