@@ -115,7 +115,7 @@ $prnum = sizeof($pr);
 for($j=0; $j < $prnum; $j++) {
 
 	if(strtolower($pr[$j]['topic']) == strtolower($topic)) {
-		print("<tr><td><a href=\"/$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td>{$pr[$j]['date']}</td>");
+		print("<tr><td><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td>{$pr[$j]['date']}</td>");
 		print("<td>{$pr[$j]['location']}</td><td>{$pr[$j]['speaker']}</td><td>{$pr[$j]['slidecount']}</td></tr>");
 
 	}
