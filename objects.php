@@ -676,6 +676,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
+			$effect = '';
 			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
 			$size = getimagesize($this->filename);
