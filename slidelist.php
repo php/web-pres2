@@ -1,5 +1,5 @@
 <?php
-	require_once 'config.php';
+    require_once 'config.php';
     require_once 'XML_Presentation.php';
     require_once 'XML_Slide.php';
 
@@ -12,7 +12,7 @@
 function slide(url){
 window.opener.location=url
 }
--->
+//-->
 </script>
 </head>
 <body bgcolor="#ffffff">
@@ -41,3 +41,5 @@ window.opener.location=url
 	}
 	echo "</table>\n";
 ?>
+</body>
+</html>
