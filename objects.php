@@ -289,7 +289,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							break;
 						case 'shell':
 							$_html_file = file_get_contents($_html_filename);
-							echo nl2br(htmlspecialchars($_html_file))."\n";
+							echo '<pre>'.nl2br(htmlspecialchars($_html_file))."</pre>\n";
 							break;
                         case 'c':
                             print `cat {$_html_filename} | c2html -cs`;
@@ -300,6 +300,11 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
                         case 'java':
                             print `cat {$_html_filename} | java2html -cs`;
                             break;
+						case 'html':
+							$_html_file = file_get_contents($_html_filename);
+							echo $_html_file."\n";
+							break;
+							
                         default:
 							$_html_file = file_get_contents($_html_filename);
 							echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
@@ -311,7 +316,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							highlight_string($this->text);
 							break;
 						case 'shell':
-							echo nl2br(htmlspecialchars($this->text))."\n";
+							echo '<pre>'.nl2br(htmlspecialchars($this->text))."</pre>\n";
+							break;
+						case 'html':
+							echo $this->text."\n";
 							break;
 
 						default:
