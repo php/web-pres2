@@ -1249,6 +1249,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 			$style='';
 			$type='';
+			$effect='';
 			$ml = $this->level;
 
 			if(!empty($this->marginleft)) $ml += (float)$this->marginleft;
@@ -1261,6 +1262,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->type)) $type = $this->type;
 			else if(!empty($objs[$coid]->type)) $type = $objs[$coid]->type;
 
+			if(!empty($this->effect)) $effect = $this->effect;
+			else if(!empty($objs[$coid]->effect)) $effect = $objs[$coid]->effect;
+
 			if(!empty($this->fontsize)) $style .= "font-size: ".$this->fontsize.';';
 			else if(!empty($objs[$coid]->fontsize)) $style .= "font-size: ".(2*(float)$objs[$coid]->fontsize/3).'em;';
 
@@ -1270,9 +1274,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
-			if ($this->effect) {
-			    // we put the slide info in as an attribute so js can get it
-			    echo "<div id='$this->id' effect='$this->effect' style='position:relative;'>";
+			if ($effect) {
+				$eff_str = "id=\"$this->id\" effect=\"$effect\"";
 			} 
 			switch($type) {
 				case 'numbered':
@@ -1315,12 +1318,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					break;
 			}
 
-			$style .= 'list-style-type: none; position: relative;';
+			$style .= 'list-style-type: none;';
 
-			echo "<li style=\"$style\">".'<tt>'.$bullet.'</tt> '.markup_text($this->text)."</li>\n";
-			if ($this->effect) {
-			    echo "</div>";
-			}
+			echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$bullet.'</tt> '.markup_text($this->text)."</li></div>\n";
 		}
 
 		function plainhtml() {

@@ -5,7 +5,7 @@ function slide(e,x,y,sp,funcCall,xNow,yNow){
 	else{if(e.sliding)return}
 	xNow=xNow||parseInt(e.left||e.style.left||e.style.pixelLeft||e.offsetLeft);
 	yNow=yNow||parseInt(e.top||e.style.top||e.style.pixelTop||e.offsetTop);
-	distX=Math.abs(xNow-x);
+	distX=Math.abs(xNow-x+10);
 	distY=Math.abs(yNow-y);
 	if(Math.round(xNow)!=x)xNow+=(distX/(11-sp)*sign(xNow,x));
 	if(Math.round(yNow)!=y)yNow+=(distY/(11-sp)*sign(yNow,y));
