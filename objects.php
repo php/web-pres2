@@ -219,8 +219,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
-			if(isset($this->title)) 
-				echo '<h1>'.$this->title."</h1>\n";
+			if(isset($this->title)) {
+				if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
+				echo "<div $style>".$this->title."</div>\n";
+			}
 			echo '<ul>';
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
 			echo '</ul>';
@@ -241,8 +243,14 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
-			if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
-			echo '<li $style>'.$this->text."</li>\n";
+			global $objs, $coid;
+
+			$style='';
+			if(!empty($this->fontsize)) $style .= "font-size: ".$this->fontsize.';';
+			else if(!empty($objs[$coid]->fontsize)) $style .= "font-size: ".(2*(float)$objs[$coid]->fontsize/3).'em;';
+			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
+			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
+			echo "<li style=\"$style\">".$this->text."</li>\n";
 		}
 
 	}

@@ -156,11 +156,11 @@ p,li {
 
 	switch($pres[1]->navmode) {
 		case 'flash':
-			$body_style = "margin-top: 6em;";
+			$body_style = "margin-top: 7em;";
 			break;
 
 		default:
-			$body_style = "margin-top: 6em;";
+			$body_style = "margin-top: 7em;";
 			break;
 	}
 	
