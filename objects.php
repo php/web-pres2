@@ -1405,6 +1405,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
 			$txt = strip_markups($this->text);
+
+			pdf_save($pdf);
+			pdf_translate($pdf,0,$pdf_y);
+			pdf_scale($pdf,1,-1);
+			pdf_set_font($pdf, $pdf_font , 12, 'winansi');
+			$leading = pdf_get_value($pdf, "leading");
+			$inc = $leading;	
+			while(pdf_show_boxed($pdf, $txt, $pdf_cx+30, $pdf_y-$pdf_cy, $pdf_x-2*($pdf_cx+20), $height, 'left', 'blind')) $height+=$inc;
+
+			pdf_restore($pdf);
+
 			//clean up eols so we get a nice pdf output
 			if (strstr("\r\n",$txt)) {
 				$eol = "\r\n";
@@ -1414,7 +1425,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$eol = "\n";
 			}
 			$txt = str_replace($eol," ", $txt);
-			while(pdf_show_boxed($pdf, 'o '.$txt, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+			$txt = str_replace("  "," ",$txt);
+
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
@@ -1422,11 +1434,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cx = 40;
 				$pdf_cy = 60;
 			}
+
 			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
-			pdf_show_boxed($pdf, 'o '.$txt, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
-			$pdf_cy+=$height;
-			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
-			pdf_continue_text($pdf,"");	
+			if($this->type=='speaker') {
+				pdf_setcolor($pdf,'fill','rgb',1,0,0);
+			}
+			pdf_show_xy($pdf, 'o', $pdf_cx+20, $pdf_cy+$leading-1);
+			pdf_show_boxed($pdf, $txt, $pdf_cx+30, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, 'left');
+			pdf_continue_text($pdf,"\n");
+			$pdf_cy = pdf_get_value($pdf, "texty");
+			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy-$leading/2);
+			pdf_setcolor($pdf,'fill','rgb',0,0,0);
 		}
 	}
 	// }}}
