@@ -243,7 +243,7 @@ function strip_markups($str) {
 				if(!empty($this->logo2)) $logo2 = $this->logo2;
 				else $logo2 = $pres[1]->logo2;
 				if (!empty($logo2)) {
-					echo "<img src=\"$logo2\" border=\"0\"><br/>";
+					echo "<img src=\"$logo2\" border=\"0\"><br />";
 					$offset-=2;
 				}
 				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($winW-300).",top=0'); return false\">".($slideNum)."/".($maxSlideNum)."</a></div>";
