@@ -19,7 +19,7 @@
 
 	$presFile = trim($PATH_INFO);			
 	$presFile = trim($presFile,'/');			
-	list($currentPres,$slideNum) = explode('/',$presFile);
+	@list($currentPres,$slideNum) = explode('/',$presFile);
 	if(!$slideNum) $slideNum = 0;
 	if($slideNum<0) $slideNum = 0;
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
@@ -126,6 +126,7 @@ FOOTER;
 			// big multi-page PDF document.
 			$page_number = 0;
 			$pdf = pdf_new();
+			if(!empty($pdfResourceFile)) pdf_set_parameter($pdf, "resourcefile", $pdfResourceFile);
 			pdf_open_file($pdf);
 			pdf_set_info($pdf, "Author",isset($pres[1]->speaker)?$pres[1]->speaker:"Anonymous");
 			pdf_set_info($pdf, "Title",isset($pres[1]->title)?$pres[1]->title:"No Title");
@@ -147,7 +148,7 @@ FOOTER;
 			}
 
 			my_new_pdf_page($pdf, $pdf_x, $pdf_y);
-			pdf_set_font($pdf, "Helvetica" , -20, 'winansi');
+			pdf_set_font($pdf, $pdf_font , -20, 'winansi');
 			$dx = pdf_stringwidth($pdf, "Index");
 			$x = (int)($pdf_x/2 - $dx/2);
 			pdf_set_parameter($pdf, "underline", 'true');
@@ -155,7 +156,7 @@ FOOTER;
 			pdf_set_parameter($pdf, "underline", 'false');
 			$pdf_cy = pdf_get_value($pdf, "texty")+30;
 			$old_cy = $pdf_cy;
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 			foreach($page_index as $pn=>$ti) {
 				if($ti=='titlepage') continue;
 				$ti.='    ';
@@ -171,7 +172,7 @@ FOOTER;
 					pdf_scale($pdf, 1, -1);
 					pdf_set_value($pdf,"horizscaling",-100);
 					$pdf_cy = $old_cy;
-					pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+					pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 				}
 			}
 			pdf_end_page($pdf);

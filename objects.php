@@ -31,10 +31,10 @@ function my_new_pdf_page($pdf, $x, $y) {
 
 // {{{ my_pdf_page_number($pdf)
 function my_pdf_page_number($pdf) {
-	global $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $page_number, $page_index;
+	global $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $page_number, $page_index, $pdf_font;
 
 	if(isset($page_index[$page_number]) && $page_index[$page_number] == 'titlepage') return;
-	pdf_set_font($pdf, "Helvetica" , -10, 'winansi');
+	pdf_set_font($pdf, $pdf_font, -10, 'winansi');
 	$dx = pdf_stringwidth($pdf,"- $page_number -");
 	$x = (int)($pdf_x/2 - $dx/2);
 	$pdf_cy = pdf_get_value($pdf, "texty");
@@ -157,21 +157,37 @@ function my_pdf_page_number($pdf) {
 			if($objs[1]->template == 'titlepage') {
 				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
 				$smallerfontsize = (2*(float)$basefontsize/3).'em';
+				$smallestfontsize = ((float)$basefontsize/2).'em';
 				$p = $pres[1];
-				echo <<<TITLEPAGE
-<br /><br /><br /><br />
-<div align="center" style="font-size: $basefontsize;">$p->title</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->event</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;<a href="mailto:$p->email">$p->email</a>&gt;</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;"><a href="$p->url">$p->url</a></div>
-<br />
-TITLEPAGE;
-				
+				$parts =  ( !empty($p->title) + !empty($p->event) +
+							(!empty($p->date)||!empty($p->location)) + 
+							(!empty($p->speaker)||!empty($p->email)) +
+							!empty($p->url) + !empty($p->subtitle) );
+				for($i=10; $i>$parts; $i--) echo "<br />\n";
+				if(!empty($p->title)) 
+					echo "<div align=\"center\" style=\"font-size: $basefontsize;\">$p->title</div><br />\n";
+				if(!empty($p->subtitle)) 
+					echo "<div align=\"center\" style=\"font-size: $smallestfontsize;\">$p->subtitle</div><br />\n";
+				if(!empty($p->event))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->event</div><br />\n";
+				if(!empty($p->date) && !empty($p->location))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date. $p->location</div><br />\n";
+				else if(!empty($p->date))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date</div><br />\n";
+				else if(!empty($p->location))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->location</div><br />\n";
+				if(!empty($p->email) && !empty($p->email))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker &lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
+				else if(!empty($p->email))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
+				else if(!empty($p->speaker))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
+				if(!empty($p->url)) 
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
+				if(!empty($p->copyright)) {
+					for($i=10; $i>$parts; $i--) echo "<br />\n";
+					echo "<div align\=\"center\" style=\"font-size: 1em\">$p->copyright</div>\n";
+				}	
 			}
 		}
 
@@ -231,19 +247,35 @@ TITLEPAGE;
 				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
 				$smallerfontsize = (2*(float)$basefontsize/3).'em';
 				$p = $pres[1];
-				echo <<<TITLEPAGE
-<br /><br /><br /><br />
-<div align="center" style="font-size: $basefontsize;">$p->title</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->event</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;<a href="mailto:$p->email">$p->email</a>&gt;</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;"><a href="$p->url">$p->url</a></div>
-<br />
-TITLEPAGE;
+				$parts =  ( !empty($p->title) + !empty($p->event) +
+							(!empty($p->date)||!empty($p->location)) + 
+							(!empty($p->speaker)||!empty($p->email)) +
+							!empty($p->url) + !empty($p->subtitle) );
+				for($i=10; $i>$parts; $i--) echo "<br />\n";
+				if(!empty($p->title)) 
+					echo "<div align=\"center\" style=\"font-size: $basefontsize;\">$p->title</div><br />\n";
+				if(!empty($p->subtitle)) 
+					echo "<div align=\"center\" style=\"font-size: $smallestfontsize;\">$p->subtitle</div><br />\n";
+				if(!empty($p->event))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->event</div><br />\n";
+				if(!empty($p->date) && !empty($p->location))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date. $p->location</div><br />\n";
+				else if(!empty($p->date))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date</div><br />\n";
+				else if(!empty($p->location))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->location</div><br />\n";
+				if(!empty($p->email) && !empty($p->email))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker &lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
+				else if(!empty($p->email))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
+				else if(!empty($p->speaker))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
+				if(!empty($p->url)) 
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
+				if(!empty($p->copyright)) {
+					for($i=10; $i>$parts; $i--) echo "<br />\n";
+					echo "<div align\=\"center\" style=\"font-size: 1em\">$p->copyright</div>\n";
+				}	
 				
 			}
 		}
@@ -276,19 +308,35 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
 				$smallerfontsize = (2*(float)$basefontsize/3).'em';
 				$p = $pres[1];
-				echo <<<TITLEPAGE
-<br /><br /><br /><br />
-<div align="center" style="font-size: $basefontsize;">$p->title</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->event</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;<a href="mailto:$p->email">$p->email</a>&gt;</div>
-<br />
-<div align="center" style="font-size: $smallerfontsize;"><a href="$p->url">$p->url</a></div>
-<br />
-TITLEPAGE;
+				$parts =  ( !empty($p->title) + !empty($p->event) +
+							(!empty($p->date)||!empty($p->location)) + 
+							(!empty($p->speaker)||!empty($p->email)) +
+							!empty($p->url) + !empty($p->subtitle) );
+				for($i=10; $i>$parts; $i--) echo "<br />\n";
+				if(!empty($p->title)) 
+					echo "<div align=\"center\" style=\"font-size: $basefontsize;\">$p->title</div><br />\n";
+				if(!empty($p->subtitle)) 
+					echo "<div align=\"center\" style=\"font-size: $smallestfontsize;\">$p->subtitle</div><br />\n";
+				if(!empty($p->event))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->event</div><br />\n";
+				if(!empty($p->date) && !empty($p->location))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date. $p->location</div><br />\n";
+				else if(!empty($p->date))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date</div><br />\n";
+				else if(!empty($p->location))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->location</div><br />\n";
+				if(!empty($p->email) && !empty($p->email))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker &lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
+				else if(!empty($p->email))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
+				else if(!empty($p->speaker))
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
+				if(!empty($p->url)) 
+					echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
+				if(!empty($p->copyright)) {
+					for($i=10; $i>$parts; $i--) echo "<br />\n";
+					echo "<div align\=\"center\" style=\"font-size: 1em\">$p->copyright</div>\n";
+				}	
 				
 			}
 		}
@@ -296,39 +344,85 @@ TITLEPAGE;
 		function pdf() {
 			global 	$pdf, $pdf_x, $pdf_y, $slideNum, $maxSlideNum, 
 					$currentPres, $baseDir, $showScript, $pres, $objs,
-					$pdf_cx, $pdf_cy, $page_index, $page_number;
+					$pdf_cx, $pdf_cy, $page_index, $page_number, $pdf_font;
 
 			$p = $pres[1];
-			$middle = (int)($pdf_y/2);
+			$middle = (int)($pdf_y/2) - 40;
 
 			$pdf_cy = 25;  // top-margin
 			$pdf_cx = 40;
 		
 			if($objs[1]->template == 'titlepage') {
-				pdf_set_font($pdf, "Helvetica" , -36, 'winansi');
-				pdf_show_boxed($pdf, $p->title, 10, $middle-250, $pdf_x-20, 40, 'center');
+				$loc = $middle - 80 * ( !empty($p->title) + !empty($p->event) +
+										!empty($p->date) + 
+										(!empty($p->speaker)||!empty($p->email)) +
+										!empty($p->url) + !empty($p->subtitle) )/2;
+				if(!empty($p->title)) {
+					pdf_set_font($pdf, $pdf_font, -36, 'winansi');
+					pdf_show_boxed($pdf, $p->title, 10, $loc, $pdf_x-20, 40, 'center');
+				}
 
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->event, 10, $middle-170, $pdf_x-20, 40, 'center');
+				if(!empty($p->subtitle)) {
+					$loc += 50;
+					pdf_set_font($pdf, $pdf_font , -22, 'winansi');
+					pdf_show_boxed($pdf, $p->subtitle, 10, $loc, $pdf_x-20, 40, 'center');
+				}
+				
+				if(!empty($p->event)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, $p->event, 10, $loc, $pdf_x-20, 40, 'center');
+				}
 
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->date, 10, $middle-90, $pdf_x-20, 40, 'center');
+				if(!empty($p->date) && !empty($p->location)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, $p->date.'. '.$p->location, 10, $loc, $pdf_x-20, 40, 'center');
+				} else if(!empty($p->date)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, $p->date, 10, $loc, $pdf_x-20, 40, 'center');
+				} else if(!empty($p->location)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, $p->location, 10, $loc, $pdf_x-20, 40, 'center');
 
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $middle-10, $pdf_x-20, 40, 'center');
-
-				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
-				pdf_show_boxed($pdf, $p->url, 10, $middle+70, $pdf_x-20, 40, 'center');
-
+				}
+				if(!empty($p->speaker) && !empty($p->email)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $loc, $pdf_x-20, 40, 'center');
+				} else if(!empty($p->speaker)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font, -30, 'winansi');
+					pdf_show_boxed($pdf, $p->speaker, 10, $loc, $pdf_x-20, 40, 'center');
+				} else if(!empty($p->email)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, ' <'.$p->email.'>', 10, $loc, $pdf_x-20, 40, 'center');
+				}
+				if(!empty($p->url)) {
+					$loc += 80;
+					pdf_set_font($pdf, $pdf_font , -30, 'winansi');
+					pdf_show_boxed($pdf, $p->url, 10, $loc, $pdf_x-20, 40, 'center');
+				}
+				if(!empty($p->copyright)) {
+					pdf_moveto($pdf, 60, $pdf_y-60);
+					pdf_lineto($pdf, $pdf_x-60, $pdf_y-60);
+					pdf_stroke($pdf);
+					pdf_set_font($pdf, $pdf_font , -10, 'winansi');
+					$x = (int)($pdf_x/2 - pdf_stringwidth($pdf, $p->copyright)/2);
+					pdf_show_xy($pdf, $p->copyright, $x, $pdf_y-45);
+				}
 				$page_index[$page_number] = 'titlepage';
 			} else { // No header on the title page
-				pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+				pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 				pdf_show_boxed($pdf, "Slide $slideNum/$maxSlideNum", $pdf_cx, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'left');
 				if(isset($p->date)) $d = $p->date;
 				else $d = strftime("%B %e %Y");
 				$w = pdf_stringwidth($pdf, $d);
 				pdf_show_boxed($pdf, $d, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'right');
-				pdf_set_font($pdf, "Helvetica" , -24, 'winansi');
+				pdf_set_font($pdf, $pdf_font , -24, 'winansi');
 				pdf_show_boxed($pdf, $this->title, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'center');
 
 				$page_index[$page_number] = $this->title;
@@ -398,10 +492,10 @@ TITLEPAGE;
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
 
 			if(isset($this->title)) {
-				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
 				$dx = pdf_stringwidth($pdf,$this->title);
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				switch($this->talign) {
@@ -433,7 +527,7 @@ TITLEPAGE;
 					$align = "justify";
 					break;
 			}
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 			$height=10;	
 			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')) $height+=10;
 
@@ -445,7 +539,7 @@ TITLEPAGE;
 				$pdf_cy = 60;
 			}
 
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 			pdf_show_boxed($pdf, str_replace("\n",' ',$this->text), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, $align);
 			pdf_continue_text($pdf, "\n");
 		}
@@ -500,12 +594,12 @@ TITLEPAGE;
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_y;
+			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_y, $pdf_font;
 
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
-				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "\n");
 			}
@@ -878,12 +972,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_cx, $pdf_cy;
+			global $pdf, $pdf_cx, $pdf_cy, $pdf_font;
 
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
-				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				pdf_set_font($pdf, $pdf_font, -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "");
 			}
@@ -946,11 +1040,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
 
 			$pdf_cy = pdf_get_value($pdf, "texty");
 		
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
 			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
@@ -960,7 +1054,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cx = 40;
 				$pdf_cy = 60;
 			}
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
 			pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
 			$pdf_cy+=$height;
 			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
@@ -1034,12 +1128,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_cx, $pdf_cy;
+			global $pdf, $pdf_cx, $pdf_cy, $pdf_font;
 
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
-				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				pdf_set_font($pdf, $pdf_font, -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "");
 			}
@@ -1095,11 +1189,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
 
 			$pdf_cy = pdf_get_value($pdf, "texty");
 		
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
 			while(pdf_show_boxed($pdf, $this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
@@ -1109,7 +1203,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cx = 40;
 				$pdf_cy = 60;
 			}
-			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			pdf_show_boxed($pdf, $this->text, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
 			$pdf_cy+=$height;
 			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
@@ -1165,7 +1259,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_cx, $pdf_x, $pdf_y;
+			global $pdf, $pdf_cx, $pdf_x, $pdf_y, $pdf_font;
 
 			if(empty($this->text)) $this->text = $this->href;
 			if(!empty($this->leader)) $leader = $this->leader;
@@ -1173,7 +1267,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 			if(!empty($this->text)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
-				pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+				pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 				if(strlen($leader)) $lx = pdf_stringwidth($pdf, $leader);
 				else $lx=0;
 				$dx = pdf_stringwidth($pdf, $this->text);

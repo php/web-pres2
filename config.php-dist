@@ -6,6 +6,8 @@
 	$baseFontSize = '12pt';
 	$flashFontScale = 18;
 	$pdfFontScale = 12;
+	$pdfResourceFile = '/usr/share/fonts/pdflib/pdflib.upr';
+	$pdf_font = "Times-Roman";  // Look in your pdfResourceFile for more options
 	$jsKeyboard = true; // enable javascript handling of keyboard events
 
 	$pdf_x = 612;
