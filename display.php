@@ -70,7 +70,7 @@ FOOTER;
     function _slide(&$slide) {
         $currentPres = $_SESSION['currentPres'];
         
-        $navsize = $slide->navSize;
+        $navsize = $slide->navsize;
         if (isset($this->pres->navsize)) $navsize = $this->pres->navsize;
 
         $titlesize = $slide->titleSize;
@@ -209,8 +209,8 @@ FOOTER;
             }
             echo "<a href=\"http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
             if ($this->pres->navbartopiclinks) {
-                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navColor;\">".markup_text($this->prevTitle)."</a></div>";
-                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navColor;\">".markup_text($this->nextTitle)."</a></div>";
+                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
+                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
             }
             echo '</div></div>';
             break;
@@ -671,7 +671,7 @@ FOOTER;
         
         $currentPres = $_SESSION['currentPres'];
         
-        $navsize = $slide->navSize;
+        $navsize = $slide->navsize;
         if ($pres->navsize) $navsize = $pres->navsize;
         
         $prev = $next = 0;

@@ -73,6 +73,10 @@
 		if(isset($pres[1]->location)) {
 			$pr[$i]['location'] = $pres[1]->location;
 		} else $pr[$i]['location'] = '&nbsp;';
+
+		if(isset($pres[1]->company)) {
+			$pr[$i]['company'] = $pres[1]->company;
+		} else $pr[$i]['company'] = '&nbsp;';
 		$i++;
 	}
 	unset($pres);

@@ -168,8 +168,8 @@ function strip_markups($str) {
 			$this->title = 'No Title Text for this slide yet';
 			$this->titleSize  = "3em";
 			$this->titleColor = '#ffffff';
-			$this->navColor = '#EFEF52';
-			$this->navSize  = "2em";
+			$this->navcolor = '#EFEF52';
+			$this->navsize  = "2em";
 			$this->titleAlign = 'center';
 			$this->titleFont  = 'fonts/Verdana.fdb';
 			$this->template   = 'php';
