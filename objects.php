@@ -315,17 +315,17 @@ function strip_markups($str) {
 				  <td><img src="images/blank.gif" width="5" /></td>
 				  <td><? if( $slideNum > 0){
                              $prevSlide = $slideNum - 1;
-                             echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlide\">"
-                        	 . '<img src="images/back.gif" border="0" hspace="2" alt="'.$prevTitle.'"/></a>';
+                             echo "<a title=\"$prevTitle\" href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlide\">"
+                        	 . '<img src="images/back.gif" border="0" hspace="2" /></a>';
                          } 
 					     if($slideNum < $maxSlideNum) $nextSlideNum = $slideNum + 1;
 				  ?></td>
 				  <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
 				  <span class="c2"><b><i>&nbsp;&nbsp;
-				  <a href="<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $winW-300 ?>,top=0'); return false" class="linka"><?= $slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+				  <a title="<?= $slideNum.' of '.$maxSlideNum?>" href="<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $winW-300 ?>,top=0'); return false" class="linka"><?= $slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
 					  <td><? if( !empty($nextSlideNum) )
-                        echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum\">"
-                        	. '<img src="images/next.gif" border="0" hspace="2" alt="'.$nextTitle.'"/></a>';
+                        echo "<a title=\"$nextTitle\" href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum\">"
+                        	. '<img src="images/next.gif" border="0" hspace="2" /></a>';
 					?></td>
 			   	  <td><img src="images/blank.gif" height="10" width="15" /></td>
 				  </tr>
@@ -2214,15 +2214,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					<?
 					}
 					break;
+/* (this seemed too intrusive)
 				case 'php2':
 					if($nextTitle) {
 					?>
 					<span class="C5">
-						<?echo markup_text($nextTitle);?>
+						<?echo 'next: '.markup_text($nextTitle);?>
 					</span>
 					<?
 					}
 					break;
+*/
 			}
 		}
 
