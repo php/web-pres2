@@ -279,6 +279,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						case 'iframe':
 						case 'link':
 						case 'embed':
+						case 'flash':
 							highlight_file($_html_filename);
 							break;
 						case 'shell':
@@ -350,6 +351,11 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							break;	
 						case 'embed':
 							echo "<embed src=\"$this->filename\" class=\"resultlink\" width=\"800\" height=\"800\"></embed><br />\n";
+							break;
+						case 'flash':
+							echo "<embed src=\"$this->filename?".time()." quality=high loop=true
+pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
+type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight>\n";
 							break;
 						default:
 							include $_html_filename;
