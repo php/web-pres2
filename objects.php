@@ -67,7 +67,7 @@ function getFlashDimensions($font,$title,$size) {
 			switch($pres[1]->template) {
 				default:
 				echo <<<NAVBAR
-<div class="sticky" align="$this->titleAlign" style="width: $winW;">
+<div class="sticky" align="$this->titleAlign" style="width: 100%;">
 <div class="navbar">
 <img src="php_logo.gif" align="left" style="float: left;">
 <div style="font-size: $this->titleSize; margin: 0 2.5em 0 0;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum" style="text-decoration: none; color: $this->titleColor;">$this->title</a></div>
