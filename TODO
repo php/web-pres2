@@ -44,3 +44,9 @@ Things to work on
 
 - make all hard-coded settings (like border padding) configurable on a per-presentation
   basis.	
+
+- Go through each XML tag and make sure the attributes are implemented and 
+  consistent across all display modes.  And at the same time, document each
+  tag in the intro presentation.
+
+- Table of contents for the PDF document
