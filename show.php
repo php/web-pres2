@@ -191,7 +191,7 @@ function keypressHandler(e){
 	}
 	if (e == 39 && <?php echo $nextSlideNum; ?>) /* right arrow */
 		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum"; ?>';
-	if (e == 37 && <?php echo $prevSlideNum; ?>) /* right arrow */
+	if (e == 37 && <?php echo $prevSlideNum+1; ?>) /* left arrow */
 		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlideNum"; ?>';
 }
 window.onkeyup = keypressHandler;
