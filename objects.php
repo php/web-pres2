@@ -20,19 +20,19 @@ function getFlashDimensions($font,$title,$size) {
 	// {{{ Presentation List Classes
 	class _presentation {
 		function _presentation() {
-			global $baseFontSize;
+			global $baseFontSize, $jsKeyboard;
 
 			$this->title = 'No Title Text for this presentation yet';
 			$this->navmode  = 'flash';
 			$this->template = 'php';
-			$this->jskeyboard = false;
+			$this->jskeyboard = $jsKeyboard;
 			$this->logo1 = 'php_logo.gif';
 			$this->logo2 = NULL;
 			$this->basefontsize = $baseFontSize;
 			$this->backgroundcol = false;
 			$this->backgroundfixed = false;
 			$this->backgroundimage = false;
-			$this->backgroundrepeat = 'no-repeat';
+			$this->backgroundrepeat = false;
 			$this->navbarbackground = 'url(trans.png) transparent fixed';
 			$this->navbartopiclinks = true;
 			$this->stylesheet = 'css.php';
