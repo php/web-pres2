@@ -1266,13 +1266,27 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			else $leader='';
 
 			if(!empty($this->text)) {
-				$pdf_cy = pdf_get_value($pdf, "texty");
+				$pdf_cy = pdf_get_value($pdf, "texty")+10;
 				pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 				if(strlen($leader)) $lx = pdf_stringwidth($pdf, $leader);
 				else $lx=0;
 				$dx = pdf_stringwidth($pdf, $this->text);
-				pdf_add_weblink($pdf, $pdf_cx+$lx, $pdf_y-$pdf_cy-3, $pdf_cx+$dx+$lx, ($pdf_y-$pdf_cy)+12, $this->text);
-				pdf_show_xy($pdf, $leader.$this->text, $pdf_cx, $pdf_cy);
+				switch($this->align) {
+					case 'center':
+						$x = (int)($pdf_x/2-$dx/2-$lx/2);
+						break;
+
+					case 'right':
+						$x = $pdf_x-$pdf_cx-$dx-$lx-15;
+						break;
+
+					case 'left':
+					default:
+						$x = $pdf_cx;	
+						break;
+				}
+				pdf_add_weblink($pdf, $x+$lx, $pdf_y-$pdf_cy-3, $x+$dx+$lx, ($pdf_y-$pdf_cy)+12, $this->text);
+				pdf_show_xy($pdf, $leader.$this->text, $x, $pdf_cy);
 				pdf_continue_text($pdf,"");
 			}
 		}
