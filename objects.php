@@ -200,6 +200,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->filename = '';
 			$this->mode = 'html';
 			$this->align = 'left';
+			$this->marginleft = "auto";
+			$this->marginright = "auto";
 		}
 
 		function display() {
@@ -210,7 +212,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
 			$size = getimagesize($this->filename);
 ?>
-<div align="<?=$this->align?>">
+<div align="<?=$this->align?>"
+ style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
 <img src="<?=$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
@@ -290,7 +293,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							break;
 						case 'shell':
 							$_html_file = file_get_contents($_html_filename);
-							echo '<pre>'.nl2br(htmlspecialchars($_html_file))."</pre>\n";
+							echo '<pre>'.htmlspecialchars($_html_file)."</pre>\n";
 							break;
                         case 'c':
                             print `cat {$_html_filename} | c2html -cs`;
@@ -317,7 +320,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 							highlight_string($this->text);
 							break;
 						case 'shell':
-							echo '<pre>'.nl2br(htmlspecialchars($this->text))."</pre>\n";
+							echo '<pre>'.htmlspecialchars($this->text)."</pre>\n";
 							break;
 						case 'html':
 							echo $this->text."\n";
