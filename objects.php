@@ -1113,7 +1113,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					case 'python':
 						$prog = trim(`which code2html`);
 						if (!empty($prog)) {
-							print nl2br(trim(`$prog -lpython --no-header -ohtml $_html_filename | sed -e 's/\t/\&nbsp\;\&nbsp;\&nbsp\; /'`));
+							print nl2br(trim(`$prog -lpython --no-header -ohtml $_html_filename | sed -e 's/\t/\&nbsp\;\&nbsp;\&nbsp\; /g'`));
 						} else {
 							$this->_highlight_none($_html_filename);
 						}
