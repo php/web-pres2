@@ -65,7 +65,7 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 
 	$pos = $i = 0;
 	$len = strlen($data);
-
+	$data = str_replace("\t",'    ',$data);  // 4-space tabs - should probably be an attribute
 	pdf_set_text_pos($pdf, $lm, $tm);
 	
 	$np = true;
@@ -120,6 +120,16 @@ function markup_text($str) {
 	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
 	return $ret;
 }
+// }}}
+
+// {{{ strip_markups
+function strip_markups($str) {
+	$ret = preg_replace('/\*([\S ]+?)\*/','\1',$str);
+	$ret = preg_replace('/\b_([\S ]+?)_\b/','\1',$ret);
+	$ret = preg_replace('/%([\S ]+?)%/','\1',$ret);
+	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','\2',$ret);
+	return $ret;
+} 
 // }}}
 
 // }}}
@@ -610,7 +620,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						break;
 				}
 				pdf_set_text_pos($pdf,$x,$pdf_cy);
-				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, strip_markups($this->title));
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$x,$pdf_cy+5);
 			}
@@ -634,8 +644,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			pdf_set_font($pdf, $pdf_font , 12, 'winansi');
 			$leading = pdf_get_value($pdf, "leading");
 			$height = $inc = 12+$leading;	
+			$txt = strip_markups($this->text);
 
-			while(pdf_show_boxed($pdf, $this->text, $pdf_cx+20, $pdf_y-$pdf_cy, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')!=0) $height+=$inc;
+			while(pdf_show_boxed($pdf, $txt, $pdf_cx+20, $pdf_y-$pdf_cy, $pdf_x-2*($pdf_cx-20), $height, $align, 'blind')!=0) $height+=$inc;
 
 			pdf_restore($pdf);
 
@@ -648,7 +659,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			}
 
 			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
-			pdf_show_boxed($pdf, str_replace("\n",' ',$this->text), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, $align);
+			pdf_show_boxed($pdf, str_replace("\n",' ',$txt), $pdf_cx+20, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, $align);
 			pdf_continue_text($pdf, "\n");
 		}
 
@@ -1063,7 +1074,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);  // Force to left-margin
 				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
-				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, strip_markups($this->title));
 				pdf_continue_text($pdf, "");
 			}
 			$pdf_cy = pdf_get_value($pdf, "texty");
@@ -1098,7 +1109,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				
 			}			
 			$pdf_cy = pdf_get_value($pdf, "texty");
-			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+			if($this->result && $this->type!='iframe' && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
 				if(!$this->hide) {
 					$pdf_cy = pdf_get_value($pdf, "texty");
 					pdf_set_text_pos($pdf,$pdf_cx+20,$pdf_cy);  // Force to left-margin
@@ -1148,7 +1159,6 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					}
 				}
 			}
-
 		}
 		// }}}
 
@@ -1203,7 +1213,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
 				pdf_set_font($pdf, $pdf_font, -16, 'winansi');
-				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, strip_markups($this->title));
 				pdf_continue_text($pdf, "");
 			}
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
@@ -1270,7 +1280,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
-			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+			$txt = strip_markups($this->text);
+			while(pdf_show_boxed($pdf, 'o '.$txt, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
@@ -1279,7 +1290,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cy = 60;
 			}
 			pdf_set_font($pdf, $pdf_font , -12, 'winansi');
-			pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
+			pdf_show_boxed($pdf, 'o '.$txt, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
 			$pdf_cy+=$height;
 			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
 			pdf_continue_text($pdf,"");	
@@ -1366,7 +1377,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
 				pdf_set_font($pdf, $pdf_font, -16, 'winansi');
-				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, strip_markups($this->title));
 				pdf_continue_text($pdf, "");
 			}
 			$width="100%";
@@ -1459,7 +1470,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
-			while(pdf_show_boxed($pdf, $row_text[0], 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+			$txt = strip_markups($row_text[0]);
+			while(pdf_show_boxed($pdf, $txt, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
@@ -1472,7 +1484,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			else if(!empty($objs[$coid]->bold) && $objs[$coid]->bold) pdf_set_font($pdf, $pdf_font_bold, -12, 'winansi');
 			$off = 0;
 			foreach($row_text as $t) {
-				pdf_show_boxed($pdf, $t, 60+$off, $pdf_cy-$height, 60+$off+$this->offset, $height, 'left');
+				pdf_show_boxed($pdf, strip_markups($t), 60+$off, $pdf_cy-$height, 60+$off+$this->offset, $height, 'left');
 				$off += $this->offset;
 			}
 			$pdf_cy+=$height;
@@ -1532,6 +1544,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		function pdf() {
 			global $pdf, $pdf_cx, $pdf_x, $pdf_y, $pdf_font;
 
+
 			if(empty($this->text)) $this->text = $this->href;
 			if(!empty($this->leader)) $leader = $this->leader;
 			else $leader='';
@@ -1542,6 +1555,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				if(strlen($leader)) $lx = pdf_stringwidth($pdf, $leader);
 				else $lx=0;
 				$dx = pdf_stringwidth($pdf, $this->text);
+				$cw = pdf_stringwidth($pdf,'m');  // em unit width
 				switch($this->align) {
 					case 'center':
 						$x = (int)($pdf_x/2-$dx/2-$lx/2);
@@ -1556,8 +1570,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 						$x = $pdf_cx;	
 						break;
 				}
+				if($this->marginleft) $x += (int)(((float)$this->marginleft) * $cw);
 				pdf_add_weblink($pdf, $x+$lx, $pdf_y-$pdf_cy-3, $x+$dx+$lx, ($pdf_y-$pdf_cy)+12, $this->text);
-				pdf_show_xy($pdf, $leader.$this->text, $x, $pdf_cy);
+				pdf_show_xy($pdf, strip_markups($leader).strip_markups($this->text), $x, $pdf_cy);
 				pdf_continue_text($pdf,"");
 			}
 		}
