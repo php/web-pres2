@@ -156,6 +156,7 @@ td.foo {color: ffffff; font-family: arial,verdana,helvetica; font-size: 70%}
 span.c4 {position: fixed; bottom: 0.5em; right: 4em; top: auto; left: auto; color: ffffff; font-family: arial,verdana,helvetica; font-size: 70%}
 td.c3 {color: CC6600; font-family: arial, helvetica, verdana}
 span.c2 {color: ffffff; font-family: arial,hevetica,verdana}
+span.c5 {position: fixed; bottom: 0.5em; right: 1em; top: auto; left: auto; color: 000000; font-family: arial,verdana,helvetica; font-size: 80%}
 td.c1 {font-family: arial,helvetica,verdana; font-size: 80%}
 
 </style>

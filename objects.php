@@ -1198,7 +1198,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($pres[1]->outputbackground)) $_html_outputbackground = $pres[1]->outputbackground;
 				if(!empty($objs[1]->outputbackground)) $_html_outputbackground = $objs[1]->outputbackground;
 				if(!empty($this->outputbackground)) $_html_outputbackground = $this->outputbackground;
-				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\">\n";
+				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\"></a>\n";
 				echo '<div class="shadow" style="margin: '.
 					((float)$this->margintop).'em '.
 					((float)$this->marginright+1).'em '.
@@ -1247,7 +1247,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					}
 				}
 				echo "</div></div>\n";
-				if(!empty($this->anchor)) echo "</a>\n";
+#				if(!empty($this->anchor)) echo "</a>\n";
 			}
 		}
 		/// }}}
@@ -1284,7 +1284,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				if(!empty($pres[1]->outputbackground)) $_html_outputbackground = $pres[1]->outputbackground;
 				if(!empty($objs[1]->outputbackground)) $_html_outputbackground = $objs[1]->outputbackground;
 				if(!empty($this->outputbackground)) $_html_outputbackground = $this->outputbackground;
-				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\">\n";
+				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\"></a>\n";
 				echo "<br /><table bgcolor=\"$_html_outputbackground\"><tr><td>\n";
 
 				if(!empty($this->filename)) {
@@ -1318,7 +1318,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					}
 				}
 				echo "</td></tr></table>\n";
-				if(!empty($this->anchor)) echo "</a>\n";
+#				if(!empty($this->anchor)) echo "</a>\n";
 			}
 		}
 		// }}}
@@ -2144,7 +2144,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function html() {
-			global $objs, $pres;
+			global $objs, $pres, $nextTitle;
 
 			// Slide layout templates
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
@@ -2161,6 +2161,15 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					<img style="margin-bottom: -0.3em" src="images/bottomswoop.gif" width="100%" height="50" />
 					<span class="c4">&copy; Copyright 2002 MySQL AB</span>
 					</div>
+					<?
+					}
+					break;
+				case 'php2':
+					if($nextTitle) {
+					?>
+					<span class="C5">
+						<?echo markup_text($nextTitle);?>
+					</span>
 					<?
 					}
 					break;
