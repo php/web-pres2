@@ -132,10 +132,16 @@ Simply click the topic you wish to find presentations on to view all available p
 </p>
 <?php 
 	ksort($topics);
+	print('<table width="100%"><tr>'."\n");
+	$col = 0;
 	foreach($topics as $i => $topic) {
-		print('<p><a href="' . $baseDir . 'index.php/' . urlencode($i) . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
+		print('<td class="output" style="font-size: 1.8em;"><a href="' . $baseDir . 'index.php/' . urlencode($i) . '">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n");
+		if (++$col >= $topic_cols) { 
+			$col=0; 
+			print("</tr>\n<tr>"); 
+		}
 	}
-
+	print('</tr></table>');
 } else {
 	if(empty($_COOKIE['display_mode'])) { $display_mode = 'html'; $form_speaker='false'; } 
 	else { 

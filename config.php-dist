@@ -11,6 +11,7 @@
 	$pdf_font_bold = "Times-Bold";
 	$pdf_example_font = "Courier";
 	$jsKeyboard = true; // enable javascript handling of keyboard events
+	$topic_cols = 3; // number of topic columns on front page
 
 // Convert em font sizing to flash font sizes
 function flash_fixsize($ht) {
