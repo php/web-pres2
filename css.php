@@ -25,6 +25,19 @@ div.sticky {
 	bottom: auto;
 	width: auto;
 }
+div.bsticky {
+	margin: 0;
+<?if(strstr($_SERVER['HTTP_USER_AGENT'],'MSIE')): // Need a much smarter check here ?>
+	position: absolute;
+<?else:?>
+	position: fixed;
+<?endif?>
+	top: auto; 
+	left: 0em;
+	right: auto;
+	bottom: 0em;
+	width: 100%;
+}
 div.shadow {
 	background: <?php echo $pres[1]->shadowbackground; ?>;
 	padding: 0.5em;
@@ -91,6 +104,13 @@ a:hover {
 	width : 46%; 
 	float : right; 
 }
+.c2rightnb {
+	margin : 1em 1em 0 0; 
+	padding-left : 1%;
+	padding-right : 1%;
+	width : 46%; 
+	float : right; 
+}
 .c2left {
 	margin : 1em 1em 0 0; 
 	padding-left : 1%;
@@ -102,6 +122,14 @@ a:hover {
 	border-left-width : 1px; 
    	border-right-color : inherit; 
    	border-left-color : inherit; 
+   	width : 46%; 
+   	float : left; 
+}
+.c2leftnb {
+	margin : 1em 1em 0 0; 
+	padding-left : 1%;
+   	padding-right : 1%;
+   	border-style : none; 
    	width : 46%; 
    	float : left; 
 }
@@ -118,4 +146,12 @@ a:hover {
    	border-left-color : inherit; 
    	float : left; 
 }
+
+A.linka { text-decoration: none; color: 000000; }
+td.foo {color: ffffff; font-family: arial,verdana,helvetica; font-size: 70%}
+span.c4 {position: fixed; bottom: 0.5em; right: 4em; top: auto; left: auto; color: ffffff; font-family: arial,verdana,helvetica; font-size: 70%}
+td.c3 {color: CC6600; font-family: arial, helvetica, verdana}
+span.c2 {color: ffffff; font-family: arial,hevetica,verdana}
+td.c1 {font-family: arial,helvetica,verdana; font-size: 80%}
+
 </style>

@@ -107,46 +107,80 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 }
 // }}}
 
+function format_tt($arg) {
+  return("<tt>".str_replace(' ', '&nbsp;', $arg[1])."</tt>");
+}
+
 /* {{{ string markup_text($str)
     *word*        Bold
     _word_        underline
     %word%        monospaced word (ie. %function()%)
+    ~word~	  italics
     |rrggbb|word| Colour a word
 	^N^           Superscript
 	@N@           Subscript
 */
 function markup_text($str) {
-	$ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$str);
+  $ret = $str;
+#	$ret = preg_replace('/\*([\S ]+?)([^\\\])\*/','<strong>\1\2</strong>',$str);
 	$ret = preg_replace('/#([[:alnum:]]+?)#/','&\1;',$ret);
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
-	$ret = preg_replace('/%([\S ]+?)%/','<tt>\1</tt>',$ret);
-	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
+
+	//bold
+	$ret = str_replace('\*',chr(1),$ret);
+	$ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$ret);
+	$ret = str_replace(chr(1),'\*',$ret);
+
+	// italics
+	$ret = str_replace('\~',chr(1),$ret);
+	$ret = preg_replace('/~([\S ]+?)~/','<i>\1</i>',$ret);
+	$ret = str_replace(chr(1),'\~',$ret);
+
+        // monospace font
+	$ret = str_replace('\%',chr(1),$ret);
+	$ret = preg_replace_callback('/%([\S ]+?)%/', 'format_tt', $ret);
+	$ret = str_replace(chr(1),'%',$ret);
+
+	// Hack by arjen: allow more than one word to be coloured
+	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|([\S ]+?)\|/','<font color="\1">\2</font>',$ret);
 	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','<sup>\1</sup>',$ret);
 	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','<sub>\1</sub>',$ret);
+	// Quick hack by arjen: BR/ and TAB/ pseudotags from conversion
+	$ret = preg_replace('/BR\//','<BR/>',$ret);
+	$ret = preg_replace('/TAB\//',' ',$ret);
+
+	$ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
+
 	return $ret;
 }
 // }}}
 
 function add_line_numbers($text)
 {
-	$lines = preg_split ('!$\n!m', $text);
-	$lnwidth = strlen(count($lines));
-	$format = '%'.$lnwidth."d: %s\n";
-	$lined_text = '';
-	while (list ($num, $line) = each ($lines)) {
-		$lined_text .= sprintf($format, $num + 1, $line);
-	}
-	return $lined_text;
+        $lines = preg_split ('!$\n!m', $text);
+        $lnwidth = strlen(count($lines));
+        $format = '%'.$lnwidth."d: %s\n";
+        $lined_text = '';
+        while (list ($num, $line) = each ($lines)) {
+                $lined_text .= sprintf($format, $num + 1, $line);
+        }
+        return $lined_text;
 }
+
 
 // {{{ strip_markups
 function strip_markups($str) {
 	$ret = preg_replace('/\*([\S ]+?)\*/','\1',$str);
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','\1',$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','\1',$ret);
-	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','\2',$ret);
+	// Hack by arjen: allow more than one word to be coloured
+	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|([\S ]+?)\|/','\2',$ret);
 	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','^\1',$ret);
 	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','_\1',$ret);
+        $ret = preg_replace('/~([\S ]+?)~/','<i>\1</i>',$ret);
+	// Quick hack by arjen: BR/ and TAB/ pseudotags from conversion
+	$ret = preg_replace('/BR\//','<BR/>',$ret);
+	$ret = preg_replace('/TAB\//','',$ret);
 	return $ret;
 } 
 // }}}
@@ -222,6 +256,12 @@ function strip_markups($str) {
 			
 			$navsize = $this->navSize;
 			if ($pres[1]->navsize) $navsize = $pres[1]->navsize;
+
+			$titlesize = $this->titleSize;
+			if ($pres[1]->titlesize) $titlesize = $pres[1]->titlesize;
+
+			$titlecolor = $this->titleColor;
+			if ($pres[1]->titlecolor) $titlecolor = $pres[1]->titlecolor;
 			
 			$prev = $next = 0;
 			if($slideNum < $maxSlideNum) {
@@ -236,7 +276,101 @@ function strip_markups($str) {
 
 				case 'simple':
 				$this->titleColor = '#000000';
-				echo "<div align=\"$this->titleAlign\" style=\"font-size: $this->titleSize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $this->titleColor;\">$this->title</a></div>";
+				echo "<div align=\"$this->titleAlign\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($this->title)."</a></div>";
+				break;
+
+				case 'php2':
+				echo "<div class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+				echo "<table style=\"float: left;\" width=\"60%\" border=\"0\" cellpadding=0 cellspacing=0><tr>\n";
+				if(!empty($this->logo1)) $logo1 = $this->logo1;
+				else $logo1 = $pres[1]->logo1;
+				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
+				else $logo1url = $pres[1]->logoimage1url;				
+				if(!empty($logo1)) {
+					$size = getimagesize($logo1);
+					echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0.5em; margin-left: 1em;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a></td>";
+					$offset+=2;
+				}
+				?>
+				<td align="center">
+				<?echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($this->title)."</a></div>";?>
+				</td>
+				</tr></table>
+				<br />
+				<table style="float: right">
+				  <tr>
+				  <td class="c1"><b><?= $pres[1]->title ?></b></td>
+				  <td><img src="images/vline.gif" hspace="5" /></td>
+				  <td class="c1"><?= date('Y-m-d') ?></td>
+				  <td><img src="images/blank.gif" width="5" /></td>
+				  <td><? if( $slideNum > 0){
+                             $prevSlide = $slideNum - 1;
+                             echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlide\">"
+                        	 . '<img src="images/back.gif" border="0" hspace="2" /></a>';
+                         } 
+					     if($slideNum < $maxSlideNum) $nextSlideNum = $slideNum + 1;
+				  ?></td>
+				  <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
+				  <span class="c2"><b><i>&nbsp;&nbsp;
+				  <a href="<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $winW-300 ?>,top=0'); return false" class="linka"><?= $slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+					  <td><? if( !empty($nextSlideNum) )
+                        echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum\">"
+                        	. '<img src="images/next.gif" border="0" hspace="2" /></a>';
+					?></td>
+			   	  <td><img src="images/blank.gif" height="10" width="15" /></td>
+				  </tr>
+				</table>
+				<br clear="left" />
+				<hr style="border: 0; color: <?=$titlecolor?>; background-color: <?=$titlecolor?>; height: 2px">
+				</div></div>
+				<?	
+				break;
+
+				case 'mysql':
+				echo "<div class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+				echo "<table style=\"float: left;\" width=\"60%\" border=\"0\"><tr>\n";
+				if(!empty($this->logo1)) $logo1 = $this->logo1;
+				else $logo1 = $pres[1]->logo1;
+				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
+				else $logo1url = $pres[1]->logoimage1url;				
+				if(!empty($logo1)) {
+					$size = getimagesize($logo1);
+					echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0.5em; margin-left: 1em;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a></td>";
+					$offset+=2;
+				}
+				?>
+				<td align="center">
+				<b style="color: CC6600; font-size: 1.5em; font-family: arial, helvetica, verdana"><?= markup_text($this->title) ?></b>
+				</td>
+				</tr></table>
+				<br />
+				<table style="float: right">
+				  <tr>
+				  <td class="c1"><b><?= $pres[1]->title ?></b></td>
+				  <td><img src="images/vline.gif" hspace="5" /></td>
+				  <td class="c1"><?= date('Y-m-d') ?></td>
+				  <td><img src="images/blank.gif" width="5" /></td>
+				  <td><? if( $slideNum > 0){
+                             $prevSlide = $slideNum - 1;
+                             echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlide\">"
+                        	 . '<img src="images/back.gif" border="0" hspace="2" /></a>';
+                         } 
+					     if($slideNum < $maxSlideNum) $nextSlideNum = $slideNum + 1;
+				  ?></td>
+				  <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
+				  <span class="c2"><b><i>&nbsp;&nbsp;
+				  <a href="<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $winW-300 ?>,top=0'); return false" class="linka"><?= $slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+					  <td><? if( !empty($nextSlideNum) )
+                        echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum\">"
+                        	. '<img src="images/next.gif" border="0" hspace="2" /></a>';
+					?></td>
+			   	  <td><img src="images/blank.gif" height="10" width="15" /></td>
+				  </tr>
+				</table>
+				<br clear="left" />
+				<hr style="border: 0; color: #CC6600; background-color: #CC6600; height: 2px">
+				</div></div>
+				<?	
 				break;
 
 				case 'php':
@@ -250,18 +384,18 @@ function strip_markups($str) {
 					echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a>";
 					$offset+=2;
 				}
-				echo "<div align=\"center\" style=\"font-size: $this->titleSize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $this->titleColor;\">$this->title</a></div>";
+				echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($this->title)."</a></div>";
 				echo "<div style=\"font-size: $navsize; float: right; margin: -2em 0 0 0;\">";
 				if(!empty($this->logo2)) $logo2 = $this->logo2;
 				else $logo2 = $pres[1]->logo2;
 				if (!empty($logo2)) {
-					echo "<img src=\"$logo2\" border=\"0\"><br />";
+					echo "<img src=\"$logo2\" border=\"0\"><br/>";
 					$offset-=2;
 				}
-				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($winW-300).",top=0'); return false\">".($slideNum)."/".($maxSlideNum)."</a></div>";
+				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($winW-300).",top=0'); return false\">".($slideNum)."/".($maxSlideNum)."</a></div>";
 				if ($pres[1]->navbartopiclinks) {
-					echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $this->navColor;\">$prevTitle</a></div>";
-					echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none; color: $this->navColor;\">$nextTitle</a></div>";
+					echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $this->navColor;\">".markup_text($prevTitle)."</a></div>";
+					echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none; color: $this->navColor;\">".markup_text($nextTitle)."</a></div>";
 				}
 				echo '</div></div>';
 				break;
@@ -271,6 +405,9 @@ function strip_markups($str) {
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
 				case '2columns':
 					echo "<div class=\"c2left\">\n";
+					break;
+				case '2columns-noborder':
+					echo "<div class=\"c2leftnb\">\n";
 					break;
 				case 'box':
 					echo "<div class=\"box\">\n";
@@ -343,8 +480,8 @@ function strip_markups($str) {
 				echo "</td>\n";
 				if ($pres[1]->navbartopiclinks) {
 					echo "<td align=\"left\">";
-					if($prevTitle) echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none;\"><font size=+2>Previous: $prevTitle</font></a></td>\n";
-					if($nextTitle) echo "<td align=\"right\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none;\"><font size=+2>Next: $nextTitle</font></a></td>";
+					if($prevTitle) echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none;\"><font size=+2>Previous: ".markup_text($prevTitle)."</font></a></td>\n";
+					if($nextTitle) echo "<td align=\"right\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none;\"><font size=+2>Next: ".markup_text($nextTitle)."</font></a></td>";
 				}
 				echo "<td rowspan=2 width=1>";
 				if(!empty($this->logo2)) $logo2 = $this->logo2;
@@ -353,7 +490,7 @@ function strip_markups($str) {
 					echo "<img src=\"$logo2\" align=\"right\">\n";
 				}
 				echo "</td>\n";
-				echo "<tr><th colspan=3 align=\"center\"><font size=+4>$this->title</font></th></table>\n";
+				echo "<tr><th colspan=3 align=\"center\"><font size=+4>".markup_text($this->title)."</font></th></table>\n";
 
 				break;
 			}
@@ -362,6 +499,9 @@ function strip_markups($str) {
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
 				case '2columns':
 					echo "<table width=\"100%\"><tr><td valign=\"top\">\n";
+					break;
+				case '2columns-noborder':
+					echo "<table width=\"100%\" border=\"0\"><tr><td valign=\"top\">\n";
 					break;
 				case 'box':
 					echo "<table><tr><td>\n";
@@ -425,6 +565,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
 				case '2columns':
 					echo "<div class=\"c2left\">\n";
+					break;
+				case '2columns-noborder':
+					echo "<div class=\"c2leftnb\">\n";
 					break;
 				case 'box':
 					echo "<div class=\"box\">\n";
@@ -555,9 +698,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				$w = pdf_stringwidth($pdf, $d);
 				pdf_show_boxed($pdf, $d, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'right');
 				pdf_set_font($pdf, $pdf_font , -24, 'winansi');
-				pdf_show_boxed($pdf, $this->title, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'center');
+				pdf_show_boxed($pdf, strip_markups($this->title), 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'center');
 
-				$page_index[$page_number] = $this->title;
+				$page_index[$page_number] = strip_markups($this->title);
 			}
 
 			$pdf_cy += 30;	
@@ -952,7 +1095,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						}
 						break;
 					case 'shell':
-						echo '<pre>'.htmlspecialchars($this->text)."</pre>\n";
+						echo '<pre>'.markup_text(htmlspecialchars($this->text))."</pre>\n";
 						break;
 					case 'html':
 						echo $this->text."\n";
@@ -1375,7 +1518,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	class _bullet {
 
 		function _bullet() {
-			$this->text = '';
+			$this->text = '&nbsp;';
 			$this->effect = '';
 			$this->id = '';
 			$this->type = '';
@@ -1487,6 +1630,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				case 'lozenge':
 					$bullet = '&loz;';
 					break;
+				case 'hyphen':
+					$bullet = '-';
+					break;
 				default:
 					$bullet = '&bull;';
 					break;
@@ -1494,7 +1640,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 			$style .= 'list-style-type: none;';
 
-			echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$bullet.'</tt> '.markup_text($this->text)."</li></div>\n";
+			echo "<div $eff_str><li style=\"$style\">".'<tt>'.$bullet.'</tt> '.markup_text($this->text)."</li></div>\n";
 		}
 
 		function plainhtml() {
@@ -1874,6 +2020,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				case '2columns':
 					echo "</div>\n<div class=\"c2right\">\n";
 					break;
+				case '2columns-noborder':
+					echo "</div>\n<div class=\"c2rightnb\">\n";
+					break;
 			}
 		}
 
@@ -1883,6 +2032,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			// Slide layout templates
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
 				case '2columns':
+					echo "</td>\n<td valign=\"top\">\n";
+					break;
+				case '2columns-noborder':
 					echo "</td>\n<td valign=\"top\">\n";
 					break;
 			}
@@ -1912,12 +2064,25 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function html() {
-			global $objs;
+			global $objs, $pres;
 
 			// Slide layout templates
 			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
 				default:
 					echo "</div>\n";
+					break;
+			}
+			// Navbar layout templates
+			switch($pres[1]->template) {
+				case 'mysql':
+					if(!strstr($_SERVER['HTTP_USER_AGENT'],'MSIE')) {
+					?>
+					<div class="bsticky">
+					<img style="margin-bottom: -0.3em" src="images/bottomswoop.gif" width="100%" height="50" />
+					<span class="c4">&copy; Copyright 2002 MySQL AB</span>
+					</div>
+					<?
+					}
 					break;
 			}
 		}

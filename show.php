@@ -25,8 +25,7 @@
 
 	$presFile = trim($_SERVER['PATH_INFO']);			
 	$presFile = trim($presFile,'/');			
-	$lastPres = -1;
-    if(isset($currentPres)) {
+	if(isset($currentPres)) {
 		$lastPres = $currentPres;
 	}
 	@list($currentPres,$slideNum) = explode('/',$presFile);
@@ -104,8 +103,11 @@ HEADER;
 			case 'simple':
 				$body_style = "margin-top: 1em;";
 				break;
+			case 'php2':
+				$body_style = "margin-top: 6em;";
+				break;
 			default:
-				$body_style = "margin-top: 7em;";
+				$body_style = "margin-top: 8em;";
 				break;
 			}
 			include 'getwidth.php';
@@ -176,6 +178,7 @@ FOOTER;
 			pdf_set_info($pdf, "Subject", isset($pres[1]->topic)?$pres[1]->topic:"");
 
 			while(list($slideNum,$slide) = each($pres[1]->slides)) {
+			  $slideDir = dirname($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename).'/';
 				$r =& new XML_Slide($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename);
 				$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 				$r->parse();
