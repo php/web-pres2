@@ -68,7 +68,9 @@
 		$nextTitle = $titles[$nextSlideNum]['title'];
 	} else $nextTitle = '';
 
-	$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
+	$slideDir = dirname($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename).'/';
+
+	$r =& new XML_Slide($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
 
@@ -154,7 +156,7 @@ FOOTER;
 			pdf_set_info($pdf, "Subject", isset($pres[1]->topic)?$pres[1]->topic:"");
 
 			while(list($slideNum,$slide) = each($pres[1]->slides)) {
-				$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
+				$r =& new XML_Slide($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename);
 				$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 				$r->parse();
 
@@ -206,9 +208,11 @@ FOOTER;
 	}
 
 function get_all_titles($pres) {
+	global $presentationDir;
+
 	reset($pres);
 	while(list($slideNum,$slide) = each($pres->slides)) {
-		$r =& new XML_Slide($pres->slides[$slideNum]->filename);
+		$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$slideNum]->filename);
 		$r->parse();
 
 		$objs = $r->getObjects();

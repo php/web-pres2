@@ -693,25 +693,29 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
+			global $slideDir;
+
 			$effect = '';
 			if($this->effect) $effect = "effect=\"$this->effect\"";
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
-			$size = getimagesize($this->filename);
+			$size = getimagesize($slideDir.$this->filename);
 ?>
 <div <?=$effect?> align="<?=$this->align?>" style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
-<img align="<?=$this->align?>" src="<?=$this->filename?>" <?=$size[3]?>>
+<img align="<?=$this->align?>" src="<?=$slideDir.$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
 
 		}
 
 		function plainhtml() {
+			global $slideDir;
+
 			if(isset($this->title)) echo '<h1>'.markup_text($this->title)."</h1>\n";
-			$size = getimagesize($this->filename);
+			$size = getimagesize($slideDir.$this->filename);
 ?>
 <div align="<?=$this->align?>"
  style="margin-left: <?=$this->marginleft?>; margin-right: <?=$this->marginright?>;">
-<img src="<?=$this->filename?>" <?=$size[3]?>>
+<img src="<?=$slideDir.$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
 		}
@@ -721,7 +725,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_y, $pdf_font;
+			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_y, $pdf_font, $slideDir;
 
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
@@ -732,22 +736,22 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			}
 			$pdf_cy = pdf_get_value($pdf, "texty")-5;
 
-			list($dx,$dy,$type) = getimagesize($this->filename);
+			list($dx,$dy,$type) = getimagesize($slideDir.$this->filename);
 			$dx = $pdf_x*$dx/1024;
 			$dy = $pdf_x*$dy/1024;
 
 			switch($type) {
 				case 1:
-					$im = pdf_open_gif($pdf, $this->filename);
+					$im = pdf_open_gif($pdf, $slideDir.$this->filename);
 					break;
 				case 2:
-					$im = pdf_open_jpeg($pdf, $this->filename);
+					$im = pdf_open_jpeg($pdf, $slideDir.$this->filename);
 					break;
 				case 3:
-					$im = pdf_open_png($pdf, $this->filename);
+					$im = pdf_open_png($pdf, $slideDir.$this->filename);
 					break;
 				case 7:
-					$im = pdf_open_tiff($pdf, $this->filename);
+					$im = pdf_open_tiff($pdf, $slideDir.$this->filename);
 					break;
 			}
 			if(isset($im)) {
@@ -819,8 +823,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 	
 		// {{{ highlight()	
 		function highlight() {
+			global $slideDir;
+
 			if(!empty($this->filename)) {
-				$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+				$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 				switch($this->type) {
 					case 'php':
 					case 'genimage':
@@ -887,7 +893,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		// Because we are eval()'ing code from slides, obfuscate all local 
 		// variables so we don't get run over
 		function html() {
-			global $pres, $objs;
+			global $pres, $objs, $slideDir;
 			$_html_effect = '';
 			if($this->effect) $_html_effect = "effect=\"$this->effect\"";
 			// Bring posted variables into the function-local namespace 
@@ -947,27 +953,27 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
 					"\">\n";
 				if(!empty($this->filename)) {
-					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 					switch($this->type) {
 						case 'genimage':
-							echo "<img src=\"$this->filename\">\n";
+							echo '<img src='.$slideDir.$this->filename."\">\n";
 							break;
 						case 'iframe':
-							echo "<iframe width=\"$this->iwidth\" height=\"$this->iheight\" src=\"$this->filename\"><a href=\"$this->filename\" class=\"resultlink\">$this->linktext</a></iframe>\n";
+							echo "<iframe width=\"$this->iwidth\" height=\"$this->iheight\" src=\"$slideDir$this->filename\"><a href=\"$slideDir$this->filename\" class=\"resultlink\">$this->linktext</a></iframe>\n";
 							break;
 						case 'link':
-							echo "<a href=\"$this->filename\" class=\"resultlink\">$this->linktext</a><br />\n";
+							echo "<a href=\"$slideDir$this->filename\" class=\"resultlink\">$this->linktext</a><br />\n";
 							break;	
 						case 'embed':
-							echo "<embed src=\"$this->filename\" class=\"resultlink\" width=\"800\" height=\"800\"></embed><br />\n";
+							echo "<embed src=\"$slideDir$this->filename\" class=\"resultlink\" width=\"800\" height=\"800\"></embed><br />\n";
 							break;
 						case 'flash':
-							echo "<embed src=\"$this->filename?".time()." quality=high loop=true
+							echo "<embed src=\"$slideDir$this->filename?".time()." quality=high loop=true
 pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
 type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight>\n";
 							break;
 						case 'system':
-							system("DISPLAY=localhost:0 $this->filename");
+							system("DISPLAY=localhost:0 $slideDir$this->filename");
 							break;	
 						default:
 							include $_html_filename;
@@ -988,7 +994,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 		// {{{ plainhtml()
 		function plainhtml() {
-			global $pres, $objs;
+			global $pres, $objs, $slideDir;
 			// Bring posted variables into the function-local namespace 
 			// so examples will work
 			foreach($_POST as $_html_key => $_html_val) {
@@ -1022,23 +1028,23 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo "<br /><table bgcolor=\"$_html_outputbackground\"><tr><td>\n";
 
 				if(!empty($this->filename)) {
-					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 					switch($this->type) {
 						case 'genimage':
-							echo "<img src=\"$this->filename\">\n";
+							echo "<img src=\"$slideDir$this->filename\">\n";
 							break;
 						case 'iframe':
 						case 'link':
 						case 'embed':
-							echo "<a href=\"$this->filename\">$this->linktext</a><br />\n";
+							echo "<a href=\"$slideDir$this->filename\">$this->linktext</a><br />\n";
 							break;
 						case 'flash':
-							echo "<embed src=\"$this->filename?".time()." quality=high loop=true
+							echo "<embed src=\"$slideDir$this->filename?".time()." quality=high loop=true
 pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
 type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight>\n";
 							break;
 						case 'system':
-							system("DISPLAY=localhost:0 $this->filename");
+							system("DISPLAY=localhost:0 $slideDir$this->filename");
 							break;	
 						default:
 							include $_html_filename;
@@ -1065,7 +1071,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 		// {{{ pdf()
 		function pdf() {
-			global $pres, $objs, $pdf, $pdf_cx, $pdf_cy, $pdf_x, $pdf_y, $pdf_font, $pdf_example_font;
+			global $pres, $objs, $pdf, $pdf_cx, $pdf_cy, $pdf_x, $pdf_y, $pdf_font, $pdf_example_font, $slideDir;
 
 			// Bring posted variables into the function-local namespace 
 			// so examples will work
@@ -1087,7 +1093,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 			if(!$this->hide) {
 				if(!empty($this->filename)) {
-					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 					$_html_file = @file_get_contents($_html_filename);
 				} else {
 					$_html_file = $this->text;
@@ -1129,7 +1135,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					global ${$this->global};
 				}
 				if(!empty($this->filename)) {
-					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 					switch($this->type) {
 						case 'genimage':
 							// need some trick to fetch the generated image here
@@ -1143,7 +1149,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 							// Definitely can't do this one	
 							break;
 						case 'system':
-							// system("DISPLAY=localhost:0 $this->filename");
+							// system("DISPLAY=localhost:0 $slideDir$this->filename");
 							break;	
 						default:
 							// Need something to turn html into pdf here?
