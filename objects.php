@@ -291,8 +291,10 @@ TITLEPAGE;
 			if($slideNum) {  // No header on the titlepage
 				pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
 				pdf_show_boxed($pdf, "Slide $slideNum/$maxSlideNum", $pdf_cx, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'left');
-				$w = pdf_stringwidth($pdf, $p->date);
-				pdf_show_boxed($pdf, $p->date, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'right');
+				if(isset($p->date)) $d = $p->date;
+				else $d = strftime("%B %e %Y");
+				$w = pdf_stringwidth($pdf, $d);
+				pdf_show_boxed($pdf, $d, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'right');
 				pdf_set_font($pdf, "Helvetica" , -24, 'winansi');
 				pdf_show_boxed($pdf, $this->title, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'center');
 			}

@@ -104,15 +104,33 @@ HEADER;
 </html>
 FOOTER;
 			break;
+
+		case 'plainhtml':
+			echo <<<HEADER
+<html>
+<head>
+<base href="http://$HTTP_HOST$baseDir">
+</head>
+<body>
+HEADER;
+			while(list($coid,$obj) = each($objs)) {
+				$obj->display();
+			}
+			echo <<<FOOTER
+</body>
+</html>
+FOOTER;
+			break;
+
 		case 'pdf':
 			// In PDF mode we loop through all the slides and make a single
 			// big multi-page PDF document.
 			$pdf = pdf_new();
 			pdf_open_file($pdf);
-			pdf_set_info($pdf, "Author",$pres[1]->speaker);
-			pdf_set_info($pdf, "Title",$pres[1]->title);
+			pdf_set_info($pdf, "Author",isset($pres[1]->speaker)?$pres[1]->speaker:"Anonymous");
+			pdf_set_info($pdf, "Title",isset($pres[1]->title)?$pres[1]->title:"No Title");
 			pdf_set_info($pdf, "Creator", "See Author");
-			pdf_set_info($pdf, "Subject", $pres[1]->topic);
+			pdf_set_info($pdf, "Subject", isset($pres[1]->topic)?$pres[1]->topic:"");
 
 			while(list($slideNum,$slide) = each($pres[1]->slides)) {
 				$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
