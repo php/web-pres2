@@ -149,7 +149,7 @@ Simply click the topic you wish to find presentations on to view all available p
 <option value="pdfa4" <?=($display_mode=='pdfa4')?'SELECTED':''?>>PDF (A4)</option>
 </select>
 <br />
-Show Speaker Notes: <input type="checkbox" name="speaker" <?=$speaker?'checked':''?> onChange="change_mode()">
+Show Speaker Notes: <input type="checkbox" name="speaker" <?=($form_speaker=='true')?'checked':''?> onChange="change_mode()">
 </p>
 </form>
 <?php
