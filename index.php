@@ -86,7 +86,7 @@
 
 <html>
 <head>
-<base href="<?="http://$_SERVER[HTTP_HOST]".$baseDir?>">
+<base href="<?php echo "http://".getenv('HTTP_HOST').$baseDir?>">
 <title>PHP Presents</title>
 <?php include("css.php"); ?>
 <script language="JavaScript1.2">

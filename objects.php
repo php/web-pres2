@@ -298,12 +298,12 @@ function strip_markups($str) {
 				else $logo1url = $pres[1]->logoimage1url;				
 				if(!empty($logo1)) {
 					$size = getimagesize($logo1);
-					echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0em; margin-left: 0em;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a></td>";
+					echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0em; margin-left: 0em;\"></a></td>";
 					$offset+=2;
 				}
 				?>
 				<td align="center">
-				<?echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($this->title)."</a></div>";?>
+				<?echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$pres[1]->slides[$slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($this->title)."</a></div>";?>
 				</td>
 				</tr></table>
 				<br />
