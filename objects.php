@@ -123,7 +123,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		function _blurb() {
 			$this->font  = 'fonts/Arial.fdb';
 			$this->align = 'left';
-			$this->fontsize     = '4em';
+			$this->fontsize     = '3.5em';
 			$this->marginleft   = '1em';
 			$this->marginright  = '1em';
 			$this->margintop    = '0.2em';	
@@ -187,6 +187,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->marginleft = '3em';
 			$this->margintop = '0em';
 			$this->marginbottom = '0em';
+			$this->width = '';
 		}
 
 		function display() {
@@ -203,6 +204,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				((float)$this->marginright+1).'em '.
 				((float)$this->marginbottom).'em '.
 				((float)$this->marginleft).'em;'.
+				((isset($this->width)) ? "width: $this->width;" : "").
 				'">';
 			echo '<div class="emcode" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
 			if(!empty($this->filename)) {
