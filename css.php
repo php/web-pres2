@@ -76,4 +76,45 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+.c2right {
+	margin : 1em 1em 0 0; 
+	padding-left : 1%;
+	padding-right : 1%;
+	border-style : solid; 
+	border-top-width : 1px; 
+	border-right-width : 1px; 
+	border-bottom-width : 1px; 
+	border-left-width : 1px; 
+	border-right-color : inherit; 
+	border-left-color : inherit; 
+	width : 46%; 
+	float : right; 
+}
+.c2left {
+	margin : 1em 1em 0 0; 
+	padding-left : 1%;
+   	padding-right : 1%;
+   	border-style : solid; 
+	border-top-width : 1px; 
+	border-right-width : 1px; 
+	border-bottom-width : 1px; 
+	border-left-width : 1px; 
+   	border-right-color : inherit; 
+   	border-left-color : inherit; 
+   	width : 46%; 
+   	float : left; 
+}
+.box {
+	margin : 0 0 0 0; 
+	padding-left : 1%;
+   	padding-right : 1%;
+   	border-style : solid; 
+	border-top-width : 1px; 
+	border-right-width : 1px; 
+	border-bottom-width : 1px; 
+	border-left-width : 1px; 
+   	border-right-color : inherit; 
+   	border-left-color : inherit; 
+   	float : left; 
+}
 </style>

@@ -116,6 +116,16 @@ class XML_Slide extends XML_Parser
                 $this->activeTag = 'text';
                 break;
 
+            /* Divider for indicating where to switch areas for layouts */
+            case 'DIVIDE':
+                $cl = '_'.strtolower($element);
+                $this->objects[++$this->coid] = new $cl();
+                $this->stack[] = $this->coid;
+                $this->insideTag = $element;
+                $this->_add_attribs($this->objects[$this->coid], $attribs);
+                $this->activeTag = 'text';
+                break;
+
             /* Special case for array properties */
             case 'BULLET':
                 $this->objects[$this->coid]->bullets[] = new _bullet();
@@ -152,12 +162,15 @@ class XML_Slide extends XML_Parser
 
         switch ($element) {
             case 'SLIDE':
+                $this->objects[++$this->coid] = new _footer();
+                /* fall-through */
             case 'BLURB':
             case 'IMAGE':
             case 'LIST':
             case 'EXAMPLE':
             case 'LINK':
             case 'PHP':
+            case 'DIVIDE':
                 $this->coid = array_pop($this->stack);
                 break;
         }

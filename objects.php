@@ -64,6 +64,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->titleFont  = 'fonts/Verdana.fdb';
 			$this->template   = 'php';
 			$this->mode  = 'html';
+			$this->layout = '';
 		}
 
 		function display() {
@@ -103,6 +104,18 @@ function getFlashDimensions($font,$title,$size) {
 				echo '</div></div>';
 				break;
 			}
+
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				case '2columns':
+					echo "<div class=\"c2left\">\n";
+					break;
+				case 'box':
+					echo "<div class=\"box\">\n";
+					break;
+			}
+
+			// Automatic slides
 			if($objs[1]->template == 'titlepage') {
 				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
 				$smallerfontsize = (2*(float)$basefontsize/3).'em';
@@ -397,4 +410,51 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 	}
 	// }}}
 
+	// {{{ Divider Class
+	class _divide {
+
+		function _divide() {
+			$this->mode         = 'html';
+		}
+
+		function display() {
+			$this->{$this->mode}();
+		}
+
+		function html() {
+			global $objs;
+
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				case '2columns':
+					echo "</div>\n<div class=\"c2right\">\n";
+					break;
+			}
+		}
+	}
+	// }}}
+
+	// {{{ Footer Class
+	class _footer {
+
+		function _footer() {
+			$this->mode         = 'html';
+		}
+
+		function display() {
+			$this->{$this->mode}();
+		}
+
+		function html() {
+			global $objs;
+
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				default:
+					echo "</div>\n";
+					break;
+			}
+		}
+	}
+	// }}}
 ?>
