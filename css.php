@@ -43,12 +43,27 @@ div.emcode {
 	padding: 0.5em;
 	font-family: monospace;
 }
+
 div.output {
 	font-family: monospace;
 	background: <?php echo $pres[1]->outputbackground; ?>;
 	border: thin solid #000000;
 	padding: 0.5em;
 }
+
+table.index {
+ background: <?php echo $pres[1]->examplebackground; ?>;
+ border: thin dotted #000000;                                                                                                 
+ padding: 0.5em;
+ font-family: monospace;
+}
+
+td.index {
+ background: <?php echo $pres[1]->examplebackground; ?>;
+ padding: 1em;
+ font-family: monospace;
+}
+
 h1 {
 	font-size: 2em;
 }
