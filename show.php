@@ -30,7 +30,6 @@
 		list($winW, $winH) = explode('_',$dims);
 	}
 
-
 	error_reporting(E_ALL);
 
 	require_once 'XML_Presentation.php';
@@ -121,7 +120,8 @@ FOOTER;
 				$r->parse();
 
 				$objs = $r->getObjects();
-				pdf_begin_page($pdf, $pdf_x, $pdf_y);  // US-Letter for now A4=595x842
+				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+				$pdf_cx = $pdf_cy = 0;  // Globals that keep our current x,y position
 				while(list($coid,$obj) = each($objs)) {
 					$obj->display();
 				}

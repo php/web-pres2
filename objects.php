@@ -15,6 +15,17 @@ function getFlashDimensions($font,$title,$size) {
 }
 // }}}
 
+// {{{ my_new_pdf_page($pdf, $x, $y)
+function my_new_pdf_page($pdf, $x, $y) {
+	pdf_begin_page($pdf, $x, $y);
+	// Having the origin in the bottom left corner confuses the
+	// heck out of me, so let's move it to the top-left.
+	pdf_translate($pdf,0,$y);
+	pdf_scale($pdf, 1, -1);   // Reflect across horizontal axis
+	pdf_set_value($pdf,"horizscaling",-100); // Mirror
+}
+// }}}
+
 // }}}
 
 	// {{{ Presentation List Classes
@@ -267,37 +278,50 @@ TITLEPAGE;
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y, $slideNum, $currentPres, $baseDir, $showScript, $pres, $objs;
+			global 	$pdf, $pdf_x, $pdf_y, $slideNum, $maxSlideNum, 
+					$currentPres, $baseDir, $showScript, $pres, $objs,
+					$pdf_cx, $pdf_cy;
 
 			$p = $pres[1];
 			$middle = (int)($pdf_y/2);
 
+			$pdf_cy = 25;  // top-margin
+			$pdf_cx = 40;
+		
 			if($slideNum) {  // No header on the titlepage
-				pdf_set_font($pdf, "Helvetica" , 12, 'winansi');
-				pdf_show_boxed($pdf, "Slide $slideNum", 10, $pdf_y-100, $pdf_x-20, 72, 'left');
-				pdf_show_boxed($pdf, $p->date, 10, $pdf_y-100, $pdf_x-20, 72, 'right');
-				pdf_set_font($pdf, "Helvetica" , 18, 'winansi');
-				pdf_show_boxed($pdf, $this->title, 10, $pdf_y-100, $pdf_x-20, 72, 'center');
+				pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+				pdf_show_boxed($pdf, "Slide $slideNum/$maxSlideNum", $pdf_cx, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'left');
+				$w = pdf_stringwidth($pdf, $p->date);
+				pdf_show_boxed($pdf, $p->date, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'right');
+				pdf_set_font($pdf, "Helvetica" , -24, 'winansi');
+				pdf_show_boxed($pdf, $this->title, 40, $pdf_cy, $pdf_x-2*$pdf_cx, 1, 'center');
 			}
 
 			if($objs[1]->template == 'titlepage') {
-				pdf_set_font($pdf, "Helvetica" , 36, 'winansi');
-				pdf_show_boxed($pdf, $p->title, 10, $middle+200, $pdf_x-20, 40, 'center');
+				pdf_set_font($pdf, "Helvetica" , -36, 'winansi');
+				pdf_show_boxed($pdf, $p->title, 10, $middle-200, $pdf_x-20, 40, 'center');
 
-				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
-				pdf_show_boxed($pdf, $p->event, 10, $middle+120, $pdf_x-20, 40, 'center');
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->event, 10, $middle-120, $pdf_x-20, 40, 'center');
 
-				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
-				pdf_show_boxed($pdf, $p->date, 10, $middle+40, $pdf_x-20, 40, 'center');
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->date, 10, $middle-40, $pdf_x-20, 40, 'center');
 
-				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
-				pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $middle-40, $pdf_x-20, 40, 'center');
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, $p->speaker.' <'.$p->email.'>', 10, $middle+40, $pdf_x-20, 40, 'center');
 
-				pdf_set_font($pdf, "Helvetica" , 30, 'winansi');
-				pdf_show_boxed($pdf, '<'.$p->url.'>', 10, $middle-120, $pdf_x-20, 40, 'center');
+				pdf_set_font($pdf, "Helvetica" , -30, 'winansi');
+				pdf_show_boxed($pdf, '<'.$p->url.'>', 10, $middle+120, $pdf_x-20, 40, 'center');
 			}
-		
-			pdf_set_text_pos($pdf, 40, $pdf_y-80);
+
+			$pdf_cy += 30;	
+			if($slideNum) { 
+				pdf_moveto($pdf,40,$pdf_cy); 
+				pdf_lineto($pdf,$pdf_x-40,$pdf_cy);	
+				pdf_stroke($pdf);
+			}
+			$pdf_cy += 20;	
+			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
 		}
 	}
 	// }}}
@@ -356,18 +380,18 @@ TITLEPAGE;
 			global $pdf, $pdf_x, $pdf_y;
 
 			if(isset($this->title)) {
-				pdf_set_font($pdf, "Helvetica" , 16, 'winansi');
+				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "\n");
-				$cy = pdf_get_value($pdf, "texty")-30;
+				$cy = pdf_get_value($pdf, "texty")+30;
 			} else $cy = pdf_get_value($pdf, "texty");
 
-			pdf_set_font($pdf, "Helvetica" , 12, 'winansi');
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
 
 			$height=14;	
 			while(pdf_show_boxed($pdf, $this->text, 60, $cy, $pdf_x-30, $height, 'left', 'blind')) $height+=10;
 			pdf_show_boxed($pdf, $this->text, 60, $cy, $pdf_x-30, $height, 'justify');
-			$cy-=$height;
+			$cy+=$height;
 			pdf_set_text_pos($pdf, 40, $cy);
 		}
 
@@ -751,7 +775,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			global $pdf;
 
 			if(isset($this->title)) {
-				pdf_set_font($pdf, "Helvetica" , 16, 'winansi');
+				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "");
 			}
@@ -814,17 +838,23 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y;
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
 
-			$cy = pdf_get_value($pdf, "texty");
-			pdf_set_font($pdf, "Helvetica" , 12, 'winansi');
+			$pdf_cy = pdf_get_value($pdf, "texty");
 		
 			$height=14;	
-			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $cy, $pdf_x-30, $height, 'left', 'blind')) $height+=10;
-			pdf_show_boxed($pdf, 'o '.$this->text, 60, $cy-$height, $pdf_x-30, $height, 'left');
-			$cy-=$height;
-			pdf_set_text_pos($pdf, 40, $cy);
-			
+			while(pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+			if( ($pdf_cy + $height) > $pdf_y-40 ) {
+				pdf_end_page($pdf);
+				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+				$pdf_cx = 40;
+				$pdf_cy = 60;
+			}
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_show_boxed($pdf, 'o '.$this->text, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
+			$pdf_cy+=$height;
+			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
+			pdf_continue_text($pdf,"");	
 		}
 	}
 	// }}}
