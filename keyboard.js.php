@@ -29,11 +29,11 @@ function keypressHandler(e) {
 			}
 			currentEffect = currentEffect+1;
 		} else if (<?php echo $nextSlideNum; ?>) {
-			top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum"; ?>';
+			top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/{$_SESSION['currentPres']}/$nextSlideNum"; ?>';
 		}
 	}
 	if (e == 37 && <?php echo $prevSlideNum+1; ?>) /* left arrow */
-		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlideNum"; ?>';
+		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$showScript/{$_SESSION['currentPres']}/$prevSlideNum"; ?>';
 }
 window.onkeyup = keypressHandler;
 
