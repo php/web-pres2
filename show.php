@@ -20,6 +20,10 @@
 
 	// Figure out which presentation file to read and slide to show
 	$presFile = trim(trim($_SERVER['PATH_INFO']),'/');
+	if (substr($presFile,-4) == ".pdf") {
+		$navmode = 'pdf';
+		$presFile = substr($presFile, 0, -4);
+	}
 	$lastPres = null;
 	if(isset($_SESSION['currentPres'])) {
 		$lastPres = $_SESSION['currentPres'];
@@ -37,12 +41,14 @@
 	$pres = $pres[1];
 
 	// Set display: html, plainhtml, pdfus, etc.
-	if (isset($_SESSION['selected_display_mode'])) { 
-		$navmode = $_SESSION['selected_display_mode'];
-	} elseif (isset($pres->navmode)) { 
-		$navmode = $pres->navmode;
-	}	else { 
-		$navmode = 'html';
+	if (!isset($navmode)) {
+		if (isset($_SESSION['selected_display_mode'])) { 
+			$navmode = $_SESSION['selected_display_mode'];
+		} elseif (isset($pres->navmode)) { 
+			$navmode = $pres->navmode;
+		}	else { 
+			$navmode = 'html';
+		}
 	}
 	$mode = new $navmode($c);
 
