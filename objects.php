@@ -83,9 +83,13 @@ function getFlashDimensions($font,$title,$size) {
 			switch($pres[1]->template) {
 				default:
 				echo "<div class='sticky' align='$this->titleAlign' style='width: 100%;'><div class='navbar'>";
-				echo "<img src='{$pres[1]->logo1}' align='left' style='float: left;'>";
-				if ($pres[1]->logo2) {
-					echo "<img src='{$pres[1]->logo2}' align='right' style='float: right;'>";
+				if(!empty($this->logo1)) $logo1 = $this->logo1;
+				else $logo1 = $pres[1]->logo1;
+				echo "<img src='$logo1' align='left' style='float: left;'>";
+				if(!empty($this->logo2)) $logo2 = $this->logo2;
+				else $logo2 = $pres[1]->logo2;
+				if ($logo2) {
+					echo "<img src='$logo2' align='right' style='float: right;'>";
 				}
 				echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum' style='text-decoration: none; color: $this->titleColor;'>$this->title</a></div>";
 				if ($pres[1]->navbartopiclinks) {
