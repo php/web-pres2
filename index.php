@@ -17,7 +17,7 @@
 	session_start();
 	session_register('selected_display_mode');
 	session_register('show_speaker_notes');
-	$titles = null;
+#	$_SESSION['titles'] = null;
 	
 	$topics = array();
 	$ps = array();

@@ -22,8 +22,6 @@
 	session_register('maxSlideNum');
 	session_register('prevTitle');
 	session_register('nextTitle');
-	session_register('titles');
-	session_register('titlesLoaded');
 
 	$presFile = trim($_SERVER['PATH_INFO']);			
 	$presFile = trim($presFile,'/');			
@@ -33,7 +31,7 @@
 	@list($currentPres,$slideNum) = explode('/',$presFile);
 	if(!$slideNum) $slideNum = 0;
 	if($slideNum<0) $slideNum = 0;
-	if(!isset($titlesLoaded)) $titlesLoaded = 0;
+	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
@@ -46,9 +44,9 @@
 	$p->parse();
 	$pres = $p->getObjects();
 
-	if(empty($titles) || $lastPres != $currentPres || $titlesLoaded < filemtime($presFile)) {
-		$titles = get_all_titles($pres[1]);
-		$titlesLoaded = filemtime($presFile);
+	if(empty($_SESSION['titles']) || $lastPres != $currentPres || $_SESSION['titlesLoaded'] < filemtime($presFile)) {
+		$_SESSION['titles'] = get_all_titles($pres[1]);
+		$_SESSION['titlesLoaded'] = filemtime($presFile);
 	}
 
 	$maxSlideNum = count($pres[1]->slides)-1;
@@ -61,11 +59,11 @@
 	$prevSlideNum = $nextSlideNum = 0;
 	if($slideNum > 0) {
 		$prevSlideNum = $slideNum-1;
-		$prevTitle = @$titles[$prevSlideNum]['title'];
+		$prevTitle = @$_SESSION['titles'][$prevSlideNum]['title'];
 	} else $prevTitle = '';
 	if($slideNum < $maxSlideNum) {
 		$nextSlideNum = $slideNum+1;
-		$nextTitle = @$titles[$nextSlideNum]['title'];
+		$nextTitle = @$_SESSION['titles'][$nextSlideNum]['title'];
 	} else $nextTitle = '';
 
 	$slideDir = dirname($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename).'/';

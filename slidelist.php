@@ -1,5 +1,7 @@
 <?php
 	require_once 'config.php';
+    require_once 'XML_Presentation.php';
+    require_once 'XML_Slide.php';
 
 	session_start();
 ?>
@@ -17,6 +19,7 @@ window.opener.location=url
 <?php
 	echo "<table border=0><tr><th> # </th><td>Slide Title</td></tr>\n";
 	$lastSection = $lastChapter = '';
+
 	foreach($_SESSION['titles'] as $k=>$v) {
 		if(!empty($v['section'])) {
 			$spacer = "&nbsp;&nbsp;&nbsp;&nbsp;";
