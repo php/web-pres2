@@ -276,6 +276,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginright+1).'em '.
 					((float)$this->marginbottom).'em '.
 					((float)$this->marginleft).'em;'.
+					((isset($this->width)) ? "width: $this->width;" : "").
 					'">';
 				echo '<div class="output" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
 				if(!empty($this->filename)) include $this->filename;
