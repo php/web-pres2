@@ -127,6 +127,18 @@ function markup_text($str) {
 }
 // }}}
 
+function add_line_numbers($text)
+{
+	$lines = preg_split ('!$\n!m', $text);
+	$lnwidth = strlen(count($lines));
+	$format = '%'.$lnwidth."d: %s\n";
+	$lined_text = '';
+	while (list ($num, $line) = each ($lines)) {
+		$lined_text .= sprintf($format, $num + 1, $line);
+	}
+	return $lined_text;
+}
+
 // {{{ strip_markups
 function strip_markups($str) {
 	$ret = preg_replace('/\*([\S ]+?)\*/','\1',$str);
@@ -845,6 +857,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->iheight = '80%';
 			$this->localhost = false;
 			$this->effect = '';
+			$this->linenumbers = false;
 		}
 
 		function display() {
@@ -876,7 +889,15 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					case 'embed':
 					case 'flash':
 					case 'system':
-						highlight_file($_html_filename);
+						if ($this->linenumbers) {
+							ob_start();
+							highlight_file($_html_filename);
+							$contents = ob_get_contents();
+							ob_end_clean();
+							echo add_line_numbers($contents);
+						} else {
+							highlight_file($_html_filename);
+						}
 						break;
 					case 'c':
 						$prog = trim(`which c2html`);
@@ -923,7 +944,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			} else {
 				switch($this->type) {
 					case 'php':
-						highlight_string($this->text);
+						if ($this->linenumbers) {
+							$text = add_line_numbers($this->text);
+							highlight_string($text);
+						} else {
+							highlight_string($this->text);
+						}
 						break;
 					case 'shell':
 						echo '<pre>'.htmlspecialchars($this->text)."</pre>\n";
