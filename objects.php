@@ -207,6 +207,7 @@ function strip_markups($str) {
 		function _image() {
 			$this->filename = '';
 			$this->align = 'left';
+			$this->talign = 'left';
 			$this->marginleft = "auto";
 			$this->marginright = "auto";
 			$this->effect = '';

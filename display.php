@@ -285,8 +285,8 @@ FOOTER;
 
     function _image(&$image) {
         $effect = '';
-        if($image->effect) $effect = "effect=\"$image->effect\"";
-        if(isset($image->title)) echo '<h1>'.markup_text($image->title)."</h1>\n";
+        if($image->effect) $effect = "effect=\"$#image->effect\"";
+        if(isset($image->title)) echo "<h1 align=\"{$image->talign}\">".markup_text($image->title)."</h1>\n";
         if ($image->width) {
             $size = "width=\"{$image->width}\" height=\"{$image->height}\"";
         } else {
@@ -776,7 +776,7 @@ FOOTER;
     }
 
     function _image(&$image) {
-        if(isset($image->title)) echo '<h1>'.markup_text($image->title)."</h1>\n";
+        if(isset($image->title)) echo "<h1 align=\"{$image->talign}\">".markup_text($image->title)."</h1>\n";
         if ($image->width) {
             $size = "width=\"{$image->width}\" height=\"{$image->height}\"";
         } else {
@@ -1532,6 +1532,14 @@ class pdf extends display {
                         // Need something to turn html into pdf here?
                         // Perhaps just output buffering and stripslashes
                         // include $_html_filename;
+                        // -- copying code from below as a temp solution --
+                        ob_start();
+                        eval('?>'.file_get_contents($_html_filename));
+                        $data = strip_tags(ob_get_contents());
+                        ob_end_clean();
+                        if(strlen($data) && $data[strlen($data)-1] != "\n") $data .= "\n";
+                        $this->my_pdf_paginated_code($this->pdf, $data, $this->pdf_x, $this->pdf_y, $this->pdf_cy, 60, $this->pdf_cx+30, $this->pdf_cx, $this->pdf_example_font, -10);
+                        pdf_continue_text($this->pdf,"");
                         break;
                 }
             } else {
