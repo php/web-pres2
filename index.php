@@ -8,7 +8,7 @@
  * vim<600: sw=4 ts=4
  */
 	if(!empty($_SERVER['PATH_INFO'])) {
-	  $topic = trim(substr($_SERVER['PATH_INFO'],1));
+	  $topic = trim(substr(urldecode($_SERVER['PATH_INFO']),1));
 	}
 
 	require_once 'config.php';
@@ -120,7 +120,7 @@ Simply click the topic you wish to find presentations on to view all available p
 </p>
 <?php 
 	foreach($topics as $i => $topic) {
-		print('<p><a href="' . $baseDir . 'index.php/' . $i . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
+		print('<p><a href="' . $baseDir . 'index.php/' . urlencode($i) . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
 	}
 
 } else {
