@@ -33,14 +33,6 @@ Things to work on
   required for the HTML navbar.  For the flash one, just a new key event
   will do the trick.
 
-- HTML navbar is working with mouse-clicks only right now.  I think we can
-  come up with some fancy Javascript to catch key events correctly.  The idea
-  is to write a onKey handler which would check the event.pageX and event.pageY
-  coordinates to see if the cursor is near the top of the page and if not, 
-  send the keypress back to the browser.  On IE it is event.clientX and
-  event.clientY instead, I think.  Not entirely sure this is possible, but
-  it should be a fun little project.
-
 - Perhaps a pop-up widget to change $baseFontSize on the fly?  The base font
   size that works on one machine may not work at all on another.  So a quick
   way to change it would be cool.  The nice thing about the system is that
