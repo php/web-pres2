@@ -266,6 +266,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($this->filename)) {
 					switch($this->type) {
 						case 'php':
+						case 'genimage':
 							highlight_file($this->filename);
 							break;
 						case 'shell':
@@ -310,8 +311,22 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((isset($this->width)) ? "width: $this->width;" : "").
 					'">';
 				echo '<div class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;\">\n";
-				if(!empty($this->filename)) include $this->filename;
-				else eval('?>'.$this->text);
+				if(!empty($this->filename)) {
+					switch($this->type) {
+						case 'genimage':
+							echo "<img src=\"$this->filename\">\n";
+							break;
+						default:
+							include $this->filename;
+							break;
+					}
+				} else {
+					switch($this->type) {
+						default:
+							eval('?>'.$this->text);
+							break;
+					}
+				}
 				echo "</div></div>\n";
 				if(!empty($this->anchor)) echo "</a>\n";
 			}
