@@ -20,4 +20,4 @@ function slide(e,x,y,sp,funcCall,xNow,yNow){
 };
 slide.all=[];
 function sign(x,y){return(x<y)?1:-1};
-function px(n){return n; /*+(!l&&!op?'px':0)*/};
+//function px(n){return n; /*+(!l&&!op?'px':0)*/};
