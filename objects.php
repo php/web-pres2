@@ -925,6 +925,102 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 		// {{{ pdf()
 		function pdf() {
+			global $pres, $objs, $pdf, $pdf_cx, $pdf_cy, $pdf_x, $pdf_y, $pdf_font, $pdf_example_font;
+
+			// Bring posted variables into the function-local namespace 
+			// so examples will work
+			foreach($_POST as $_html_key => $_html_val) {
+				$$_html_key = $_html_val;
+			}
+			foreach($_SERVER as $_html_key => $_html_val) {
+				$$_html_key = $_html_val;
+			}
+
+			if(isset($this->title)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
+				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
+				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, "\n");
+			}
+			$pdf_cy = pdf_get_value($pdf, "texty");
+
+			if(!$this->hide) {
+				if(!empty($this->filename)) {
+					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					$_html_file = file_get_contents($_html_filename);
+				} else {
+					$_html_file = $this->text;
+				}
+				switch($this->type) {
+					case 'php':
+					case 'genimage':
+					case 'iframe':
+					case 'link':
+					case 'embed':
+					case 'flash':
+					case 'system':
+					case 'shell':
+					case 'c':
+					case 'perl':
+					case 'java':
+					case 'python':
+					case 'html':
+					default:
+						pdf_set_font($pdf, $pdf_example_font, -12, 'winansi');
+/* This took way way too long
+						$height=10
+						while(pdf_show_boxed($pdf, $_html_file, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+*/
+						pdf_show_boxed($pdf, $_html_file, 60, $pdf_cy, $pdf_x-120, 1, 'left');
+						pdf_continue_text($pdf,"");
+						break;
+				}
+				
+			}			
+			$pdf_cy = pdf_get_value($pdf, "texty");
+			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
+					global ${$this->global};
+				}
+				pdf_set_font($pdf, $pdf_example_font, -12, 'winansi');
+				if(!empty($this->filename)) {
+					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
+					switch($this->type) {
+						case 'genimage':
+							// need some trick to fetch the generated image here
+							break;
+						case 'iframe':
+						case 'link':
+						case 'embed':
+							// don't think we can do these in pdf
+							break;
+						case 'flash':
+							// Definitely can't do this one	
+							break;
+						case 'system':
+							// system("DISPLAY=localhost:0 $this->filename");
+							break;	
+						default:
+							// Need something to turn html into pdf here?
+							// Perhaps just output buffering and stripslashes
+							// include $_html_filename;
+							break;
+					}
+				} else {
+					switch($this->type) {
+						default:
+							ob_start();
+							eval('?>'.$this->text);
+							$data = strip_tags(ob_get_contents());
+							ob_end_clean();
+							pdf_set_font($pdf, $pdf_example_font, -12, 'winansi');
+							pdf_show_boxed($pdf, $data, 60, $pdf_cy, $pdf_x-120, 1, 'left');
+							pdf_continue_text($pdf,"");
+							break;
+					}
+				}
+			}
 
 		}
 		// }}}

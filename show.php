@@ -1,6 +1,7 @@
 <?php
 	require_once 'config.php';
 
+	set_time_limit(0);  // PDF generation can take a while
 	if(!strlen($PATH_INFO)) {
 		header('Location: http://'.$HTTP_HOST.$baseDir);
 		exit;
