@@ -42,6 +42,71 @@ function my_pdf_page_number($pdf) {
 }
 // }}}
 
+/* {{{ my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
+
+   Function displays and paginates a bunch of text.  Wordwrapping is also
+   done on long lines.  Top-down coordinates and a monospaced font are assumed.
+
+     $data = text to display
+     $x    = width of page
+     $y    = height of page
+     $tm   = top-margin
+     $bm   = bottom-margin
+     $lm   = left-margin
+     $rm   = right-margin
+     $font = font name
+     $fs   = font size
+*/
+function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
+
+	pdf_set_font($pdf, $font, $fs, 'winansi');	
+	$cw = pdf_stringwidth($pdf,'m'); // Width of 1 char - assuming monospace
+	$linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
+
+	$pos = $i = 0;
+	$len = strlen($data);
+
+	pdf_set_text_pos($pdf, $lm, $tm);
+	
+	$np = true;
+	while($pos < $len) {
+		$nl = strpos(substr($data,$pos),"\n");
+		if($nl===0) {
+			if($np) { pdf_show($pdf, ""); $np = false; }
+			else pdf_continue_text($pdf, "");
+			$pos++;
+			continue;
+		}
+		if($nl!==false) $ln = substr($data,$pos,$nl);
+		else { 
+			$ln = substr($data,$pos);
+			$nl = $len-$pos;
+		}
+		if($nl>$linelen) { // Line needs to be wrapped
+			$ln = wordwrap($ln,$linelen);
+			$out = explode("\n", $ln);
+		} else {
+			$out[0] = $ln;	
+		}
+		foreach($out as $l) {
+			if($np) { pdf_show($pdf, $l); $np = false; }
+			else pdf_continue_text($pdf, $l);
+		}
+		$pos += $nl+1;
+		if(pdf_get_value($pdf, "texty") >= ($y-$bm)) {
+			my_pdf_page_number($pdf);
+			pdf_end_page($pdf);
+			my_new_pdf_page($pdf, $x, $y);
+
+			pdf_set_font($pdf, $font, $fs, 'winansi');	
+			pdf_set_text_pos($pdf, $lm, 60);
+			$np = true;
+		}
+		
+	}
+}
+// }}}
+
 // }}}
 
 	// {{{ Presentation List Classes
@@ -502,7 +567,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		function pdf() {
 			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
 
-			if(isset($this->title)) {
+			if(!empty($this->title)) {
 				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
 				$dx = pdf_stringwidth($pdf,$this->title);
 				$pdf_cy = pdf_get_value($pdf, "texty");
@@ -520,9 +585,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				}
 				pdf_set_text_pos($pdf,$x,$pdf_cy);
 				pdf_continue_text($pdf, $this->title);
-				pdf_continue_text($pdf, "\n");
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_text_pos($pdf,$x,$pdf_cy+5);
 			}
-			$pdf_cy = pdf_get_value($pdf, "texty")-5;
+			$pdf_cy = pdf_get_value($pdf, "texty");
 
 			switch(strtolower($this->align)) {
 				case 'right':
@@ -880,6 +946,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo "</td></tr></table>\n";
 			}
 			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+				if(!$this->hide) {
+					echo "<h2>Output</h2>\n";
+				}
 				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
 					global ${$this->global};
 				}
@@ -944,12 +1013,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$$_html_key = $_html_val;
 			}
 
-			if(isset($this->title)) {
+			if(!empty($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
-				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);  // Force to left-margin
 				pdf_set_font($pdf, $pdf_font , -16, 'winansi');
 				pdf_continue_text($pdf, $this->title);
-				pdf_continue_text($pdf, "\n");
+				pdf_continue_text($pdf, "");
 			}
 			$pdf_cy = pdf_get_value($pdf, "texty");
 
@@ -975,12 +1044,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					case 'python':
 					case 'html':
 					default:
-						pdf_set_font($pdf, $pdf_example_font, -12, 'winansi');
-/* This took way way too long
-						$height=10
-						while(pdf_show_boxed($pdf, $_html_file, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
-*/
-						pdf_show_boxed($pdf, $_html_file, 60, $pdf_cy, $pdf_x-120, 1, 'left');
+						if($_html_file[strlen($_html_file)-1] != "\n") $_html_file .= "\n";
+						my_pdf_paginated_code($pdf, $_html_file, $pdf_x, $pdf_y, $pdf_cy+10, 60, $pdf_cx+30, $pdf_cx, $pdf_example_font, -10);
 						pdf_continue_text($pdf,"");
 						break;
 				}
@@ -988,10 +1053,18 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			}			
 			$pdf_cy = pdf_get_value($pdf, "texty");
 			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+				if(!$this->hide) {
+					$pdf_cy = pdf_get_value($pdf, "texty");
+					pdf_set_text_pos($pdf,$pdf_cx+20,$pdf_cy);  // Force to left-margin
+					pdf_set_font($pdf, $pdf_font , -14, 'winansi');
+					pdf_continue_text($pdf, "Output:");
+					pdf_continue_text($pdf, "");
+				}
+				$pdf_cy = pdf_get_value($pdf, "texty");
+
 				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
 					global ${$this->global};
 				}
-				pdf_set_font($pdf, $pdf_example_font, -12, 'winansi');
 				if(!empty($this->filename)) {
 					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
 					switch($this->type) {
@@ -1022,8 +1095,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 							eval('?>'.$this->text);
 							$data = strip_tags(ob_get_contents());
 							ob_end_clean();
-							pdf_set_font($pdf, $pdf_example_font, -12, 'winansi');
-							pdf_show_boxed($pdf, $data, 60, $pdf_cy, $pdf_x-120, 1, 'left');
+							if($data[strlen($data)-1] != "\n") $data .= "\n";
+							my_pdf_paginated_code($pdf, $data, $pdf_x, $pdf_y, $pdf_cy, 60, $pdf_cx+30, $pdf_cx, $pdf_example_font, -10);
 							pdf_continue_text($pdf,"");
 							break;
 					}
