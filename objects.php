@@ -926,6 +926,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->fontsize    = '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
+			$this->border = 0;
 		}
 
 		function display() {
@@ -944,7 +945,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo "<div $style>".$this->title."</div>\n";
 			}
 			$i=0;
-			echo '<table width="100%" border=1>';
+			echo '<table width="100%" border="'.$this->border.'">';
 			while(list($k,$cell)=each($this->cells)) {
 				if(!($i % $this->columns)) {
 					echo "<tr>\n";
@@ -952,7 +953,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo " <td>";
 				$cell->display();
 				echo " </td>";
-				if(!($i % $this->columns)==0) {
+				if(!(($i+1) % $this->columns)) {
 					echo "</tr>\n";
 				}
 				$i++;
