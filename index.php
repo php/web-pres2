@@ -134,6 +134,9 @@ Simply click the topic you wish to find presentations on to view all available p
 	ksort($topics);
 	print('<table width="100%"><tr>'."\n");
 	$col = 0;
+    if (!isset($topic_cols) || $topic_cols == 0) {
+        $topic_cols = 1;
+    }
 	$percent = 100 / $topic_cols;
 	foreach($topics as $i => $topic) {
 		printf('<td width="%.1f%%" class="output" style="font-size: 1.8em; padding-bottom: 15px"><a href="' . $baseDir . 'index.php/' . urlencode($i) . '">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", $percent);
