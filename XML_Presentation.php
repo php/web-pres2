@@ -53,6 +53,11 @@ class XML_Presentation extends XML_Parser
     var $activeSection = '';
 
     /**
+     * @var string
+     */
+    var $activeChapter = '';
+
+    /**
      * @var array
      */
     var $objects = array();
@@ -123,12 +128,21 @@ class XML_Presentation extends XML_Parser
 				if(!empty($this->activeSection)) {
 					$this->objects[$this->coid]->slides[$idx]->Section = $this->activeSection;
 				}
+				if(!empty($this->activeChapter)) {
+					$this->objects[$this->coid]->slides[$idx]->Chapter = $this->activeChapter;
+				}
                 break; 
 
             /* Everything else can't */
 			case 'SECTION':
-				if(!empty($attribs['NAME'])) {
-					$this->activeSection = $attribs['NAME'];
+				if(!empty($attribs['TITLE'])) {
+					$this->activeSection = $attribs['TITLE'];
+				}
+				break;
+
+			case 'CHAPTER':
+				if(!empty($attribs['TITLE'])) {
+					$this->activeChapter = $attribs['TITLE'];
 				}
 				break;
 
@@ -163,6 +177,9 @@ class XML_Presentation extends XML_Parser
                 break;
 			case 'SECTION':
 				$this->activeSection = '';
+				break;
+			case 'CHAPTER':
+				$this->activeChapter = '';
 				break;
         }
         $this->activeTag = '';

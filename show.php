@@ -216,6 +216,9 @@ function get_all_titles($pres) {
 		if(!empty($pres->slides[$slideNum]->Section)) {
 			$titles[$slideNum]['section'] = $pres->slides[$slideNum]->Section;
 		}
+		if(!empty($pres->slides[$slideNum]->Chapter)) {
+			$titles[$slideNum]['chapter'] = $pres->slides[$slideNum]->Chapter;
+		}
 	}
 	return($titles);
 }
