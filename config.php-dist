@@ -1,13 +1,32 @@
 <?php
-    include 'compat.php';
-    
-    $presentationDir = 'presentations';
+	$presentationDir = 'presentations';
 	$baseDir = '/';
 	$showScript = 'show.php';  // In case you want to ForceType a shorter one
 	$helpPage = 'help.php';
 	$baseFontSize = '12pt';
 	$flashFontScale = 18;
-    $pdf_x = 612;  // US-Letter papersize
-    $pdf_y = 792;  // A4 would be 595x842
+	$pdfFontScale = 12;
 	$jsKeyboard = true; // enable javascript handling of keyboard events
+
+	$pdf_x = 612;
+	$pdf_y = 792;
+
+// Convert em font sizing to flash font sizes
+function flash_fixsize($ht) {
+	global $flashFontScale;
+
+	if(strstr($ht,'em')) {
+		$ht = ((float)$ht*$flashFontScale);
+	} 
+	return $ht;
+}
+
+function pdf_fixsize($ht) {
+	global $pdfFontScale;
+
+	if(strstr($ht,'em')) {
+		$ht = ((float)$ht*$pdfFontScale);
+	} 
+	return $ht;
+}
 ?>
