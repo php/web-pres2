@@ -1,0 +1,242 @@
+#!/usr/bin/php -q 
+<?
+dl('gd.so');
+ 
+require_once('XML/Tree.php');
+require_once('Image/Transform.php');
+$f=  $_SERVER['argv'][1];
+ 
+$exec = "tidy -asxml $f";
+$data = `$exec`;
+/* for debugging - just show it ! */ 
+//$tree = new XML_Tree;
+ //$tree ->getTreeFromString($data);
+ // $tree->dump();
+
+class SDX_Parser {
+    function start($data) {
+        $this->transform($data);
+        $fh = fopen ('slides.xml','w');
+        fwrite($fh,$this->slideInfo);
+        foreach($this->files as $f) {
+            fwrite($fh,"<slide>slides/gtk_design_strategies/{$f}</slide>\n");
+        }
+        fwrite($fh,'</presentation>');
+        fclose($fh);
+        
+    }
+    var $_caseFolding  = TRUE;
+    function transform($xml) {
+        // Don't process input when it contains no XML elements.
+
+        if (strpos($xml, '<') === false) {
+            return $xml;
+        }
+
+        // Create XML parser, set parser options.
+
+        $parser = xml_parser_create();
+
+        xml_set_object($parser, $this);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, $this->_caseFolding);
+
+        // Register SAX callbacks.
+
+        xml_set_element_handler($parser, '_startElement', '_endElement');
+        xml_set_character_data_handler($parser, '_characterData');
+
+        // Parse input.
+
+        if (!xml_parse($parser, $xml, true)) {
+            $line = xml_get_current_line_number($parser);
+
+            echo sprintf(
+              "Transformer: XML Error: %s at line %d:%d\n",
+              xml_error_string(xml_get_error_code($parser)),
+              $line,
+              xml_get_current_column_number($parser)
+            );
+
+             
+
+            return '';
+        }
+
+         
+        // Clean up.
+
+        xml_parser_free($parser);
+        if ($this->fh) {
+            fclose($this->fh);
+        }
+         
+    }
+    function _startElement($parser, $element, $attributes) {
+        // Push element's name and attributes onto the stack.
+
+        $this->_level++;
+        $this->_elementStack[$this->_level]    = $element;
+        $this->_attributesStack[$this->_level] = $attributes;
+        $this->_cdataStack[$this->_level] = '';
+        //echo "S:{$this->_level}:$element\n";
+        if (method_exists($this, $element.'Start')) {
+            call_user_func(array(&$this,$element.'Start'),$attributes);
+        }
+    }
+    
+    
+    function _endElement($parser, $element) {
+        $cdata     = $this->_cdataStack[$this->_level];
+        //echo "E:{$this->_level}:$element\n";
+        if (method_exists($this, $element.'End')) {
+            call_user_func(array(&$this,$element.'End'),$cdata);
+        }
+        $this->_level--;
+    }    
+
+    function _characterData($parser, $cdata) {
+        //echo "C:{$this->_level}:$cdata\n";
+        $this->_cdataStack[$this->_level] .= $cdata;
+    }
+    
+     function bodyStart($a) {
+        echo "--START--\n";
+
+        //echo "GOT BODY! $a";
+    }
+    function bodyEnd($a) {
+           echo "--END--\n"; 
+    }
+    function hrStart($a) {
+        //print_r($a); 
+        $this->add('</slide>');
+
+    }
+    function hrEnd($a) {  }
+    
+    function h1Start($a) {
+        //print_r($a); 
+       
+
+
+    }
+    var $files = array();
+    function h1End($a) {  
+        if ($this->fh) {
+            fclose($this->fh);
+        }
+        $filename= preg_replace('/[^a-z0-9]+/i','_',$a) . '.xml';
+        $this->files[] = $filename;
+        $this->fh = fopen($filename,'w');
+        
+        $this->add('<?xml version="1.0" encoding="ISO-8859-1"?>');
+        $this->add('<slide>');
+        $this->add('<title>'.$a.'</title>',TRUE);
+        $this->fontsize =0;
+    }
+    
+    
+    
+    function pStart($a) {
+       
+        if (!$this->inLI) {
+            $this->add('<blurb>');
+        } 
+        
+        
+    }
+    function pEnd($a) {
+        $this->add($a);
+         
+        if (!$this->inLI) {
+            $this->add('</blurb>');
+        }
+        
+    } 
+     
+    var $fontsize =0;
+    function smallStart() {
+        $this->fontsize--;
+    }
+     
+    
+    function preEnd($a) {
+        $this->add('<example fontsize="1.2em"><![CDATA['.trim($a).']]></example>',TRUE);  
+    } 
+    var $inLI = FALSE;
+    function liStart($a) {
+         
+        
+    }
+    function liEnd($a) {
+        $this->add('<bullet>'.$a. '</bullet>', TRUE);
+        
+         
+    }
+    
+    function ulStart($a) {
+        
+        $this->inLI = TRUE;
+        $this->add('<list>');
+    }
+    function ulEnd($a) { 
+       
+        $this->inLI = FALSE;
+        $this->add('</list>');
+    }
+    
+   
+    function imgStart($a){ 
+        //print_r($a);
+        // scale the image !
+        print_r($a);
+        preg_match('/width: ([0-9]+)px; height: ([0-9]+)px/i', $a['STYLE'],$ar);
+        print_r($ar);
+        $it = Image_Transform::factory('GD');
+        list($filename,$ext) = explode('.',$a['SRC']);
+        $it->load( getenv('PWD').'/'.$a['SRC'] );
+        print_r($it);
+        $it->scaleMaxX( $ar[1]);
+        
+        
+        
+        $newfilename = $filename . '_'.$ar[1] .'.'. $ext;
+        $it->save(getenv('PWD').'/'.$newfilename);
+        $this->add(' <image align="center" scale="30%" filename="'. $newfilename.'" />',TRUE);
+    }
+     
+    
+    
+    var $slideInfo = '';
+    function addressEnd($a) {
+        $this->slideInfo .= $a . "\n";
+    }
+    
+    var $indent =0;
+    function add($str, $noIndent=FALSE) {
+        $ret = "\n";
+        
+        if (!$noIndent && ($str[0] == '<') && ($str[1] != '?')) {
+            if ($str[1] == '/') {
+                
+                $this->indent -=2;
+                fwrite($this->fh,str_repeat(' ', $this->indent).$str.$ret);
+                return;
+            } else {
+                fwrite($this->fh,str_repeat(' ', $this->indent).$str.$ret);
+                $this->indent +=2;
+                
+                return;
+            }
+        }
+         
+        fwrite($this->fh, str_repeat(' ', $this->indent).$str.$ret);
+        
+    }
+    
+}
+
+ $sdxp = new SDX_Parser;
+ $sdxp->start($data);
+
+?>
