@@ -132,8 +132,8 @@ function strip_markups($str) {
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','\1',$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','\1',$ret);
 	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','\2',$ret);
-	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','\1',$ret);
-	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','\1',$ret);
+	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','^\1',$ret);
+	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','_\1',$ret);
 	return $ret;
 } 
 // }}}
