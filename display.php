@@ -362,10 +362,14 @@ ENDD;
             if(!empty($this->objs[1]->examplebackground)) $_html_examplebackground = $this->objs[1]->examplebackground;
             if(!empty($example->examplebackground)) $_html_examplebackground = $example->examplebackground;
 
-            echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
-                ((!empty($_html_examplebackground)) ? "background: $_html_examplebackground;" : '').
-                (($example->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
-                '">';
+            if (($this->pres->template == 'css') and (isset($example->class))) {
+                echo "<div class='{$example->class}'>";
+            } else {
+                echo '<div class="'. $class. '" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
+                    ((!empty($_html_examplebackground)) ? "background: $_html_examplebackground;" : '').
+                    (($example->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
+                    '">';
+            }
 
             $example->highlight($this->slideDir);
 
