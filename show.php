@@ -23,6 +23,7 @@
 	session_register('prevTitle');
 	session_register('nextTitle');
 	session_register('titles');
+	session_register('titlesLoaded');
 
 	$presFile = trim($PATH_INFO);			
 	$presFile = trim($presFile,'/');			
@@ -32,6 +33,7 @@
 	@list($currentPres,$slideNum) = explode('/',$presFile);
 	if(!$slideNum) $slideNum = 0;
 	if($slideNum<0) $slideNum = 0;
+	if(!$titlesLoaded) $titlesLoaded = 0;
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
@@ -44,8 +46,9 @@
 	$p->parse();
 	$pres = $p->getObjects();
 
-	if(empty($titles) || $lastPres != $currentPres) {
+	if(empty($titles) || $lastPres != $currentPres || $titlesLoaded < filemtime($presFile)) {
 		$titles = get_all_titles($pres[1]);
+		$titlesLoaded = filemtime($presFile);
 	}
 
 	$maxSlideNum = count($pres[1]->slides)-1;
