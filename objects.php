@@ -119,6 +119,7 @@ function format_tt($arg) {
     |rrggbb|word| Colour a word
 	^N^           Superscript
 	@N@           Subscript
+	**word**      Blink
 	#id#          Entity
 */
 function markup_text($str) {
@@ -126,6 +127,11 @@ function markup_text($str) {
 #	$ret = preg_replace('/\*([\S ]+?)([^\\\])\*/','<strong>\1\2</strong>',$str);
 	$ret = preg_replace('/#([[:alnum:]]+?)#/','&\1;',$ret);
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
+
+	//blink
+	$ret = str_replace('\*',chr(1),$ret);
+	$ret = preg_replace('/\*\*([\S ]+?)\*\*/','<blink>\1</blink>',$ret);
+	$ret = str_replace(chr(1),'\*',$ret);
 
 	//bold
 	$ret = str_replace('\*',chr(1),$ret);
@@ -934,6 +940,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		function pdf() {
 			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_y, $pdf_font, $slideDir;
 
+			if(strstr($this->filename,"blank")) return;
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
 				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
