@@ -28,12 +28,12 @@ function keypressHandler(e) {
 					break;
 			}
 			currentEffect = currentEffect+1;
-		} else if (<?php echo $nextSlideNum; ?>) {
-			top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$GLOBALS[showScript]/{$_SESSION['currentPres']}/$nextSlideNum"; ?>';
+		} else if (<?php echo $this->nextSlideNum; ?>) {
+			top.location='<?php echo "http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/{$_SESSION['currentPres']}/$this->nextSlideNum"; ?>';
 		}
 	}
-	if (e == 37 && <?php echo $prevSlideNum+1; ?>) /* left arrow */
-		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$baseDir$GLOBALS[showScript]/{$_SESSION['currentPres']}/$prevSlideNum"; ?>';
+	if (e == 37 && <?php echo $this->prevSlideNum+1; ?>) /* left arrow */
+		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/{$_SESSION['currentPres']}/$this->prevSlideNum"; ?>';
 }
 window.onkeyup = keypressHandler;
 
@@ -47,7 +47,7 @@ onload = function() {
 
 	// make banner sticky on old Windows IEs
 	<?php 
-	if (!$GLOBALS['css_supports_fixed']) {
+	if (!$css_supports_fixed) {
 		echo('window.setInterval("fixNavigation()", 250);');
 	}	
 	?>
@@ -61,7 +61,7 @@ onload = function() {
 			if(divs[i].getAttribute('effect') == 'slide') {
 				divs[i].setAttribute('gotox',divs[i].offsetLeft);
 				divs[i].setAttribute('gotoy',0);
-				divs[i].setAttribute('style','position:relative;left:-<?=$GLOBALS['winW']+10?>;top:0;');
+				divs[i].setAttribute('style','position:relative;left:-<?=$this->winW+10?>;top:0;');
 			} else if(divs[i].getAttribute('effect') == 'hide') {
 				style = divs[i].getAttribute('style');
 				divs[i].setAttribute('style',style+'visibility:hidden;');

@@ -82,6 +82,7 @@
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");        
 	$p->parse();        
 	$pres = $p->getObjects();   
+	$pres = $pres[1];
 ?>
 
 <html>
@@ -103,10 +104,10 @@ function change_mode() {
 
 	echo '<div id="stickyBar" class="sticky" align="center" style="width: 100%;"><div class="navbar">';
 
-	$logo1 = $pres[1]->logo1;
+	$logo1 = $pres->logo1;
 	echo "<img src=\"$logo1\" align=\"left\" style=\"float: left;\">";
  
-	$logo2 = $pres[1]->logo2;
+	$logo2 = $pres->logo2;
 
 	if ($logo2) {
 		echo "<img src=\"$logo2\" align=\"right\" style=\"float: right;\">";

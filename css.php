@@ -2,20 +2,20 @@
 require_once 'sniff.php';
 global $css_supports_fixed;
 
-if (empty($pres)) $pres[1] = $presentation;
+if (empty($pres)) $pres = $presentation;
 ?>
 <style title="Default" type="text/css">
 body {
-	font-size: <?php echo $pres[1]->basefontsize; ?>;
+	font-size: <?php echo $pres->basefontsize; ?>;
 	margin-top:0em;
 	margin-left:0em;
 	margin-right:0em;
 	margin-bottom:0em;
 	<?php
-	if ($pres[1]->backgroundcol) { echo "background: {$pres[1]->backgroundcol};\n"; }
-	if ($pres[1]->backgroundimage) echo "background-image: url({$pres[1]->backgroundimage});\n";
-	if ($pres[1]->backgroundfixed) echo "background-attachment : fixed;\n";
-	if ($pres[1]->backgroundrepeat) echo "background-repeat : repeat\n";
+	if ($pres->backgroundcol) { echo "background: {$pres->backgroundcol};\n"; }
+	if ($pres->backgroundimage) echo "background-image: url({$pres->backgroundimage});\n";
+	if ($pres->backgroundfixed) echo "background-attachment : fixed;\n";
+	if ($pres->backgroundrepeat) echo "background-repeat : repeat\n";
 	else echo "background-repeat : no-repeat\n";
 	?>
 }
@@ -46,20 +46,20 @@ div.bsticky {
 	width: 100%;
 }
 div.shadow {
-	background: <?php echo $pres[1]->shadowbackground; ?>;
+	background: <?php echo $pres->shadowbackground; ?>;
 	padding: 0.5em;
 }
 div.navbar {
-	background: <?php echo $pres[1]->navbarbackground; ?>;
+	background: <?php echo $pres->navbarbackground; ?>;
 	padding: 4;
 	margin: 0;
-        height: <?php echo $pres[1]->navbarheight; ?>;
+        height: <?php echo $pres->navbarheight; ?>;
 	color: #ffffff;
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 	z-index: 99;
 }
 div.emcode {
-	background: <?php echo $pres[1]->examplebackground; ?>;
+	background: <?php echo $pres->examplebackground; ?>;
 	border: thin solid #000000;
 	padding: 0.5em;
 	font-family: monospace;
@@ -67,20 +67,20 @@ div.emcode {
 
 div.output {
 	font-family: monospace;
-	background: <?php echo $pres[1]->outputbackground; ?>;
+	background: <?php echo $pres->outputbackground; ?>;
 	border: thin solid #000000;
 	padding: 0.5em;
 }
 
 table.index {
- background: <?php echo $pres[1]->examplebackground; ?>;
+ background: <?php echo $pres->examplebackground; ?>;
  border: thin dotted #000000;                                                                                                 
  padding: 0.5em;
  font-family: monospace;
 }
 
 td.index {
- background: <?php echo $pres[1]->examplebackground; ?>;
+ background: <?php echo $pres->examplebackground; ?>;
  padding: 1em;
  font-family: monospace;
 }

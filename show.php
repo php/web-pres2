@@ -4,7 +4,7 @@
 	require_once 'config.php';
 	require_once 'sniff.php';
 
-	set_time_limit(0);  // PDF generation can take a while
+	set_time_limit(0); // PDF generation can take a while
 	if(!strlen($_SERVER['PATH_INFO'])) {
 		header('Location: http://'.$_SERVER['HTTP_HOST'].$baseDir);
 		exit;
@@ -15,73 +15,84 @@
 
 	session_start();
 
-	$presFile = trim($_SERVER['PATH_INFO']);			
-	$presFile = trim($presFile,'/');			
+	// Figure out which presentation file to read and slide to show
+	$presFile = trim(trim($_SERVER['PATH_INFO']),'/');
 	$lastPres = null;
 	if(isset($_SESSION['currentPres'])) {
 		$lastPres = $_SESSION['currentPres'];
 	}
 	@list($_SESSION['currentPres'],$slideNum) = explode('/',$presFile);
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
-	$presFile = str_replace('..','',$_SESSION['currentPres']);  // anti-hack
+	$presFile = str_replace('..','',$_SESSION['currentPres']); // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
-	if(isset($_COOKIE['dims'])) {
-		list($winW, $winH) = explode('_',$_COOKIE['dims']);
-	}
-	if (!isset($winW)) {
-		$winW = 0;
-	}
-	if (!isset($winH)) {
-		$winH = 0;
-	}
-
+	// Load in the presentation
 	$p =& new XML_Presentation($presFile);
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();
+	$pres = $pres[1];
 
-	// nav mode no longer settable on a per-slide basis
-	if(isset($pres[1]->navmode)) $navmode = $pres[1]->navmode;
-	else $navmode = 'html';
-	// Override with user-selected display mode
-	if(isset($_SESSION['selected_display_mode'])) $navmode = $_SESSION['selected_display_mode'];
+	// Set display: html, plainhtml, pdfus, etc.
+	if (isset($_SESSION['selected_display_mode'])) { 
+		$navmode = $_SESSION['selected_display_mode'];
+	} elseif (isset($pres->navmode)) { 
+		$navmode = $pres->navmode;
+	}	else { 
+		$navmode = 'html';
+	}
+	$mode = new $navmode($c);
 
-	$mode = new $navmode;
+	// Browser window size, used for JavaScript resizing
+	if(isset($_COOKIE['dims'])) {
+		list($mode->winW, $mode->winH) = explode('_',$_COOKIE['dims']);
+	}
+	if (!isset($mode->winW)) {
+		$mode->winW = 0;
+	}
+	if (!isset($winH)) {
+		$mode->winH = 0;
+	}
 
+	// Store slide titles in session variable
 	if(empty($_SESSION['titles']) || $lastPres != $_SESSION['currentPres'] || $_SESSION['titlesLoaded'] < filemtime($presFile)) {
-		$_SESSION['titles'] = get_all_titles($pres[1]);
+		$_SESSION['titles'] = get_all_titles($pres);
 		$_SESSION['titlesLoaded'] = filemtime($presFile);
 	}
 
-	$maxSlideNum = count($pres[1]->slides)-1;
-
-	// Make sure we don't go beyond the first slide
-	if(!$slideNum || $slideNum<0) $slideNum = 0;
-	// Make sure we don't go beyond the last slide
-	if($slideNum > $maxSlideNum) {
-		$slideNum = $maxSlideNum;
+	// Sanity check slide number ranges
+	$mode->maxSlideNum = count($pres->slides)-1;
+	if (empty($slideNum) || $slideNum < 0) {
+		// Make sure we don't go beyond the first slide
+		$mode->slideNum = 0;
+	} elseif($slideNum > $mode->maxSlideNum) {
+		// Make sure we don't go beyond the last slide
+		$mode->slideNum = $mode->maxSlideNum;
+	} else {
+		$mode->slideNum = $slideNum;
 	}
-	// Fetch info about previous slide
-	$prevSlideNum = $nextSlideNum = 0;
-	if($slideNum > 0) {
-		$prevSlideNum = $slideNum-1;
-		$prevTitle = @$_SESSION['titles'][$prevSlideNum]['title'];
-	} else $prevTitle = '';
-	if($slideNum < $maxSlideNum) {
-		$nextSlideNum = $slideNum+1;
-		$nextTitle = @$_SESSION['titles'][$nextSlideNum]['title'];
-	} else $nextTitle = '';
+	
+	// Fetch info about previous and next slides
+	$mode->prevSlideNum = $mode->nextSlideNum = 0;
+	if($mode->slideNum > 0) {
+		$mode->prevSlideNum = $mode->slideNum-1;
+		$mode->prevTitle = @$_SESSION['titles'][$mode->prevSlideNum]['title'];
+	} else $mode->prevTitle = '';
+	if($mode->slideNum < $mode->maxSlideNum) {
+		$mode->nextSlideNum = $mode->slideNum+1;
+		$mode->nextTitle = @$_SESSION['titles'][$mode->nextSlideNum]['title'];
+	} else $mode->nextTitle = '';
 
-	$slideDir = dirname($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename).'/';
-
-	$r =& new XML_Slide($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename);
+	// Load the slide
+	$mode->slideDir = dirname($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename).'/';
+	$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
 
-	$objs = $r->getObjects();
-
-	$pres[1]->display();
+	// Display slide
+	$mode->objs = $r->getObjects();
+	$mode->pres =& $pres;
+	$pres->display();
 
 function get_all_titles($pres) {
 	global $presentationDir;

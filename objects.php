@@ -18,97 +18,6 @@ function getFlashDimensions($font,$title,$size) {
 }
 // }}}
 
-// {{{ my_new_pdf_page($pdf, $x, $y)
-function my_new_pdf_page($pdf, $x, $y) {
-	global $pdf_x, $pdf_y, $page_number;
-
-	$page_number++;
-	pdf_begin_page($pdf, $pdf_x, $pdf_y);
-	// Having the origin in the bottom left corner confuses the
-	// heck out of me, so let's move it to the top-left.
-	pdf_translate($pdf,0,$pdf_y);
-	pdf_scale($pdf, 1, -1);   // Reflect across horizontal axis
-	pdf_set_value($pdf,"horizscaling",-100); // Mirror
-}
-// }}}
-
-// {{{ my_pdf_page_number($pdf)
-function my_pdf_page_number($pdf) {
-	global $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $page_number, $page_index, $pdf_font;
-
-	if(isset($page_index[$page_number]) && $page_index[$page_number] == 'titlepage') return;
-	pdf_set_font($pdf, $pdf_font, -10, 'winansi');
-	$dx = pdf_stringwidth($pdf,"- $page_number -");
-	$x = (int)($pdf_x/2 - $dx/2);
-	$pdf_cy = pdf_get_value($pdf, "texty");
-	pdf_show_xy($pdf, "- $page_number -", $x, $pdf_y-20);
-}
-// }}}
-
-/* {{{ my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
-
-   Function displays and paginates a bunch of text.  Wordwrapping is also
-   done on long lines.  Top-down coordinates and a monospaced font are assumed.
-
-     $data = text to display
-     $x    = width of page
-     $y    = height of page
-     $tm   = top-margin
-     $bm   = bottom-margin
-     $lm   = left-margin
-     $rm   = right-margin
-     $font = font name
-     $fs   = font size
-*/
-function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
-	$data = strip_markups($data);	
-	pdf_set_font($pdf, $font, $fs, 'winansi');	
-	$cw = pdf_stringwidth($pdf,'m'); // Width of 1 char - assuming monospace
-	$linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
-
-	$pos = $i = 0;
-	$len = strlen($data);
-	pdf_set_text_pos($pdf, $lm, $tm);
-	
-	$np = true;
-	while($pos < $len) {
-		$nl = strpos(substr($data,$pos),"\n");
-		if($nl===0) {
-			if($np) { pdf_show($pdf, ""); $np = false; }
-			else pdf_continue_text($pdf, "");
-			$pos++;
-			continue;
-		}
-		if($nl!==false) $ln = substr($data,$pos,$nl);
-		else { 
-			$ln = substr($data,$pos);
-			$nl = $len-$pos;
-		}
-		if($nl>$linelen) { // Line needs to be wrapped
-			$ln = wordwrap($ln,$linelen);
-			$out = explode("\n", $ln);
-		} else {
-			$out = array($ln);	
-		}
-		foreach($out as $l) {
-			$l = str_replace("\t",'    ',$l);  // 4-space tabs - should probably be an attribute
-			if($np) { pdf_show($pdf, $l); $np = false; }
-			else pdf_continue_text($pdf, $l);
-		}
-		$pos += $nl+1;
-		if(pdf_get_value($pdf, "texty") >= ($y-$bm)) {
-			my_pdf_page_number($pdf);
-			pdf_end_page($pdf);
-			my_new_pdf_page($pdf, $x, $y);
-
-			pdf_set_font($pdf, $font, $fs, 'winansi');	
-			pdf_set_text_pos($pdf, $lm, 60);
-			$np = true;
-		}
-		
-	}
-}
-// }}}
 
 function format_tt($arg) {
   return("<tt>".str_replace(' ', '&nbsp;', $arg[1])."</tt>");
@@ -118,7 +27,7 @@ function format_tt($arg) {
 	*word*        Bold
 	_word_        underline
 	%word%        monospaced word (ie. %function()%)
-	~word~	      italics
+	~word~        italics
 	|rrggbb|word| Colour a word
 	^N^           Superscript
 	@N@           Subscript
@@ -167,14 +76,14 @@ function markup_text($str) {
 
 function add_line_numbers($text)
 {
-    $lines = preg_split ('!$\n!m', $text);
-    $lnwidth = strlen(count($lines));
-    $format = '%'.$lnwidth."d: %s\n";
-    $lined_text = '';
-    while (list ($num, $line) = each ($lines)) {
-            $lined_text .= sprintf($format, $num + 1, $line);
-    }
-    return $lined_text;
+	$lines = preg_split ('!$\n!m', $text);
+	$lnwidth = strlen(count($lines));
+	$format = '%'.$lnwidth."d: %s\n";
+	$lined_text = '';
+	while (list ($num, $line) = each ($lines)) {
+	        $lined_text .= sprintf($format, $num + 1, $line);
+	}
+	return $lined_text;
 }
 
 
@@ -208,12 +117,12 @@ function strip_markups($str) {
 
 	// {{{ Presentation List Classes
 	class _tag {
-		function display() {
-			global $mode;
-			
-			$class = get_class($this);
-			$mode->$class($this);
-		}
+	    function display() {
+	        global $mode;
+	        
+	        $class = get_class($this);
+	        $mode->$class($this);
+	    }
 	}
 	
 	class _presentation extends _tag {
@@ -336,8 +245,7 @@ function strip_markups($str) {
 		}
 	
 		// {{{ highlight()	
-		function highlight() {
-			global $slideDir;
+		function highlight($slideDir) {
 			static $temap = array(
 				'py' => 'python',
 				'pl' => 'perl',
@@ -554,13 +462,13 @@ function strip_markups($str) {
 
 	// {{{ Divider Class
 	class _divide extends _tag {
-		/* empty */
+	    /* empty */
 	}
 	// }}}
 
 	// {{{ Footer Class
 	class _footer extends _tag {
-		/* empty */
+	    /* empty */
 	}
 	// }}}
 ?>
