@@ -114,10 +114,10 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
     |rrggbb|word| Colour a word
 */
 function markup_text($str) {
-	$ret = preg_replace('/\*(\S+?)\*/','<strong>\1</strong>',$str);
-	$ret = preg_replace('/\W_(\S+?)_\W/','<u>\1</u>',$ret);
-	$ret = preg_replace('/%(\S+?)%/','<tt>\1</tt>',$ret);
-	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
+	$ret = preg_replace('/\b\*([\S ]+?)\*\b/','<strong>\1</strong>',$str);
+	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
+	$ret = preg_replace('/\b%([\S ]+?)%\b/','<tt>\1</tt>',$ret);
+	$ret = preg_replace('/\b\|([0-9a-fA-F]+?)\|(\S+?)\|\b/','<font color="\1">\2</font>',$ret);
 	return $ret;
 }
 // }}}
@@ -1166,9 +1166,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function html() {
+			$align = '';
 			if(isset($this->title)) {
-				if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
-				echo "<div $style>".markup_text($this->title)."</div>\n";
+				if(!empty($this->fontsize)) $style = "font-size: ".$this->fontsize.';';
+				if(!empty($this->align)) $align = 'align="'.$this->align.'"';
+				echo "<div $align style=\"$style\">".markup_text($this->title)."</div>\n";
 			}
 			echo '<ul>';
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
@@ -1232,14 +1234,13 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 
 			if(!empty($this->marginright)) $style .= "margin-right: ".$this->marginleft.';';
 			else if(!empty($objs[$coid]->marginright)) $style .= "margin-right: ".$objs[$coid]->marginright.';';
-
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
 			if ($this->slide) {
 			    // we put the slide info in as an attribute so js can get it
 			    echo "<div id='$this->id' slide='true' style='position:relative;'>";
-			}
+			} 
 			echo "<li style=\"$style\">".markup_text($this->text)."</li>\n";
 			if ($this->slide) {
 			    echo "</div>";
@@ -1299,16 +1300,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function html() {
+			if(!empty($this->align)) $align = 'align="'.$this->align.'"';
 			if(isset($this->title)) {
 				if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
-				echo "<div $style>".$this->title."</div>\n";
+				echo "<div $align $style>".markup_text($this->title)."</div>\n";
 			}
 			$i=0;
 			$width="100%";
 			if(!empty($this->width)) {
 				$width = $this->width;
 			}
-			echo '<table width="'.$width.'" border="'.$this->border.'">';
+			echo '<table '.$align.' width="'.$width.'" border="'.$this->border.'">';
 			while(list($k,$cell)=each($this->cells)) {
 				if(!($i % $this->columns)) {
 					echo "<tr>\n";
@@ -1325,8 +1327,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function plainhtml() {
-			if(isset($this->title)) echo "<h1>$this->title</h1>\n";
-			echo '<table width="100%" border=1>';
+			if(!empty($this->align)) $align = 'align="'.$this->align.'"';
+			if(isset($this->title)) echo "<h1 $align>".markup_text($this->title)."</h1>\n";
+			echo '<table '.$align.' width="100%" border=1>';
 			$i = 1;
 			while(list($k,$cell)=each($this->cells)) {
 				if(!($i % $this->columns)) {
