@@ -40,6 +40,7 @@ function getFlashDimensions($font,$title,$size) {
 			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
+			$this->logoimage1url = '/index.php';
 		}
 	}
 
@@ -86,7 +87,9 @@ function getFlashDimensions($font,$title,$size) {
 				echo "<div class='sticky' align='$this->titleAlign' style='width: 100%;'><div class='navbar'>";
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
-				echo "<img src='$logo1' align='left' style='float: left;'>";
+				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
+				else $logo1url = $pres[1]->logoimage1url;				
+				echo "<a href='$logo1url'><img src='$logo1' border='0' align='left' style='float: left;'></a>";
 				if(!empty($this->logo2)) $logo2 = $this->logo2;
 				else $logo2 = $pres[1]->logo2;
 				if ($logo2) {
