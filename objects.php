@@ -238,6 +238,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		// Because we are eval()'ing code from slides, obfuscate all local 
 		// variables so we don't get run over
 		function html() {
+			global $pres, $objs;
 			// Bring posted variables into the function-local namespace 
 			// so examples will work
 			foreach($_POST as $_html_key => $_html_val) {
@@ -259,8 +260,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginleft).'em;'.
 					((isset($this->width)) ? "width: $this->width;" : "").
 					'">';
+				if(!empty($objs[1]->examplebackground)) $_html_examplebackground = $objs[1]->examplebackground;
+				if(!empty($this->examplebackground)) $_html_examplebackground = $this->examplebackground;
+
 				echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
 					(($this->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
+					((!empty($_html_examplebackground)) ? "background: $_html_examplebackground;" : '').
 					'">';
 
 				if(!empty($this->filename)) {
@@ -311,15 +316,19 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
 					global ${$this->global};
 				}
+				if(!empty($objs[1]->outputbackground)) $_html_outputbackground = $objs[1]->outputbackground;
+				if(!empty($this->outputbackground)) $_html_outputbackground = $this->outputbackground;
 				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\">\n";
 				echo '<div class="shadow" style="margin: '.
 					((float)$this->margintop).'em '.
 					((float)$this->marginright+1).'em '.
 					((float)$this->marginbottom).'em '.
 					((float)$this->marginleft).'em;'.
-					((isset($this->width)) ? "width: $this->width;" : "").
+					((isset($this->rwidth)) ? "width: $this->rwidth;" : "").
 					'">';
-				echo '<div class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;\">\n";
+				echo '<div class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
+					((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
+					"\">\n";
 				if(!empty($this->filename)) {
 					switch($this->type) {
 						case 'genimage':
