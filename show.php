@@ -2,7 +2,7 @@
 	require_once 'config.php';
 
 	if(!strlen($PATH_INFO)) {
-		header('Location: http://'.$HTTP_HOST.$baseDir.'list.php');
+		header('Location: http://'.$HTTP_HOST.$baseDir);
 		exit;
 	}
 
