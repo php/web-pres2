@@ -61,7 +61,7 @@ class presentation_generator {
 				$buf .= $line;
 			}
 				
-			if (!$inslide && preg_match('/^<slide.*>/', $line)) { 
+			if (!$inslide && preg_match('/^<slide.*?>/', $line)) { 
 				$beginning = 0;
 				$inslide = 1;
 				$data[$element] = new presentation_slide;
