@@ -1404,6 +1404,15 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
 			$txt = strip_markups($this->text);
+			//clean up eols so we get a nice pdf output
+			if (strstr("\r\n",$txt)) {
+				$eol = "\r\n";
+			} elseif (strstr("\r", $txt)) {
+				$eol = "\r";
+			} else {
+				$eol = "\n";
+			}
+			$txt = str_replace($eol," ", $txt);
 			while(pdf_show_boxed($pdf, 'o '.$txt, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				my_pdf_page_number($pdf);
@@ -1646,8 +1655,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(empty($this->text)) $this->text = $this->href;
 			if(!empty($this->leader)) $leader = $this->leader;
 			else $leader='';
+			if (empty($this->target)) $this->target = '_self';
 			if(!empty($this->text)) {
-				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\">".markup_text($this->text)."</a></div><br />\n";
+				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\" target=\"{$this->target}\">".markup_text($this->text)."</a></div><br />\n";
 			}
 		}
 
@@ -1656,7 +1666,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->leader)) $leader = $this->leader;
 			else $leader='';
 			if(!empty($this->text)) {
-				echo "$leader<a href=\"$this->href\">".markup_text($this->text)."</a><br />\n";
+				echo "$leader<a href=\"$this->href\" target=\"{$this->target}\">".markup_text($this->text)."</a><br />\n";
 			}
 		}
 
