@@ -19,7 +19,7 @@ function keypressHandler(e) {
 			switch(effects[currentEffect].getAttribute('effect')) {
 				case 'slide':
 					try {
-						slide(effects[currentEffect], effects[currentEffect].getAttribute('gotox')-50, effects[currentEffect].getAttribute('gotoy'), 0) ;
+						slide(effects[currentEffect], effects[currentEffect].getAttribute('gotox')-120, effects[currentEffect].getAttribute('gotoy'), 0) ;
 					} catch (e) { alert(e); }
 					break;
 				case 'hide':
