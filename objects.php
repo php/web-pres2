@@ -123,7 +123,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		function _blurb() {
 			$this->font  = 'fonts/Arial.fdb';
 			$this->align = 'left';
-			$this->fontsize     = '3.5em';
+			$this->fontsize     = '2.66em';
 			$this->marginleft   = '1em';
 			$this->marginright  = '1em';
 			$this->margintop    = '0.2em';	
@@ -186,8 +186,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->marginright = '3em';
 			$this->marginleft = '3em';
 			$this->margintop = '0em';
-			$this->marginbottom = '0em';
+			$this->marginbottom = '0.8em';
 			$this->width = '';
+			$this->condition = '';
 		}
 
 		function display() {
@@ -195,7 +196,16 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		}
 
 		function html() {
-			if(isset($this->title)) echo '<h1>'.$this->title."</h1>\n";
+			// Bring posted variables into the function-local namespace 
+			// so examples will work
+			foreach($_POST as $key => $val) {
+				$$key = $val;
+			}
+			foreach($_SERVER as $key => $val) {
+				$$key = $val;
+			}
+
+			if(isset($this->title)) echo '<div style="font-size: '.(4*(float)$this->fontsize/3).'em;">'.$this->title."</div>\n";
 			$sz = (float) $this->fontsize;
 			if(!$sz) $sz = 0.1;
 			$offset = (1/$sz).'em';
@@ -228,8 +238,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				}
 			}
 			echo "</div></div>\n";
-			if(!empty($this->result) && $this->result!='no') {
-				echo "<h2>Output</h2>\n";
+			if(!empty($this->result) && $this->result!='no' && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+				echo '<div style="font-size: '.(4*(float)$this->fontsize/3)."em;\">Output</div>\n";
 				$sz = (float) $this->rfontsize;
 				if(!$sz) $sz = 0.1;
 				$toffset = (1/$sz).'em';
