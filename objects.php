@@ -119,6 +119,7 @@ function format_tt($arg) {
     |rrggbb|word| Colour a word
 	^N^           Superscript
 	@N@           Subscript
+	#id#          Entity
 */
 function markup_text($str) {
   $ret = $str;
@@ -1050,9 +1051,22 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 		// {{{ highlight()	
 		function highlight() {
 			global $slideDir;
+			static $temap = array(
+				'py' => 'python',
+				'pl' => 'perl',
+				'php' => 'php',
+				'html' => 'html',
+				'sql' => 'sql',
+				'java' => 'java',
+				'c' => 'c'
+			);
 
 			if(!empty($this->filename)) {
 				$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
+				if ($this->type == 'php') {
+					$p = pathinfo($this->filename);
+					$this->type = $temap[$p['extension']];
+				}
 				switch($this->type) {
 					case 'php':
 					case 'genimage':
@@ -1097,9 +1111,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						}
 						break;
 					case 'python':
-						$prog = trim(`which py2html`);
+						$prog = trim(`which code2html`);
 						if (!empty($prog)) {
-							print `$prog -stdout -format:rawhtml $_html_filename`;
+							print nl2br(trim(`$prog -lpython --no-header -ohtml $_html_filename | sed -e 's/\t/\&nbsp\;\&nbsp;\&nbsp\; /'`));
 						} else {
 							$this->_highlight_none($_html_filename);
 						}
@@ -1107,7 +1121,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					case 'sql':
 						$prog = trim(`which code2html`);
 						if (!empty($prog)) {
+							print "<pre>";
 							print `$prog --no-header -lsql $_html_filename`;
+							print "</pre>";
 						} else {
 							$this->_highlight_none($_html_filename);
 						}
