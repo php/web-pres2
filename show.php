@@ -85,9 +85,19 @@
 	switch($navmode) {
 		case 'html':
 		case 'flash':
-			// facilitate caching
-                        header("Last-Modified: " . date("r", filemtime($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename)));
+			// Determine if we should cache
+			$cache_ok = 1;
+			foreach($objs as $obj) {
+				if(is_a($obj, '_example')) {
+					if(strtolower($obj->type) == 'php') {
+						$cache_ok = 0;
+					}
+				}
+			}
+			reset($objs); // shouldn't be necessary, but is
 
+			// allow caching
+			if($cache_ok) header("Last-Modified: " . date("r", filemtime($presentationDir.'/'.$pres[1]->slides[$slideNum]->filename)));
 			echo <<<HEADER
 <html>
 <head>
@@ -105,6 +115,9 @@ HEADER;
 			include $pres[1]->stylesheet;
 			/* the following includes scripts necessary for various animations */
 			if($pres[1]->animate || $pres[1]->jskeyboard) include 'keyboard.js.php';
+			// Link Navigation (and next slide pre-fetching))
+			if($slideNum) echo '<link rel="prev" href="'.$presentationDir.'/'.$pres[1]->slides[$prevSlideNum]->filename."\" />\n";
+			if($nextSlideNum) echo '<link rel="next" href="'.$presentationDir.'/'.$pres[1]->slides[$nextSlideNum]->filename."\" />\n";
 			echo '</head>';
 			echo "<body onResize=\"get_dims();\" style=\"".$body_style."\">\n";
 			while(list($coid,$obj) = each($objs)) {
