@@ -1218,6 +1218,13 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				pdf_continue_text($pdf, strip_markups($this->title));
 				pdf_continue_text($pdf, "");
 			}
+			if(!empty($this->start)) {
+				if(is_numeric($this->start)) {
+					$this->num = (int)$this->start;	
+				} else {
+					$this->alpha = $this->start;
+				}
+			}
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
 			
 		}
@@ -1250,6 +1257,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$style='';
 			$type='';
 			$effect='';
+			$eff_str='';
 			$ml = $this->level;
 
 			if(!empty($this->marginleft)) $ml += (float)$this->marginleft;
@@ -1259,6 +1267,13 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$style .= "margin-left: ".$ml."em;";
 			}
 
+			if(!empty($this->start)) {
+				if(is_numeric($this->start)) {
+					$objs[$coid]->num = (int)$this->start;	
+				} else {
+					$objs[$coid]->alpha = $this->start;
+				}
+			}
 			if(!empty($this->type)) $type = $this->type;
 			else if(!empty($objs[$coid]->type)) $type = $objs[$coid]->type;
 
