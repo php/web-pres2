@@ -91,6 +91,7 @@
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$baseDir">
+<title>{$pres[1]->title}</title>
 HEADER;
 			switch($pres[1]->template) {
 			case 'simple':
@@ -132,6 +133,7 @@ FOOTER;
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$baseDir">
+<title>{$pres[1]->title}</title>
 </head>
 <body>
 HEADER;
