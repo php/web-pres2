@@ -108,6 +108,7 @@ class XML_Slide extends XML_Parser
             case 'EXAMPLE':
             case 'LINK':
             case 'PHP':
+			case 'TABLE':
                 $cl = '_'.strtolower($element);
                 $this->objects[++$this->coid] = new $cl();
                 $this->stack[] = $this->coid;
@@ -131,6 +132,12 @@ class XML_Slide extends XML_Parser
                 $this->objects[$this->coid]->bullets[] = new _bullet();
                 $idx = count($this->objects[$this->coid]->bullets) - 1;
                 $this->_add_attribs($this->objects[$this->coid]->bullets[$idx], $attribs);
+                $this->activeTag = $element;
+                break; 
+			case 'CELL':
+                $this->objects[$this->coid]->cells[] = new _cell();
+                $idx = count($this->objects[$this->coid]->cells) - 1;
+                $this->_add_attribs($this->objects[$this->coid]->cells[$idx], $attribs);
                 $this->activeTag = $element;
                 break; 
 
@@ -171,6 +178,7 @@ class XML_Slide extends XML_Parser
             case 'LINK':
             case 'PHP':
             case 'DIVIDE':
+			case 'TABLE':
                 $this->coid = array_pop($this->stack);
                 break;
         }
@@ -200,6 +208,12 @@ class XML_Slide extends XML_Parser
                 $this->objects[$this->coid]->bullets[$idx]->text .= $cdata;
             else 
                 $this->objects[$this->coid]->bullets[$idx]->text = $cdata;
+		} elseif($el == 'cell') {
+            $idx = count($this->objects[$this->coid]->cells) - 1;
+            if($this->last_handler == 'cdata')
+                $this->objects[$this->coid]->cells[$idx]->text .= $cdata;
+            else 
+                $this->objects[$this->coid]->cells[$idx]->text = $cdata;
         } else {
             if($this->last_handler == 'cdata') {
                 $this->objects[$this->coid]->$el .= $cdata;

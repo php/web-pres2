@@ -920,6 +920,153 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	}
 	// }}}
 
+	// {{{ Table Class
+	class _table {
+		function _table() {
+			$this->fontsize    = '3em';
+			$this->marginleft  = '0em';
+			$this->marginright = '0em';
+		}
+
+		function display() {
+			global $objs, $pres, $selected_display_mode;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			$this->$mode();
+		}
+
+		function html() {
+			if(isset($this->title)) {
+				if(!empty($this->fontsize)) $style = "style=\"font-size: ".$this->fontsize.';"';
+				echo "<div $style>".$this->title."</div>\n";
+			}
+			$i=0;
+			echo '<table width="100%" border=1>';
+			while(list($k,$cell)=each($this->cells)) {
+				if(!($i % $this->columns)) {
+					echo "<tr>\n";
+				}
+				echo " <td>";
+				$cell->display();
+				echo " </td>";
+				if(!($i % $this->columns)==0) {
+					echo "</tr>\n";
+				}
+				$i++;
+			}
+			echo '</table><br />';
+		}
+
+		function plainhtml() {
+			if(isset($this->title)) echo "<h1>$this->title</h1>\n";
+			echo '<table width="100%" border=1>';
+			$i = 0;
+			while(list($k,$cell)=each($this->cells)) {
+				if(!($i % $this->columns)) {
+					echo "<tr>\n";
+				}
+				echo " <td>";
+				$cell->display();
+				echo " </td>";
+				if(!($i % $this->columns)==0) {
+					echo "</tr>\n";
+				}
+				$i++;
+			}
+			echo '</table><br />';
+		}
+
+		function flash() {
+			$this->html();
+		}
+
+		function pdf() {
+			global $pdf, $pdf_cx, $pdf_cy;
+
+			if(isset($this->title)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_text_pos($pdf,$pdf_cx,$pdf_cy);
+				pdf_set_font($pdf, "Helvetica" , -16, 'winansi');
+				pdf_continue_text($pdf, $this->title);
+				pdf_continue_text($pdf, "");
+			}
+			while(list($k,$cell)=each($this->cells)) $cell->display();
+			pdf_continue_text($pdf, "");
+		}
+	}
+	// }}}
+
+	// {{{ Cell Class
+	class _cell {
+
+		function _cell() {
+			$this->text = '';
+			$this->slide = '';
+			$this->id = '';
+		}
+
+		function display() {
+			global $objs, $pres, $selected_display_mode;
+			if(isset($this->mode)) $mode = $this->mode;
+			else if(isset($objs[1]->mode)) $mode = $objs[1]->mode;
+			else if(isset($pres[1]->mode)) $mode = $pres[1]->mode;
+			else $mode='html';
+			if(isset($selected_display_mode)) $mode = $selected_display_mode;
+			$this->$mode();
+		}
+
+		function html() {
+			global $objs, $coid;
+
+			$style='';
+			if(!empty($this->fontsize)) $style .= "font-size: ".$this->fontsize.';';
+			else if(!empty($objs[$coid]->fontsize)) $style .= "font-size: ".(2*(float)$objs[$coid]->fontsize/3).'em;';
+			if(!empty($this->marginleft)) $style .= "margin-left: ".$this->marginleft.';';
+			else if(!empty($objs[$coid]->marginleft)) $style .= "margin-left: ".$objs[$coid]->marginleft.';';
+
+			if(!empty($this->marginright)) $style .= "margin-right: ".$this->marginleft.';';
+			else if(!empty($objs[$coid]->marginright)) $style .= "margin-right: ".$objs[$coid]->marginright.';';
+
+			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
+			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
+
+			echo "<span style=\"$style\">".$this->text."</span>\n";
+		}
+
+		function plainhtml() {
+			echo $this->text."\n";
+		}
+
+		function flash() {
+			$this->html();
+		}
+
+		function pdf() {
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy;
+
+			$pdf_cy = pdf_get_value($pdf, "texty");
+		
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			$height=10;	
+			while(pdf_show_boxed($pdf, $this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+			if( ($pdf_cy + $height) > $pdf_y-40 ) {
+				pdf_end_page($pdf);
+				my_new_pdf_page($pdf, $pdf_x, $pdf_y);
+				$pdf_cx = 40;
+				$pdf_cy = 60;
+			}
+			pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+			pdf_show_boxed($pdf, $this->text, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
+			$pdf_cy+=$height;
+			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
+			pdf_continue_text($pdf,"");	
+		}
+	}
+	// }}}
+
 	// {{{ Link Class
 	class _link {
 

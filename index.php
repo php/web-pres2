@@ -92,18 +92,18 @@ function change_mode() {
 <body>
 <?php
 
-	echo "<div class='sticky' align='$this->titleAlign' style='width: 100%;'><div class='navbar'>";
+	echo '<div class="sticky" align="center" style="width: 100%;"><div class="navbar">';
 
 	$logo1 = $pres[1]->logo1;
-	echo "<img src='$logo1' align='left' style='float: left;'>";
+	echo "<img src=\"$logo1\" align=\"left\" style=\"float: left;\">";
  
 	$logo2 = $pres[1]->logo2;
 
 	if ($logo2) {
-		echo "<img src='$logo2' align='right' style='float: right;'>";
+		echo "<img src=\"$logo2\" align=\"right\" style=\"float: right;\">";
 	}
  
-	echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'>$this->title</div>";
+	echo "<div style=\"font-size: 3em; margin: 0 2.5em 0 0;\">PHP Presentation System</div>";
 
 	echo '</div></div>';
 ?>
