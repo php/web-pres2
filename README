@@ -11,9 +11,8 @@ fonts/                - Font files
 help.php              - Help file
 index.php             - Prints list of available presentations
 objects.php           - Top-level widget rendering
-presentations/        - Directory of presentation files
+presentations/        - Directory of presentation files (from separate CVS)
 show.php              - Main slide display code
-slides/               - Directory of slide files
 XML_Presentation.php  - XML parser for the presentation files
 XML_Slide.php         - XML parser for the slide files
 
@@ -43,7 +42,7 @@ starting at #1.  The presentation file itself looks like this:
 
 That is, you start it with a <presentation> tag, and have at least a title
 tag inside.  The others are optional.  Then a series of <slide> tags where
-you put the relative filename of each slide.
+you put the relative filename (to the presentations dir) of each slide.
 
 This particular presentation XML file ends up getting parsed into an
 array of objects that looks like this:
@@ -97,25 +96,6 @@ Then it can have any combination of the following tags:
 
 See the example slides in the slides/ directory for more info.
 
-The default navbar is written in flash5 and is rendered from objects.php
-with an embed tag which embeds flash.php.  Since the flash.php is fetched
-in a separate request, it gets the current slide data via the session data.
-It also makes use of $slideNum and $maxSlideNum to navigate through the 
-slides.  A unique quality of this navbar is that when the mouse cursor is
-over it, it takes full control of the keyboard allowing the space bar to
-be used to advance to the next slide and the backspace key to go back one.
-Once you move the mouse cursor out of the navbar area all keystrokes go to
-the browser.  We need this so we can do interactive slides where we don't 
-want the space and backspace keys to change the slide.
-
-Architecturally any widget, including the navbar can have multiple rendering
-methods.  For someone without a flash plugin for their browser, they will
-be able to choose (or we might even be able to detect this) a non-flash
-navbar of some kind.  Likewise for each component of the slide.  So far I
-have focused on HTML rendering of the various pieces, but eventually I'd like
-to see plain text, flash, SVG, jpg, png, etc... rendering methods for each
-component.
-
 If you look in objects.php you will see that each widget type has a $mode
 property and that the display() method for each one looks something like this:
 
@@ -130,4 +110,3 @@ Have a look at the TODO file for a list of things to start working on.  If
 we all pitch in a bit we should all end up with cool-looking presentations
 through this very flexible system.
 
--Rasmus
