@@ -18,7 +18,7 @@ function keypressHandler(e){
         {
             if (sliders.length > 0 && currentSlider < sliders.length) {
 		try {
-                slide(sliders[currentSlider], sliders[currentSlider].getAttribute('gotox'), 0, 0) ;
+                slide(sliders[currentSlider], sliders[currentSlider].getAttribute('gotox'), sliders[currentSlider].getAttribute('gotoy'), 0) ;
 		} catch (e) { alert(e);}
 		currentSlider = currentSlider+1;
             } else if (<?php echo $nextSlideNum; ?>) {
@@ -41,19 +41,11 @@ onload = function() {
 		// ok, add this to our slider array
 		//alert("slide "+sliderdiv[i].id+" at "+sliderdiv[i].offsetLeft+","+sliderdiv[i].offsetTop+"\n");
 		sliderdiv[i].setAttribute('gotox',sliderdiv[i].offsetLeft);
-		sliderdiv[i].setAttribute('gotoy',sliderdiv[i].offsetTop);
-		sliderdiv[i].style.left = -1024;
-		sliderdiv[i].style.top = sliderdiv[i].offsetTop;
+		sliderdiv[i].setAttribute('gotoy',0);
+                sliderdiv[i].setAttribute('style','position:relative;left:-1024;top:0;');
 		sliders[sliders.length] = sliderdiv[i];
 	    }
 	}
-	for (i=0; i< sliders.length; i++) {
-	    //alert(sliders[i].id);
-	}
-	//example = gE( "EXAMPLE" ) ;
-	//sX( example, -100 ) ; // some browsers won't automatically populate the...
-	//sY( example, -100 ) ; // ...position properties from the style sheet
-	//slide( example, 200, 200, 3 ) ;
 }
 -->
 </script>
