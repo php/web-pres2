@@ -559,7 +559,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 
         $markedText = ($bullet->text == '&nbsp;') ? $bullet->text : markup_text(htmlspecialchars($bullet->text));
 
-        if ($this->pres->template = 'css') {
+        if ($this->pres->template == 'css') {
             echo "<li class='pres_bullet'>$markedText</li>";
         } else {
             echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
