@@ -196,7 +196,7 @@ ENDT;
             echo $slide->title."</a></div>";
             echo "<div class='navbar_nr'>";
             echo <<<ENDD
-<a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php' class='navbar-title' onClick="window.open('http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height={$slidelistH},left=10,top=0'); return false">{$this->slideNum}/{$this->maxSlideNum}</a></div>
+<a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php' class='navbar-title' onClick="window.open('http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=10,top=0'); return false">{$this->slideNum}/{$this->maxSlideNum}</a></div>
 ENDD;
             if ($this->pres->navbartopiclinks) {
                 echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
@@ -288,7 +288,8 @@ ENDD;
 
     function _blurb(&$blurb) {
         if ($this->pres->template == 'css') {
-            echo "<div class='blurb'>".markup_text($blurb->text)."</div>";
+			$class = isset($blurb->class) ? $blurb->class : 'blurb';
+            echo "<div class='{$class}'>".markup_text($blurb->text)."</div>";
             return;
         }
 
@@ -568,7 +569,16 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         $markedText = ($bullet->text == '&nbsp;') ? $bullet->text : markup_text(htmlspecialchars($bullet->text));
 
         if ($this->pres->template == 'css') {
-            echo "<li class='pres_bullet'>$markedText</li>";
+			if (isset($bullet->class)) {
+				$class = $bullet->class;
+			} else {
+				$class = "pres_bullet'";
+			}
+			$attrs = '';
+			if (isset($bullet->effect) && !empty($bullet->effect)) {
+				$attrs = " style='' effect='{$bullet->effect}'";
+			}
+            echo "<div $attrs><li class='$class'>$markedText</li></div>";
         } else {
             echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
         }
