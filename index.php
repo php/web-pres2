@@ -1,9 +1,12 @@
 <?php
+        if(strlen($PATH_INFO)) {
+	  $topic = trim(substr($PATH_INFO,1));
+	}
 
-	require_once 'config.php';
-	session_start();
+        require_once 'config.php';
 	require_once 'XML_Presentation.php';
-	
+
+        session_start();
 	$topics = array();
 
 	$dir = opendir($presentationDir);
@@ -64,6 +67,7 @@
 
 <html>
 <head>
+<base href="<?="http://$HTTP_HOST".$baseDir?>">
 <title>PHP Presents</title>
 <?php include("css.php"); ?>
 </head>
@@ -82,12 +86,8 @@
    echo "<img src='$logo2' align='right' style='float: right;'>";
  }
  
- echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum' style='text-decoration: none; color: $this->titleColor;'>$this->title</a></div>";
+ echo "<div style='font-size: $this->titleSize; margin: 0 2.5em 0 0;'>$this->title</div>";
 
- if ($pres[1]->navbartopiclinks) {
-    echo "<div style='float: left; margin: -0.2em 2em 0 0; font-size: $this->navSize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev' style='text-decoration: none; color: $this->navColor;'>$prevTitle</a></div>";
-    echo "<div style='float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $this->navSize;'><a href='http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next' style='text-decoration: none; color: $this->navColor;'>$nextTitle</a></div>";
- }
  echo '</div></div>';
 ?>
 <br /><br /><br /><br /><br /><br />
@@ -101,13 +101,13 @@ Simply click the topic you wish to find presentations on to view all available p
 </p>
 <?php 
 foreach($topics as $i => $topic) {
-	print('<p><a href="' . $PHP_SELF . '?topic=' . $i . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
+	print('<p><a href="' . $baseDir . 'index.php/' . $i . '">' . $i . '</a> (' . $topic['count'] . ')</p>');
 }
 
 } else {
 ?>
 <p>The available presentations are...</p>
-<table>
+<table align="center" class="index">
 <tr><th>Title</th><th>Date</th><th>Location</th><th>Speaker</th><th>Slides</th></tr>
 <?php
 $prnum = sizeof($pr);
@@ -115,8 +115,7 @@ $prnum = sizeof($pr);
 for($j=0; $j < $prnum; $j++) {
 
 	if(strtolower($pr[$j]['topic']) == strtolower($topic)) {
-		print("<tr><td><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td>{$pr[$j]['date']}</td>");
-		print("<td>{$pr[$j]['location']}</td><td>{$pr[$j]['speaker']}</td><td>{$pr[$j]['slidecount']}</td></tr>");
+		print("<tr><td class='index'><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>");
 
 	}
 
