@@ -1,6 +1,6 @@
 <?php
 // vim: set tabstop=4 shiftwidth=4 fdm=marker:
-
+require_once 'compat.php';
 // {{{ Helper functions
 
 // {{{ getFLashDimensions - Find the height and width of the given flash string
@@ -1046,7 +1046,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!$this->hide) {
 				if(!empty($this->filename)) {
 					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
-					$_html_file = join(file($_html_filename),'');
+					$_html_file = file_get_contents($_html_filename);
 				} else {
 					$_html_file = $this->text;
 				}
