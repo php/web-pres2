@@ -1,5 +1,4 @@
 <?php
-	apd_set_pprof_trace();
 	error_reporting(E_ALL);
 
 	require_once 'config.php';
