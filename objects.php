@@ -975,7 +975,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					$_html_filename = preg_replace('/\?.*$/','',$slideDir.$this->filename);
 					switch($this->type) {
 						case 'genimage':
-							echo '<img src='.$slideDir.$this->filename."\">\n";
+							echo '<img src="'.$slideDir.$this->filename."\">\n";
 							break;
 						case 'iframe':
 							echo "<iframe width=\"$this->iwidth\" height=\"$this->iheight\" src=\"$slideDir$this->filename\"><a href=\"$slideDir$this->filename\" class=\"resultlink\">$this->linktext</a></iframe>\n";
