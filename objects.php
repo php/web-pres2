@@ -117,7 +117,7 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 */
 function markup_text($str) {
 	$ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$str);
-	$ret = preg_replace('/#([[:alnum:]]+?)#/','&\1;',$str);
+	$ret = preg_replace('/#([[:alnum:]]+?)#/','&\1;',$ret);
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','<tt>\1</tt>',$ret);
 	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|(\S+?)\|/','<font color="\1">\2</font>',$ret);
