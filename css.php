@@ -33,7 +33,7 @@ div.navbar {
 	background: <?php echo $pres[1]->navbarbackground; ?>;
 	padding: 4;
 	margin: 0;
-	<?php if ($pres[1]->navbartopiclinks) { ?>height: 6em;<?php } ?>
+        height: <?php echo $pres[1]->navbarheight; ?>;
 	color: #ffffff;
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 }
