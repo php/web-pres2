@@ -139,7 +139,7 @@ Simply click the topic you wish to find presentations on to view all available p
 	}
 	$percent = 100 / $topic_cols;
 	foreach($topics as $i => $topic) {
-		printf('<td width="%.1f%%" class="output" style="font-size: 1.8em; padding-bottom: 15px"><a href="' . $baseDir . 'index.php/' . urlencode($i) . '">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", $percent);
+		printf('<td width="%.1f%%" class="output" style="font-size: 1.8em; padding-bottom: 15px"><a href="' . $baseDir . 'index.php/%s">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", urlencode($i), $percent);
 		if (++$col >= $topic_cols) { 
 			$col=0; 
 			print("</tr>\n<tr>"); 
