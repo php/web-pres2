@@ -269,26 +269,27 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					'">';
 
 				if(!empty($this->filename)) {
+					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
 					switch($this->type) {
 						case 'php':
 						case 'genimage':
-							highlight_file($this->filename);
+							highlight_file($_html_filename);
 							break;
 						case 'shell':
-							$_html_file = file_get_contents($this->filename);
+							$_html_file = file_get_contents($_html_filename);
 							echo nl2br(htmlspecialchars($_html_file))."\n";
 							break;
                         case 'c':
-                            print `cat {$this->filename} | c2html -cs`;
+                            print `cat {$_html_filename} | c2html -cs`;
                             break;
                         case 'perl':
-                            print `cat {$this->filename} | perl2html -cs`;
+                            print `cat {$_html_filename} | perl2html -cs`;
                             break;
                         case 'java':
-                            print `cat {$this->filename} | java2html -cs`;
+                            print `cat {$_html_filename} | java2html -cs`;
                             break;
                         default:
-							$_html_file = file_get_contents($this->filename);
+							$_html_file = file_get_contents($_html_filename);
 							echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
 							break;
 					}
@@ -309,7 +310,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				echo "</div></div>\n";
 			}
 			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
-				echo '<div style="font-size: '.(4*(float)$this->fontsize/3)."em;\">Output</div>\n";
+				if(!$this->hide) echo '<div style="font-size: '.(4*(float)$this->fontsize/3)."em;\">Output</div>\n";
 				$_html_sz = (float) $this->rfontsize;
 				if(!$_html_sz) $_html_sz = 0.1;
 				$_html_offset = (1/$_html_sz).'em';
@@ -330,12 +331,13 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
 					"\">\n";
 				if(!empty($this->filename)) {
+					$_html_filename = preg_replace('/\?.*$/','',$this->filename);
 					switch($this->type) {
 						case 'genimage':
 							echo "<img src=\"$this->filename\">\n";
 							break;
 						default:
-							include $this->filename;
+							include $_html_filename;
 							break;
 					}
 				} else {
