@@ -104,7 +104,7 @@ HEADER;
 				$body_style = "margin-top: 1em;";
 				break;
 			case 'php2':
-				$body_style = "margin-top: 6em;";
+				$body_style = "margin-top: 5em;";
 				break;
 			default:
 				$body_style = "margin-top: 8em;";

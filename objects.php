@@ -58,7 +58,7 @@ function my_pdf_page_number($pdf) {
      $fs   = font size
 */
 function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
-
+	$data = strip_markups($data);	
 	pdf_set_font($pdf, $font, $fs, 'winansi');	
 	$cw = pdf_stringwidth($pdf,'m'); // Width of 1 char - assuming monospace
 	$linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
@@ -170,17 +170,26 @@ function add_line_numbers($text)
 
 // {{{ strip_markups
 function strip_markups($str) {
-	$ret = preg_replace('/\*([\S ]+?)\*/','\1',$str);
+
+	$ret = str_replace('\*',chr(1),$str);
+	$ret = preg_replace('/\*([\S ]+?)\*/','\1',$ret);
+	$ret = str_replace(chr(1),'\*',$ret);
+
 	$ret = preg_replace('/\b_([\S ]+?)_\b/','\1',$ret);
+	$ret = str_replace('\%',chr(1),$ret);
 	$ret = preg_replace('/%([\S ]+?)%/','\1',$ret);
+	$ret = str_replace(chr(1),'\%',$ret);
+
+	$ret = preg_replace('/~([\S ]+?)~/','\1',$ret);
 	// Hack by arjen: allow more than one word to be coloured
 	$ret = preg_replace('/\|([0-9a-fA-F]+?)\|([\S ]+?)\|/','\2',$ret);
 	$ret = preg_replace('/\^([[:alnum:]]+?)\^/','^\1',$ret);
 	$ret = preg_replace('/\@([[:alnum:]]+?)\@/','_\1',$ret);
-        $ret = preg_replace('/~([\S ]+?)~/','<i>\1</i>',$ret);
+	$ret = preg_replace('/~([\S ]+?)~/','<i>\1</i>',$ret);
 	// Quick hack by arjen: BR/ and TAB/ pseudotags from conversion
 	$ret = preg_replace('/BR\//','<BR/>',$ret);
 	$ret = preg_replace('/TAB\//','',$ret);
+	$ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
 	return $ret;
 } 
 // }}}
@@ -288,7 +297,7 @@ function strip_markups($str) {
 				else $logo1url = $pres[1]->logoimage1url;				
 				if(!empty($logo1)) {
 					$size = getimagesize($logo1);
-					echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0.5em; margin-left: 1em;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a></td>";
+					echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0em; margin-left: 0em;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a></td>";
 					$offset+=2;
 				}
 				?>
@@ -306,7 +315,7 @@ function strip_markups($str) {
 				  <td><? if( $slideNum > 0){
                              $prevSlide = $slideNum - 1;
                              echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prevSlide\">"
-                        	 . '<img src="images/back.gif" border="0" hspace="2" /></a>';
+                        	 . '<img src="images/back.gif" border="0" hspace="2" alt="'.$prevTitle.'"/></a>';
                          } 
 					     if($slideNum < $maxSlideNum) $nextSlideNum = $slideNum + 1;
 				  ?></td>
@@ -315,13 +324,13 @@ function strip_markups($str) {
 				  <a href="<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>" onClick="window.open('<?= "http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?= $winW-300 ?>,top=0'); return false" class="linka"><?= $slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
 					  <td><? if( !empty($nextSlideNum) )
                         echo "<a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$nextSlideNum\">"
-                        	. '<img src="images/next.gif" border="0" hspace="2" /></a>';
+                        	. '<img src="images/next.gif" border="0" hspace="2" alt="'.$nextTitle.'"/></a>';
 					?></td>
 			   	  <td><img src="images/blank.gif" height="10" width="15" /></td>
 				  </tr>
 				</table>
 				<br clear="left" />
-				<hr style="border: 0; color: <?=$titlecolor?>; background-color: <?=$titlecolor?>; height: 2px">
+				<hr style="margin-left: 0; margin-right: 0; border: 0; color: <?=$titlecolor?>; background-color: <?=$titlecolor?>; height: 2px">
 				</div></div>
 				<?	
 				break;
@@ -1029,6 +1038,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					case 'genimage':
 					case 'iframe':
 					case 'link':
+					case 'nlink':
 					case 'embed':
 					case 'flash':
 					case 'system':
@@ -1192,6 +1202,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						case 'link':
 							echo "<a href=\"$slideDir$this->filename\" class=\"resultlink\">$this->linktext</a><br />\n";
 							break;	
+						case 'nlink':
+							echo "<a href=\"$slideDir$this->filename\" class=\"resultlink\" target=\"_blank\">$this->linktext</a><br />\n";
+							break;
 						case 'embed':
 							echo "<embed src=\"$slideDir$this->filename\" class=\"resultlink\" width=\"800\" height=\"800\"></embed><br />\n";
 							break;
@@ -1433,7 +1446,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 							eval('?>'.$this->text);
 							$data = strip_tags(ob_get_contents());
 							ob_end_clean();
-							if($data[strlen($data)-1] != "\n") $data .= "\n";
+							if(strlen($data) && $data[strlen($data)-1] != "\n") $data .= "\n";
 							my_pdf_paginated_code($pdf, $data, $pdf_x, $pdf_y, $pdf_cy, 60, $pdf_cx+30, $pdf_cx, $pdf_example_font, -10);
 							pdf_continue_text($pdf,"");
 							break;
@@ -1518,7 +1531,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 	class _bullet {
 
 		function _bullet() {
-			$this->text = '&nbsp;';
+			$this->text = '';
 			$this->effect = '';
 			$this->id = '';
 			$this->type = '';
@@ -1537,6 +1550,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		function html() {
 			global $objs, $coid;
 
+			if ($this->text == "") $this->text = "&nbsp;";
 			$style='';
 			$type='';
 			$effect='';
@@ -1644,6 +1658,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function plainhtml() {
+			if ($this->text == "") $this->text = "&nbsp;";
 			echo "<li>".markup_text($this->text)."</li>\n";
 		}
 
@@ -1652,8 +1667,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
-
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font, $coid, $objs;
+			$type = '';
 			$pdf_cy = pdf_get_value($pdf, "texty");
 		
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
@@ -1671,9 +1686,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			pdf_restore($pdf);
 
 			//clean up eols so we get a nice pdf output
-			if (strstr("\r\n",$txt)) {
+			if (strstr($txt,"\r\n")) {
 				$eol = "\r\n";
-			} elseif (strstr("\r", $txt)) {
+			} elseif (strstr($txt,"\r")) {
 				$eol = "\r";
 			} else {
 				$eol = "\n";
@@ -1693,8 +1708,53 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if($this->type=='speaker') {
 				pdf_setcolor($pdf,'fill','rgb',1,0,0);
 			}
-			pdf_show_xy($pdf, 'o', $pdf_cx+20, $pdf_cy+$leading-1);
-			pdf_show_boxed($pdf, $txt, $pdf_cx+30, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, 'left');
+
+			if(!empty($this->start)) {
+				if(is_numeric($this->start)) {
+					$objs[$coid]->num = (int)$this->start;
+				} else {
+					$objs[$coid]->alpha = $this->start;
+				}
+			}
+
+			if(!empty($this->type)) $type = $this->type;
+			else if(!empty($objs[$coid]->type)) $type = $objs[$coid]->type;
+
+			switch($type) {
+				case 'numbered':
+				case 'number':
+				case 'decimal':
+					$bullet = $objs[$coid]->num++ . '.';
+					$pdf_cx_height = 30;
+					break;
+				case 'no-bullet':
+					case 'none':
+					$bullet='';
+					$pdf_cx_height = 20;
+					break;
+				case 'alpha':
+					$bullet = $objs[$coid]->alpha++ . '.';
+					break;
+				case 'ALPHA':
+					$bullet = strtoupper($objs[$coid]->alpha++) . '.';
+					$pdf_cx_height = 30;
+					break;
+				case 'asterisk':
+					$bullet = '*';
+					$pdf_cx_height = 20;
+					break;
+				case 'hyphen':
+					$bullet = '-';
+					$pdf_cx_height = 20;
+					break;
+				default:
+					$bullet = 'o';
+					$pdf_cx_height = 20;
+					break;
+			}
+
+			pdf_show_xy($pdf, $bullet, $pdf_cx+20 + $this->level*10, $pdf_cy+$leading-1);
+			pdf_show_boxed($pdf, $txt, $pdf_cx+40 + $this->level*10, $pdf_cy-$height, $pdf_x-2*($pdf_cx+20), $height, 'left');
 			pdf_continue_text($pdf,"\n");
 			$pdf_cy = pdf_get_value($pdf, "texty");
 			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy-$leading/2);
