@@ -2,7 +2,7 @@ Things to work on
 
 - Make the presentation listing page in index.php pretty.  Perhaps
   add (+) buttons out in front of each one, and when clicked you 
-  would get a list of slides inside that presentation?
+  would get a list of slides inside that presentation? (james)
 
 - Stupid IE does not support fixed positioned div elements
   Emulate it using Javascript.
@@ -16,6 +16,7 @@ Things to work on
   a conversion to Docbook-XML and then use all the existing tools to print
   from there.  Or perhaps some other converter.  Basically, I figure, it 
   would just be another set of rendering methods in objects.php
+	-- What about generating PDF from HTML? (james)
 
 - Calling all ming hackers - help us with some cool transitions for the navbar
   and also the various individual slide components if people choose to use
@@ -48,3 +49,6 @@ Things to work on
 
 - Perhaps a set of suggested fonts for various browsers would be a good idea 
   as well.
+
+- make all hard-coded settings (like border padding) configurable on a per-presentation
+  basis.	
