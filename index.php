@@ -158,6 +158,14 @@ switch($display_mode) {
 			 " &lt;Space&gt; or &lt;Enter&gt; next slide<br />\n".
 			 " &lt;Backspace&gt; previous slide<br />\n";	
 		break;
+
+	case 'pdfus':
+	case 'pdfusl':
+	case 'pdfa4':
+		if (!extension_loaded("pdf")) {
+			echo "<p>The PDF extension is not loaded, so this format is not available here.</p>";
+		}
+		break;
 }
 ?>
 <p>The available presentations are...</p>
