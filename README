@@ -28,19 +28,19 @@ presentation file to read.  Open the presentation file and grab the list of
 slides.  First slide is #0 internally.  Will probably show it to the user as
 starting at #1.  The presentation file itself looks like this:
 
-
 <presentation>
-<title>PHP - Scripting the Web</title>
-<event>OSCON</event>
-<location>San Diego</location>
-<date>July 22, 2002</date>
-<speaker>Rasmus</speaker>
-<navmode>flash</navmode>
+ <title>PHP - Scripting the Web</title>
+ <event>OSCON</event>
+ <location>San Diego</location>
+ <date>July 22, 2002</date>
+ <speaker>Rasmus</speaker>
+ <navmode>flash</navmode>
 
-<slide>slides/slide1.xml</slide>
-<slide>slides/slide2.xml</slide>
+ <slide>slides/slide1.xml</slide>
+ <slide>slides/slide2.xml</slide>
 
 </presentation>
+
 That is, you start it with a <presentation> tag, and have at least a title
 tag inside.  The others are optional.  Then a series of <slide> tags where
 you put the relative filename of each slide.
