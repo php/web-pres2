@@ -268,6 +268,9 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				$sz = (float) $this->rfontsize;
 				if(!$sz) $sz = 0.1;
 				$toffset = (1/$sz).'em';
+				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
+					global ${$this->global};
+				}
 				echo '<div class="shadow" style="margin: '.
 					((float)$this->margintop).'em '.
 					((float)$this->marginright+1).'em '.
