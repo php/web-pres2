@@ -1573,7 +1573,7 @@ class pdf extends display {
 
         pdf_save($this->pdf);
         pdf_translate($this->pdf,0,$this->pdf_y);
-        pdf_scale($this->pdf,1, -1;
+        pdf_scale($this->pdf,1, -1);
         pdf_set_font($this->pdf, $this->pdf_font , 12, 'winansi');
         $leading = pdf_get_value($this->pdf, "leading");
         $inc = $leading;	
