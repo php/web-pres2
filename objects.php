@@ -455,8 +455,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($this->examplebackground)) $_html_examplebackground = $this->examplebackground;
 
 				echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
-					(($this->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
 					((!empty($_html_examplebackground)) ? "background: $_html_examplebackground;" : '').
+					(($this->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
 					'">';
 
 				$this->highlight();
