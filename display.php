@@ -1076,7 +1076,7 @@ class pdf extends display {
             }
             $pos += $nl+1;
             if(pdf_get_value($pdf, "texty") >= ($y-$bm)) {
-                $this->my_pdf_page_number($pdf);
+                $this->my_pdf_page_number($pdf, $x, $y);
                 $this->my_new_pdf_end_page($pdf);
                 $this->my_new_pdf_page($pdf, $x, $y, true);
     
