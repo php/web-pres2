@@ -212,6 +212,8 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->marginleft = '3em';
 			$this->margintop = '1em';
 			$this->marginbottom = '0.8em';
+			$this->hide = false;
+			$this->result = false;
 			$this->width = '';
 			$this->condition = '';
 		}
@@ -220,54 +222,58 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->{$this->mode}();
 		}
 
+		// Because we are eval()'ing code from slides, obfuscate all local 
+		// variables so we don't get run over
 		function html() {
 			// Bring posted variables into the function-local namespace 
 			// so examples will work
-			foreach($_POST as $key => $val) {
-				$$key = $val;
+			foreach($_POST as $_html_key => $_html_val) {
+				$$_html_key = $_html_val;
 			}
-			foreach($_SERVER as $key => $val) {
-				$$key = $val;
+			foreach($_SERVER as $_html_key => $_html_val) {
+				$$_html_key = $_html_val;
 			}
 
 			if(isset($this->title)) echo '<div style="font-size: '.(4*(float)$this->fontsize/3).'em;">'.$this->title."</div>\n";
-			$sz = (float) $this->fontsize;
-			if(!$sz) $sz = 0.1;
-			$offset = (1/$sz).'em';
-			echo '<div class="shadow" style="margin: '.
-				((float)$this->margintop).'em '.
-				((float)$this->marginright+1).'em '.
-				((float)$this->marginbottom).'em '.
-				((float)$this->marginleft).'em;'.
-				((isset($this->width)) ? "width: $this->width;" : "").
-				'">';
-			echo '<div class="emcode" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
-			if(!empty($this->filename)) {
-				switch($this->type) {
-					case 'php':
-						highlight_file($this->filename);
-						break;
-					default:
-						$file = file_get_contents($this->filename);
-						echo "<pre>".htmlspecialchars($file)."</pre>\n";
-						break;
+			if(!$this->hide) {
+				$_html_sz = (float) $this->fontsize;
+				if(!$_html_sz) $_html_sz = 0.1;
+				$_html_offset = (1/$_html_sz).'em';
+				echo '<div class="shadow" style="margin: '.
+					((float)$this->margintop).'em '.
+					((float)$this->marginright+1).'em '.
+					((float)$this->marginbottom).'em '.
+					((float)$this->marginleft).'em;'.
+					((isset($this->width)) ? "width: $this->width;" : "").
+					'">';
+				echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;\">\n";
+				if(!empty($this->filename)) {
+					switch($this->type) {
+						case 'php':
+							highlight_file($this->filename);
+							break;
+						default:
+							$_html_file = file_get_contents($this->filename);
+							echo "<pre>".htmlspecialchars($_html_file)."</pre>\n";
+							break;
+					}
+				} else {
+					switch($this->type) {
+						case 'php':
+							highlight_string($this->text);
+							break;
+						default:
+							echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
+							break;
+					}
 				}
-			} else {
-				switch($this->type) {
-					case 'php':
-						highlight_string($this->text);
-						break;
-					default:
-						echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
-						break;
-				}
+				echo "</div></div>\n";
 			}
-			echo "</div></div>\n";
-			if(!empty($this->result) && $this->result!='no' && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
+			if($this->result && (empty($this->condition) || (!empty($this->condition) && isset(${$this->condition})))) {
 				echo '<div style="font-size: '.(4*(float)$this->fontsize/3)."em;\">Output</div>\n";
-				$sz = (float) $this->rfontsize;
-				if(!$sz) $sz = 0.1;
-				$toffset = (1/$sz).'em';
+				$_html_sz = (float) $this->rfontsize;
+				if(!$_html_sz) $_html_sz = 0.1;
+				$_html_offset = (1/$_html_sz).'em';
 				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
 					global ${$this->global};
 				}
@@ -278,7 +284,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 					((float)$this->marginleft).'em;'.
 					((isset($this->width)) ? "width: $this->width;" : "").
 					'">';
-				echo '<div class="output" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
+				echo '<div class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;\">\n";
 				if(!empty($this->filename)) include $this->filename;
 				else eval('?>'.$this->text);
 				echo "</div></div>\n";
