@@ -1,8 +1,8 @@
 Things to work on
 
-- Make the presentation listing page in index.php pretty.  Perhaps
-  add (+) buttons out in front of each one, and when clicked you 
-  would get a list of slides inside that presentation? (james)
+- On the presentation list page, perhaps add (+) buttons out in front of
+  each presentation, and when clicked you would get a list of slides inside
+  that presentation?
 
 - Stupid IE does not support fixed positioned div elements
   Emulate it using Javascript.
