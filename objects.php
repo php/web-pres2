@@ -289,7 +289,7 @@ function strip_markups($str) {
 				break;
 
 				case 'php2':
-				echo "<div class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+				echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
 				echo "<table style=\"float: left;\" width=\"60%\" border=\"0\" cellpadding=0 cellspacing=0><tr>\n";
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
@@ -336,7 +336,7 @@ function strip_markups($str) {
 				break;
 
 				case 'mysql':
-				echo "<div class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+				echo "<div id=\"stickybar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
 				echo "<table style=\"float: left;\" width=\"60%\" border=\"0\"><tr>\n";
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
@@ -384,7 +384,7 @@ function strip_markups($str) {
 
 				case 'php':
 				default:
-				echo "<div class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
+				echo "<div id=\"stickybar\" class=\"sticky\" align=\"$this->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
 				if(!empty($this->logo1)) $logo1 = $this->logo1;
 				else $logo1 = $pres[1]->logo1;
 				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
@@ -563,7 +563,7 @@ function strip_markups($str) {
 			list($dx,$dy) = getFlashDimensions($this->titleFont,$this->title,flash_fixsize($this->titleSize));
 			$dx = $winW;  // full width
 ?>
-<div align="<?=$this->titleAlign?>" class="sticky">
+<div align="<?=$this->titleAlign?>" class="sticky" id="stickyBar">
 <embed src="<?=$baseDir?>flash.php/<?echo time()?>?type=title&dy=<?=$dy?>&dx=<?=$dx?>&coid=<?=$coid?>" quality=high loop=false 
 pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"
 type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">

@@ -41,6 +41,13 @@ var effects = [];
 var currentEffect = 0;
 
 onload = function() {
+	// make banner sticky on old Windows IEs
+	<?php 
+	if (!$css_supports_fixed) {
+		echo('window.setInterval("fixNavigation()", 250);');
+	}	
+	?>
+	
 	// find any div objects with an effect attribute 
 	var divs = document.getElementsByTagName('div');
 	for (var i=0; i < divs.length; i++) {
@@ -60,5 +67,19 @@ onload = function() {
 	    }
 	}
 }
+
+function fixNavigation() {  //helper function for making navbar sticky
+	 if (document.layers) {
+		document.layers["stickyBar"].left = window.pageXOffset;
+		document.layers["stickyBar"].top = window.pageYOffset;
+	} else if (document.all) {
+		document.all("stickyBar").style.posLeft = document.body.scrollLeft;
+		document.all("stickyBar").style.posTop = document.body.scrollTop;
+ 	} else if (document.getElementById) {
+		document.getElementById("stickyBar").style.left = window.pageXOffset;
+		document.getElementById("stickyBar").style.top = window.pageYOffset;
+	}
+}
+
 //-->
 </script>

@@ -104,7 +104,7 @@ function change_mode() {
 <body>
 <?php
 
-	echo '<div class="sticky" align="center" style="width: 100%;"><div class="navbar">';
+	echo '<div id="stickyBar" class="sticky" align="center" style="width: 100%;"><div class="navbar">';
 
 	$logo1 = $pres[1]->logo1;
 	echo "<img src=\"$logo1\" align=\"left\" style=\"float: left;\">";
