@@ -231,8 +231,10 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 	// {{{ List Class
 	class _list {
 		function _list() {
-			$this->mode = 'html';
-			$this->fontsize = '3em';
+			$this->mode        = 'html';
+			$this->fontsize    = '3em';
+			$this->marginleft  = '0em';
+			$this->marginright = '0em';
 		}
 
 		function display() {
@@ -269,11 +271,48 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$style='';
 			if(!empty($this->fontsize)) $style .= "font-size: ".$this->fontsize.';';
 			else if(!empty($objs[$coid]->fontsize)) $style .= "font-size: ".(2*(float)$objs[$coid]->fontsize/3).'em;';
+			if(!empty($this->marginleft)) $style .= "margin-left: ".$this->marginleft.';';
+			else if(!empty($objs[$coid]->marginleft)) $style .= "margin-left: ".$objs[$coid]->marginleft.';';
+
+			if(!empty($this->marginright)) $style .= "margin-right: ".$this->marginleft.';';
+			else if(!empty($objs[$coid]->marginright)) $style .= "margin-right: ".$objs[$coid]->marginright.';';
+
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
+
 			echo "<li style=\"$style\">".$this->text."</li>\n";
 		}
 
+	}
+	// }}}
+
+	// {{{ Link Class
+	class _link {
+
+		function _link() {
+			$this->href  = '';
+			$this->align = 'left';
+			$this->fontsize     = '2em';
+			$this->textcolor    = '#000000';
+			$this->marginleft   = '0em';
+			$this->marginright  = '0em';
+			$this->margintop    = '0em';	
+			$this->marginbottom = '0em';	
+			$this->mode         = 'html';
+		}
+
+		function display() {
+			$this->{$this->mode}();
+		}
+
+		function html() {
+			if(empty($this->text)) $this->text = $this->href;
+			if(!empty($this->leader)) $leader = $this->leader;
+			else $leader='';
+			if(!empty($this->text)) {
+				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\">$this->text</a></div><br />\n";
+			}
+		}
 	}
 	// }}}
 

@@ -113,7 +113,12 @@ h1 {
 p,li {
 	font-size: 2.6em;
 }
-
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
 </style>
 </head>
 <?php
