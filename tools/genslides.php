@@ -12,6 +12,8 @@ class presentation_generator {
 	var $presfile;
 	var $presfileStart;
 	var $directory;
+	var $unknown_count = 0;
+	var $stderr_fp = 0;
 
 	function presentation_generator ($filename, $directory, $presfile)
 	{
@@ -23,6 +25,13 @@ class presentation_generator {
 		unset($tmp['start']);
 		$this->slides = $tmp;
 		print "done!\n";
+	}
+
+	function warn($msg) {
+		if (!$this->stderr_fp) {
+			$this->stderr_fp = fopen('php://stderr', 'w');
+		}
+		fwrite($this->stderr_fp, "\n$msg\n");
 	}
 
 	function parseFile ($filename)
@@ -52,16 +61,16 @@ class presentation_generator {
 				$buf .= $line;
 			}
 				
-			if (!$inslide && preg_match('/^<slide.*>/', $line) && 
-			    preg_match_all('/(title|filename)\=\"([\w\.\s]+)\"/', $line, $matches)) {
+			if (!$inslide && preg_match('/^<slide.*>/', $line)) { 
 				$beginning = 0;
 				$inslide = 1;
 				$data[$element] = new presentation_slide;
-
+			    
+				preg_match_all('/(title|filename)\=\"([\w\.\s]+)\"/', $line, $matches);
 				if (isset($matches[1][0])) {
 					$data[$element]->{$matches[1][0]} = $matches[2][0];
 				} else {
-					$this->warn("No title found.. Assigning 'unknown'\n");
+					$this->warn("No title found.. Assigning 'unknown'");
 					$data[$element]->title = "unknown";
 				}
 
@@ -81,6 +90,10 @@ class presentation_generator {
 	}
 
 	function createFilename($title) {
+		if ($title == "unknown") {
+			$title .= '_' . $this->unknown_count++;
+		}
+		
 		return str_replace(" ", "_", strtolower($title)). '.xml';
 	}
 
