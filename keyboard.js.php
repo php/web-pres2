@@ -47,7 +47,7 @@ onload = function() {
 
 	// make banner sticky on old Windows IEs
 	<?php 
-	if (!$css_supports_fixed) {
+	if (!$GLOBALS['css_supports_fixed']) {
 		echo('window.setInterval("fixNavigation()", 250);');
 	}	
 	?>
