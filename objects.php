@@ -904,10 +904,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 						echo $this->text."\n";
 						break;
 					case 'perl':
-						print `echo "{$this->text}" | perl2html -cs`;
+					    $text = str_replace('"', '\\"', $this->text);
+						print `echo "{$text}" | perl2html -cs`;
 						break;
 					case 'c':
-						print `echo "{$this->text}" | c2html -cs`;
+					    $text = str_replace('"', '\\"', $this->text);
+						print `echo "{$text}" | c2html -cs`;
 						break;
 
 					default:
