@@ -1165,7 +1165,22 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
+			global $pdf, $pdf_cx, $pdf_x, $pdf_y;
 
+			if(empty($this->text)) $this->text = $this->href;
+			if(!empty($this->leader)) $leader = $this->leader;
+			else $leader='';
+
+			if(!empty($this->text)) {
+				$pdf_cy = pdf_get_value($pdf, "texty");
+				pdf_set_font($pdf, "Helvetica" , -12, 'winansi');
+				if(strlen($leader)) $lx = pdf_stringwidth($pdf, $leader);
+				else $lx=0;
+				$dx = pdf_stringwidth($pdf, $this->text);
+				pdf_add_weblink($pdf, $pdf_cx+$lx, $pdf_y-$pdf_cy-3, $pdf_cx+$dx+$lx, ($pdf_y-$pdf_cy)+12, $this->text);
+				pdf_show_xy($pdf, $leader.$this->text, $pdf_cx, $pdf_cy);
+				pdf_continue_text($pdf,"");
+			}
 		}
 	}
 	// }}}
