@@ -71,8 +71,8 @@ function getFlashDimensions($font,$title,$size) {
 <div class="navbar">
 <img src="php_logo.gif" align="left" style="float: left;">
 <div style="font-size: $this->titleSize; margin: 0 2.5em 0 0;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum" style="text-decoration: none; color: $this->titleColor;">$this->title</a></div>
-<div style="float: left; font-size: $this->navSize;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev" style="text-decoration: none; color: $this->navColor;">$prevTitle</a></div>
-<div style="float: right; margin: 0 2em 0 0; color: $this->navColor; font-size: $this->navSize;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next" style="text-decoration: none; color: $this->navColor;">$nextTitle</a></div>
+<div style="float: left; margin: -0.2em 2em 0 0; font-size: $this->navSize;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev" style="text-decoration: none; color: $this->navColor;">$prevTitle</a></div>
+<div style="float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $this->navSize;"><a href="http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next" style="text-decoration: none; color: $this->navColor;">$nextTitle</a></div>
 </div>
 </div>
 NAVBAR;
@@ -185,7 +185,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			$this->rfontsize = '1.8em';
 			$this->marginright = '3em';
 			$this->marginleft = '3em';
-			$this->margintop = '0em';
+			$this->margintop = '1em';
 			$this->marginbottom = '0.8em';
 			$this->width = '';
 			$this->condition = '';
