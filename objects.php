@@ -247,7 +247,7 @@ function strip_markups($str) {
 				if(!empty($this->logoimage1url)) $logo1url = $this->logoimage1url;
 				else $logo1url = $pres[1]->logoimage1url;				
 				if(!empty($logo1)) {
-					echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\"></a>";
+					echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\" alt=\"".$pres[1]->slides[$slideNum]->filename."\"></a>";
 					$offset+=2;
 				}
 				echo "<div align=\"center\" style=\"font-size: $this->titleSize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$slideNum\" style=\"text-decoration: none; color: $this->titleColor;\">$this->title</a></div>";
