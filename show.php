@@ -28,7 +28,27 @@
 	if(isset($_SESSION['currentPres'])) {
 		$lastPres = $_SESSION['currentPres'];
 	}
+
+	/*
+	Adding support for URLs such as
+	http://shiflett.org/talks/oscon2004/php-security
+	*/
+	$urlArray = explode('/', $presFile);
+	$slideNumIndex = sizeof($urlArray) - 1;
+	if ($urlArray[$slideNumIndex] == strval(intval($urlArray[$slideNumIndex]))) {
+		$slideNum = $urlArray[$slideNumIndex];
+		unset($urlArray[$slideNumIndex]);
+	}
+	else {
+		$slideNum = '';
+	}
+	$_SESSION['currentPres'] = trim(implode('-', $urlArray), '-');
+
+	/*
+	Old way:
 	@list($_SESSION['currentPres'],$slideNum) = explode('/',$presFile);
+	*/
+	
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
 	$presFile = str_replace('..','',$_SESSION['currentPres']); // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
