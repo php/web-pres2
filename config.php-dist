@@ -6,5 +6,6 @@
 	$showScript = 'show.php';  // In case you want to ForceType a shorter one
 	$helpPage = 'help.php';
 	$baseFontSize = '12pt';
+	$flashFontScale = 18;
 	$jsKeyboard = true; // enable javascript handling of keyboard events
 ?>

@@ -25,9 +25,6 @@
 	$presFile = str_replace('..','',$currentPres);  // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 ?>
-<html>
-<head>
-<base href="<?="http://$HTTP_HOST".$baseDir?>">
 <?
 	if(isset($dims)) {
 		list($winW, $winH) = explode('_',$dims);
@@ -76,13 +73,17 @@
 	if(isset($objs[1]->navmode)) $navmode = $objs[1]->navmode;
 	else if(isset($pres[1]->navmode)) $navmode = $pres[1]->navmode;
 	else $navmode = 'html';
-
 	// Override with user-selected display mode
 	if(isset($selected_display_mode)) $navmode = $selected_display_mode;
 
 	switch($navmode) {
 		case 'html':
 		case 'flash':
+			echo <<<HEADER
+<html>
+<head>
+<base href="http://$HTTP_HOST$baseDir">
+HEADER;
 			$body_style = "margin-top: 7em;";
 			include 'getwidth.php';
 			include $pres[1]->stylesheet;
@@ -90,18 +91,25 @@
 			if($pres[1]->animate || $pres[1]->jskeyboard) include 'keyboard.js.php';
 			echo '</head>';
 			echo "<body onResize=\"get_dims();\" style=\"$body_style\">\n";
-			break;
-	}
-
-	while(list($coid,$obj) = each($objs)) {
-		$obj->display();
-	}
-	/*
-	echo "<pre>DEBUG";
-	print_r($pres);
-	print_r($objs);
-	echo "</pre>";
-	*/
-?>
+			while(list($coid,$obj) = each($objs)) {
+				$obj->display();
+			}
+			/*
+			echo "<pre>DEBUG";
+			print_r($pres);
+			print_r($objs);
+			echo "</pre>";
+			*/
+			echo <<<FOOTER
 </body>
 </html>
+FOOTER;
+			break;
+		case 'pdf':
+			echo "<pre>DEBUG";
+			print_r($pres);
+			print_r($objs);
+			echo "</pre>";
+			break;
+	}
+?>

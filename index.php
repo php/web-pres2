@@ -130,6 +130,8 @@ Simply click the topic you wish to find presentations on to view all available p
 <select name="modes" onChange="change_mode()">
 <option value="html" <?=($display_mode=='html')?'SELECTED':''?>>Fancy HTML (Best with Mozilla)</option>
 <option value="plainhtml" <?=($display_mode=='plainhtml')?'SELECTED':''?>>Plain HTML</option>
+<option value="flash" <?=($display_mode=='flash')?'SELECTED':''?>>Flash 5 (not working yet)</option>
+<option value="pdf" <?=($display_mode=='pdf')?'SELECTED':''?>>PDF (not working yet)</option>
 </select>
 </p>
 </form>

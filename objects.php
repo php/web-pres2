@@ -222,9 +222,9 @@ TITLEPAGE;
 		}
 
 		function flash() {
-			global $coid, $winW, $winH, $baseDir;
+			global $objs,$pres,$coid, $winW, $winH, $baseDir;
 
-			list($dx,$dy) = getFlashDimensions($this->titleFont,$this->title,$this->titleSize);
+			list($dx,$dy) = getFlashDimensions($this->titleFont,$this->title,fixsize($this->titleSize));
 			$dx = $winW;  // full width
 ?>
 <div align="<?=$this->titleAlign?>" class="sticky">
@@ -234,6 +234,36 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 </embed>
 </div>
 <?php
+			// Slide layout templates
+			if(!empty($objs[1]->layout)) switch($objs[1]->layout) {
+				case '2columns':
+					echo "<div class=\"c2left\">\n";
+					break;
+				case 'box':
+					echo "<div class=\"box\">\n";
+					break;
+			}
+
+			// Automatic slides
+			if($objs[1]->template == 'titlepage') {
+				$basefontsize = isset($objs[1]->fontsize) ? $objs[1]->fontsize:'5em';
+				$smallerfontsize = (2*(float)$basefontsize/3).'em';
+				$p = $pres[1];
+				echo <<<TITLEPAGE
+<br /><br /><br /><br />
+<div align="center" style="font-size: $basefontsize;">$p->title</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->event</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->date. $p->location</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;">$p->speaker &lt;<a href="mailto:$p->email">$p->email</a>&gt;</div>
+<br />
+<div align="center" style="font-size: $smallerfontsize;"><a href="$p->url">$p->url</a></div>
+<br />
+TITLEPAGE;
+				
+			}
 		}
 
 	}
@@ -284,6 +314,11 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				echo "<p><font color=\"$this->textcolor\">$this->text</font></p>\n";
 			}
 		}
+
+		function flash() {
+			$this->html();
+		}
+
 	}
 	// }}}
 
@@ -327,8 +362,12 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 <img src="<?=$this->filename?>" <?=$size[3]?>>
 </div>
 <?php
-
 		}
+
+		function flash() {
+			$this->html();
+		}
+
 	}
 	// }}}
 
@@ -598,6 +637,12 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 		// }}}
 
+		// {{{ flash()
+		function flash() {
+			$this->html();
+		}
+		// }}}
+
 	}
 	// }}}
 
@@ -635,6 +680,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			while(list($k,$bul)=each($this->bullets)) $bul->display();
 			echo '</ul>';
 		}
+
+		function flash() {
+			$this->html();
+		}
+
 	}
 	// }}}
 
@@ -686,6 +736,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			echo "<li>".$this->text."</li>\n";
 		}
 
+		function flash() {
+			$this->html();
+		}
+
+
 	}
 	// }}}
 
@@ -730,6 +785,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo "$leader<a href=\"$this->href\">$this->text</a><br />\n";
 			}
 		}
+
+		function flash() {
+			$this->html();
+		}
+
 	}
 	// }}}
 
@@ -781,6 +841,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					break;
 			}
 		}
+
+		function flash() {
+			$this->html();
+		}
+
 	}
 	// }}}
 
@@ -818,6 +883,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 					break;
 			}
 		}
+
+		function flash() {
+			$this->html();
+		}
+
 	}
 	// }}}
 ?>

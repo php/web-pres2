@@ -55,7 +55,7 @@ switch($type) {
 		$rgb = rgb($objs[$coid]->titleColor);	
 		$t->setColor($rgb[0], $rgb[1], $rgb[2]);
 
-		$tHeight = $objs[$coid]->titleSize;
+		$tHeight = fixsize($objs[$coid]->titleSize);
 		$t->setHeight($tHeight);
 
 		$tText = $objs[$coid]->title;
@@ -82,7 +82,7 @@ switch($type) {
 			$t = new SWFText();
 			$f = new SWFFont($objs[$coid]->font);
 			$t->setFont($f);
-			$t->setHeight($objs[$coid]->titleSize);
+			$t->setHeight(fixsize($objs[$coid]->titleSize));
 			$t->addString($objs[$coid]->title);
 			$i = $m->add($t);
 			if($in==0) $i->moveTo(5, 0);
@@ -113,4 +113,5 @@ function rgb($rgb) {
 	} else $r = $g = $b = 0;
 	return array($r,$g,$b);
 }
+
 ?>
