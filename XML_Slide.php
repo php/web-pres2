@@ -107,6 +107,7 @@ class XML_Slide extends XML_Parser
             case 'LIST':
             case 'EXAMPLE':
             case 'LINK':
+            case 'PHP':
                 $cl = '_'.strtolower($element);
                 $this->objects[++$this->coid] = new $cl();
                 $this->stack[] = $this->coid;
@@ -156,6 +157,7 @@ class XML_Slide extends XML_Parser
             case 'LIST':
             case 'EXAMPLE':
             case 'LINK':
+            case 'PHP':
                 $this->coid = array_pop($this->stack);
                 break;
         }

@@ -277,6 +277,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($this->global) && !isset($GLOBALS[$this->global])) {
 					global ${$this->global};
 				}
+				if(!empty($this->anchor)) echo "<a name=\"$this->anchor\">\n";
 				echo '<div class="shadow" style="margin: '.
 					((float)$this->margintop).'em '.
 					((float)$this->marginright+1).'em '.
@@ -288,6 +289,7 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				if(!empty($this->filename)) include $this->filename;
 				else eval('?>'.$this->text);
 				echo "</div></div>\n";
+				if(!empty($this->anchor)) echo "</a>\n";
 			}
 		}
 	}
@@ -377,6 +379,20 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 			if(!empty($this->text)) {
 				echo "<div align=\"$this->align\" style=\"font-size: $this->fontsize; color: $this->textcolor; margin-left: $this->marginleft; margin-right: $this->marginright; margin-top: $this->margintop; margin-bottom: $this->marginbottom;\">$leader<a href=\"$this->href\">$this->text</a></div><br />\n";
 			}
+		}
+	}
+	// }}}
+
+	// {{{ PHP Eval Class
+	class _php {
+
+		function _php() {
+			$this->filename = '';
+		}
+
+		function display() {
+			if(!empty($this->filename)) include $this->filename;
+			else eval('?>'.$this->text);
 		}
 	}
 	// }}}
