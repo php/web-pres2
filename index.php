@@ -16,6 +16,7 @@
 
 	session_start();
 	session_register('selected_display_mode');
+	$titles = null;
 	
 	$topics = array();
 

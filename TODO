@@ -1,9 +1,5 @@
 Things to work on
 
-- On the presentation list page, perhaps add (+) buttons out in front of
-  each presentation, and when clicked you would get a list of slides inside
-  that presentation?
-
 - Stupid IE does not support fixed positioned div elements
   Emulate it using Javascript.
   See: http://javascriptkit.com/javatutors/static3.shtml
@@ -11,12 +7,6 @@ Things to work on
   IE on the Mac does support fixed positioned div elements.
 
 - This thing probably needs a name
-
-- We need a way to print presentations nicely.  This might be done through
-  a conversion to Docbook-XML and then use all the existing tools to print
-  from there.  Or perhaps some other converter.  Basically, I figure, it 
-  would just be another set of rendering methods in objects.php
-	-- What about generating PDF from HTML? (james)
 
 - Calling all ming hackers - help us with some cool transitions for the navbar
   and also the various individual slide components if people choose to use
@@ -49,4 +39,4 @@ Things to work on
   consistent across all display modes.  And at the same time, document each
   tag in the intro presentation.
 
-- Table of contents for the PDF document
+- Still need to write the PDF code for the TABLE tag

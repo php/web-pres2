@@ -1,4 +1,6 @@
 <?php
+	error_reporting(E_ALL);
+
 	require_once 'config.php';
 
 	set_time_limit(0);  // PDF generation can take a while
@@ -6,6 +8,9 @@
 		header('Location: http://'.$HTTP_HOST.$baseDir);
 		exit;
 	}
+
+	require_once 'XML_Presentation.php';
+	require_once 'XML_Slide.php';
 
 	session_start();
 	session_register('pres');
@@ -17,9 +22,13 @@
 	session_register('maxSlideNum');
 	session_register('prevTitle');
 	session_register('nextTitle');
+	session_register('titles');
 
 	$presFile = trim($PATH_INFO);			
 	$presFile = trim($presFile,'/');			
+	if(isset($currentPres)) {
+		$lastPres = $currentPres;
+	}
 	@list($currentPres,$slideNum) = explode('/',$presFile);
 	if(!$slideNum) $slideNum = 0;
 	if($slideNum<0) $slideNum = 0;
@@ -30,15 +39,14 @@
 		list($winW, $winH) = explode('_',$dims);
 	}
 
-	error_reporting(E_ALL);
-
-	require_once 'XML_Presentation.php';
-	require_once 'XML_Slide.php';
-	
 	$p =& new XML_Presentation($presFile);
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();
+
+	if(empty($titles) || $lastPres != $currentPres) {
+		$titles = get_all_titles($pres[1]);
+	}
 
 	$maxSlideNum = count($pres[1]->slides)-1;
 
@@ -50,17 +58,11 @@
 	$prevSlideNum = $nextSlideNum = 0;
 	if($slideNum > 0) {
 		$prevSlideNum = $slideNum-1;
-		$r =& new XML_Slide($pres[1]->slides[$slideNum-1]->filename);
-		$r->parse();
-		$objs = $r->getObjects();
-		$prevTitle = $objs[1]->title;
+		$prevTitle = $titles[$prevSlideNum];
 	} else $prevTitle = '';
 	if($slideNum < $maxSlideNum) {
 		$nextSlideNum = $slideNum+1;
-		$r =& new XML_Slide($pres[1]->slides[$slideNum+1]->filename);
-		$r->parse();
-		$objs = $r->getObjects();
-		$nextTitle = (isset($objs[1]->title)) ? $objs[1]->title : '';
+		$nextTitle = $titles[$nextSlideNum];
 	} else $nextTitle = '';
 
 	$r =& new XML_Slide($pres[1]->slides[$slideNum]->filename);
@@ -199,4 +201,16 @@ FOOTER;
 			echo $data;
 			break;
 	}
+
+function get_all_titles($pres) {
+	reset($pres);
+	while(list($slideNum,$slide) = each($pres->slides)) {
+		$r =& new XML_Slide($pres->slides[$slideNum]->filename);
+		$r->parse();
+
+		$objs = $r->getObjects();
+		$titles[] = $objs[1]->title;
+	}
+	return($titles);
+}
 ?>
