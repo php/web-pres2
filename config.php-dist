@@ -8,6 +8,7 @@
 	$pdfFontScale = 12;
 	$pdfResourceFile = '/usr/share/fonts/pdflib/pdflib.upr';
 	$pdf_font = "Times-Roman";  // Look in your pdfResourceFile for more options
+	$pdf_font_bold = "Times-Bold";
 	$pdf_example_font = "Courier";
 	$jsKeyboard = true; // enable javascript handling of keyboard events
 

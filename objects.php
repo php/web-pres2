@@ -206,7 +206,7 @@ function my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $
 					echo "<img src=\"$logo2\" border=\"0\"><br/>";
 					$offset-=2;
 				}
-				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,width=300,height=$winH,left=".($winW-300).",top=0'); return false\">".($slideNum+1)."/".($maxSlideNum+1)."</a></div>";
+				echo "<a href=\"http://$_SERVER[HTTP_HOST]{$baseDir}slidelist.php\" style=\"text-decoration: none; color: $this->titleColor;\" onClick=\"window.open('slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,width=300,height=$winH,left=".($winW-300).",top=0'); return false\">".($slideNum)."/".($maxSlideNum)."</a></div>";
 				if ($pres[1]->navbartopiclinks) {
 					echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $this->navColor;\">$prevTitle</a></div>";
 					echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $this->navColor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$baseDir$showScript/$currentPres/$next\" style=\"text-decoration: none; color: $this->navColor;\">$nextTitle</a></div>";
@@ -1287,7 +1287,11 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo "<div $style>".$this->title."</div>\n";
 			}
 			$i=0;
-			echo '<table width="100%" border="'.$this->border.'">';
+			$width="100%";
+			if(!empty($this->width)) {
+				$width = $this->width;
+			}
+			echo '<table width="'.$width.'" border="'.$this->border.'">';
 			while(list($k,$cell)=each($this->cells)) {
 				if(!($i % $this->columns)) {
 					echo "<tr>\n";
@@ -1306,7 +1310,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		function plainhtml() {
 			if(isset($this->title)) echo "<h1>$this->title</h1>\n";
 			echo '<table width="100%" border=1>';
-			$i = 0;
+			$i = 1;
 			while(list($k,$cell)=each($this->cells)) {
 				if(!($i % $this->columns)) {
 					echo "<tr>\n";
@@ -1314,7 +1318,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				echo " <td>";
 				$cell->display();
 				echo " </td>";
-				if(!($i % $this->columns)==0) {
+				if(($i % $this->columns)==0) {
 					echo "</tr>\n";
 				}
 				$i++;
@@ -1327,7 +1331,7 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_cx, $pdf_cy, $pdf_font;
+			global $pdf, $pdf_x, $pdf_cx, $pdf_cy, $pdf_font;
 
 			if(isset($this->title)) {
 				$pdf_cy = pdf_get_value($pdf, "texty");
@@ -1336,7 +1340,30 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				pdf_continue_text($pdf, $this->title);
 				pdf_continue_text($pdf, "");
 			}
-			while(list($k,$cell)=each($this->cells)) $cell->display();
+			$width="100%";
+			if(!empty($this->width)) {
+				$width = $this->width;
+			}
+			$width = (int)$width;
+			$max_w = $pdf_x - 2*$pdf_cx;
+			$max_w = $max_w * $width/100;
+			$cell_offset = $max_w/$this->columns;
+
+			$i = 1;
+			while(list($k,$cell)=each($this->cells)) {
+				if(!($i % $this->columns)) {
+					$cell->end_row = false;
+				} 
+				if(($i % $this->columns)==0) {
+					$cell->end_row = true;
+					$cell->offset = $cell_offset;
+				}
+
+				$cell->pdf();
+
+				$i++;
+
+			}
 			pdf_continue_text($pdf, "");
 		}
 	}
@@ -1349,6 +1376,8 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			$this->text = '';
 			$this->slide = '';
 			$this->id = '';
+			$this->end_row = false;
+			$this->offset = 0;
 		}
 
 		function display() {
@@ -1376,6 +1405,9 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 			if(!empty($this->padding)) $style .= "padding: ".$this->padding.';';
 			else if(!empty($objs[$coid]->padding)) $style .= "padding: ".$objs[$coid]->padding.';';
 
+			if(!empty($this->bold) && $this->bold) $style .= 'font-weight: bold;';
+			else if(!empty($objs[$coid]->bold) && $objs[$coid]->bold) $style .= 'font-weight: bold;';
+
 			echo "<span style=\"$style\">".$this->text."</span>\n";
 		}
 
@@ -1388,13 +1420,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 		}
 
 		function pdf() {
-			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font;
+			global $pdf, $pdf_x, $pdf_y, $pdf_cx, $pdf_cy, $pdf_font, $pdf_font_bold, $coid;
+			static $row_text = array();
 
+			$row_text[] = $this->text;
+			if(!$this->end_row) return;
+			
 			$pdf_cy = pdf_get_value($pdf, "texty");
 		
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
 			$height=10;	
-			while(pdf_show_boxed($pdf, $this->text, 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
+			while(pdf_show_boxed($pdf, $row_text[0], 60, $pdf_cy, $pdf_x-120, $height, 'left', 'blind')) $height+=10;
 			if( ($pdf_cy + $height) > $pdf_y-40 ) {
 				my_pdf_page_number($pdf);
 				pdf_end_page($pdf);
@@ -1403,10 +1439,17 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				$pdf_cy = 60;
 			}
 			pdf_set_font($pdf, $pdf_font, -12, 'winansi');
-			pdf_show_boxed($pdf, $this->text, 60, $pdf_cy-$height, $pdf_x-120, $height, 'left');
+			if(!empty($this->bold) && $this->bold) pdf_set_font($pdf, $pdf_font_bold, -12, 'winansi');
+			else if(!empty($objs[$coid]->bold) && $objs[$coid]->bold) pdf_set_font($pdf, $pdf_font_bold, -12, 'winansi');
+			$off = 0;
+			foreach($row_text as $t) {
+				pdf_show_boxed($pdf, $t, 60+$off, $pdf_cy-$height, 60+$off+$this->offset, $height, 'left');
+				$off += $this->offset;
+			}
 			$pdf_cy+=$height;
 			pdf_set_text_pos($pdf, $pdf_cx, $pdf_cy);
 			pdf_continue_text($pdf,"");	
+			$row_text = array();
 		}
 	}
 	// }}}
