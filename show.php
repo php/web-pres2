@@ -25,6 +25,7 @@
 
 	$presFile = trim($_SERVER['PATH_INFO']);			
 	$presFile = trim($presFile,'/');			
+	$lastPres = null;
 	if(isset($currentPres)) {
 		$lastPres = $currentPres;
 	}
