@@ -135,6 +135,27 @@ Simply click the topic you wish to find presentations on to view all available p
 </select>
 </p>
 </form>
+<?php
+switch($display_mode) {
+	case 'html':
+		if($jsKeyboard) {
+			echo "<p>Keyboard controls are available: <br />\n".
+				 " &lt;cursor-left&gt; previous slide<br />\n".
+				 " &lt;cursor-right&gt; next slide<br />\n".
+				 " also use &lt;cursor-right&gt; to step through animated slides.</p>\n";
+		} else {
+			echo "<p>Keyboard controls disabled</p>\n";
+			break;
+		}
+		break;
+
+	case 'flash':
+		echo "<p>Keyboard controls available: <br />\n".
+			 " &lt;Space&gt; or &lt;Enter&gt; next slide<br />\n".
+			 " &lt;Backspace&gt; previous slide<br />\n";	
+		break;
+}
+?>
 <p>The available presentations are...</p>
 <table align="center" class="index">
 <tr><th>Title</th><th>Date</th><th>Location</th><th>Speaker</th><th>Slides</th></tr>
