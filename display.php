@@ -358,7 +358,7 @@ ENDD;
 
         if(isset($example->title)) echo '<div style="font-size: '.(4*(float)$example->fontsize/3).'em;">'.markup_text($example->title)."</div>\n";
         if(!$example->hide) {
-            if (!$this->pres->template == 'css') {
+            if ($this->pres->template != 'css') {
                 $_html_sz = (float) $example->fontsize;
                 if(!$_html_sz) $_html_sz = 0.1;
                 $_html_offset = (1/$_html_sz).'em';
@@ -391,7 +391,7 @@ ENDD;
 
             $example->highlight($this->slideDir);
 
-            if (!$pres->template == 'css') {
+            if ($pres->template != 'css') {
                 echo "</div>";
             }
             echo "</div>\n";
