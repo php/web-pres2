@@ -1,18 +1,10 @@
 <?php
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: sw=4 ts=4 fdm=marker
- * vim<600: sw=4 ts=4
- */
 	if(!empty($_SERVER['PATH_INFO'])) {
 	  $topic = trim(substr(urldecode($_SERVER['PATH_INFO']),1));
 	}
 
-	require_once 'config.php';
-	require_once 'XML_Presentation.php';
+	require 'config.php';
+	require 'XML_Presentation.php';
 
 	session_start();
 	
@@ -125,21 +117,18 @@ function change_mode() {
 <div class="shadow" style="margin: 1em 4em 0.8em 3em;">
 <div class="output" style="font-size: 1.8em; margin: -0.5em 0 0 -0.5em;">
 <?php if(!isset($topic)){ ?>
-<p> Welcome to the PHP Presentation System. Here we list all of the available presentations stored
+<p> Welcome to the PHP Presentation System. Here we list all of the available presentation categories stored
 within this system.</p>
-<p>
-Simply click the topic you wish to find presentations on to view all available presentations.
-</p>
 <?php 
 	ksort($topics);
 	print('<table width="100%"><tr>'."\n");
 	$col = 0;
 	if (!isset($topic_cols) || $topic_cols == 0) {
-		$topic_cols = 1;
+		$topic_cols = 2;
 	}
-	$percent = 100 / $topic_cols;
+	$percent = (int)(100 / $topic_cols);
 	foreach($topics as $i => $topic) {
-		printf('<td width="%.1f%%" class="output" style="font-size: 1.8em; padding-bottom: 15px"><a href="' . $baseDir . 'index.php/%s">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", urlencode($i), $percent);
+		printf('<td width="%.1f%%" class="output" style="font-size: 1.8em; padding-bottom: 15px"><a href="' . $baseDir . 'index.php/%s">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", $percent, urlencode($i));
 		if (++$col >= $topic_cols) { 
 			$col=0; 
 			print("</tr>\n<tr>"); 
@@ -223,3 +212,12 @@ echo '</table>';
 </div>
 </body>
 </html>
+<?
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: sw=4 ts=4 fdm=marker
+ * vim<600: sw=4 ts=4
+ */
