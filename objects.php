@@ -1317,6 +1317,15 @@ type=\"application/x-shockwave-flash\" width=$this->iwidth height=$this->iheight
 				case 'darrow':
 					$bullet = '&rArr;';
 					break;
+				case 'dot':
+					$bullet = '&sdot;';
+					break;
+				case 'rgillemet':
+					$bullet = '&raquo;';
+					break;
+				case 'csymbol':
+					$bullet = '&curren;';
+					break;
 				case 'oplus':
 					$bullet = '&oplus;';
 					break;
