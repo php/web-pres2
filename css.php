@@ -43,7 +43,7 @@ div.emcode {
 }
 div.output {
 	font-family: monospace;
-	background: #cccc55;
+	background: #dddd66;
 	border: thin solid #000000;
 	padding: 0.5em;
 }
