@@ -20,15 +20,18 @@
 	$titles = null;
 	
 	$topics = array();
+	$ps = array();
 
-	$dir = opendir($presentationDir);
-	while($file = readdir($dir)) {
-		if($file[0] != '.' && substr($file,-4) == '.xml') {
-			$i = substr($file, 0, strpos($file, '.'));
-			$ps[$i] = "$presentationDir/$file";
+	if ($dir = @opendir($presentationDir)) {
+		while($file = @readdir($dir)) {
+			if($file[0] != '.' && substr($file,-4) == '.xml') {
+				$i = substr($file, 0, strpos($file, '.'));
+				$ps[$i] = "$presentationDir/$file";
+			}
 		}
+
+		@closedir($dir);
 	}
-	closedir($dir);
 
 	$i = 0;
 		
