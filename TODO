@@ -28,7 +28,9 @@ Things to work on
 
 - a pop-up list of slide titles would be good so at any time during a
   presentation you could get the list and navigate to any slide by 
-  clicking somewhere on the list.
+  clicking somewhere on the list.  Perhaps some Javascript trickery is
+  required for the HTML navbar.  For the flash one, just a new key event
+  will do the trick.
 
 - HTML navbar is working with mouse-clicks only right now.  I think we can
   come up with some fancy Javascript to catch key events correctly.  The idea
@@ -37,3 +39,12 @@ Things to work on
   send the keypress back to the browser.  On IE it is event.clientX and
   event.clientY instead, I think.  Not entirely sure this is possible, but
   it should be a fun little project.
+
+- Perhaps a pop-up widget to change $baseFontSize on the fly?  The base font
+  size that works on one machine may not work at all on another.  So a quick
+  way to change it would be cool.  The nice thing about the system is that
+  everything is relative to the baseFontSize, so there is only one value to
+  change.
+
+- Perhaps a set of suggested fonts for various browsers would be a good idea 
+  as well.
