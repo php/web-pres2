@@ -3,6 +3,8 @@ to combine XML, PHP, HTML, CSS, JavaScript, Flash and
 ActionScript in one application?  Well, here it is.  The new
 and improved PHP presentation system.
 
+Used PHP extensions: pcre, xml, optional: pdf, ming
+
 Brief walkthrough of how this all hangs together:
 
 config.php            - User configurable paths and filenames
