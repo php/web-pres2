@@ -205,8 +205,25 @@ type="application/x-shockwave-flash" width="<?=$dx?>" height="<?=$dy?>">
 				((float)$this->marginleft).'em;'.
 				'">';
 			echo '<div class="emcode" style="font-size: '.$sz."em; margin: -$offset 0 0 -$offset;\">\n";
-			if(!empty($this->filename)) highlight_file($this->filename);
-			else highlight_string($this->text);
+			if(!empty($this->filename)) {
+				switch($this->type) {
+					case 'php':
+						highlight_file($this->filename);
+						break;
+					default:
+						readfile($this->filename);
+						break;
+				}
+			} else {
+				switch($this->type) {
+					case 'php':
+						highlight_string($this->text);
+						break;
+					default:
+						echo $this->text;
+						break;
+				}
+			}
 			echo "</div></div>\n";
 			if(!empty($this->result) && $this->result!='no') {
 				echo "<h2>Output</h2>\n";
