@@ -25,7 +25,8 @@
 
 	$presFile = trim($_SERVER['PATH_INFO']);			
 	$presFile = trim($presFile,'/');			
-	if(isset($currentPres)) {
+	$lastPres = -1;
+    if(isset($currentPres)) {
 		$lastPres = $currentPres;
 	}
 	@list($currentPres,$slideNum) = explode('/',$presFile);
