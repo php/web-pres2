@@ -89,9 +89,7 @@
 			$cache_ok = 1;
 			foreach($objs as $obj) {
 				if(is_a($obj, '_example')) {
-					if(strtolower($obj->type) == 'php') {
-						$cache_ok = 0;
-					}
+					$cache_ok = 0;
 				}
 			}
 			reset($objs); // shouldn't be necessary, but is
