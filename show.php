@@ -73,8 +73,11 @@ body {
 }
 div.sticky {
 	margin: 0;
+<?if(strstr($HTTP_USER_AGENT,'MSIE')):?>
 	position: absolute;
+<?else:?>
 	position: fixed;
+<?endif?>
 	top: 0em;
 	left: 0em;
 	right: auto;
