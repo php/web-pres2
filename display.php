@@ -1,4 +1,27 @@
 <?php
+
+if(!function_exists('pdf_set_font')) {
+    function pdf_set_font($pdf, $font_name, $fs, $encoding) {
+        $font = pdf_findfont($pdf, $font_name, $encoding, 0);
+        if ($font) {
+            return pdf_setfont($pdf, $font, $fs);
+        }
+        return false;
+    }
+    function pdf_open_gif($pdf, $fn) {
+	return pdf_open_image_file($pdf, "gif", $fn, null, null);
+    }
+    function pdf_open_jpeg($pdf, $fn) {
+	return pdf_open_image_file($pdf, "jpeg", $fn, null, null);
+    }
+    function pdf_open_png($pdf, $fn) {
+	return pdf_open_image_file($pdf, "png", $fn, null, null);
+    }
+    function pdf_open_tiff($pdf, $fn) {
+	return pdf_open_image_file($pdf, "tiff", $fn, null, null);
+    }
+}
+
 class display {
 
     // dump in config values
@@ -1125,10 +1148,10 @@ class pdf extends display {
     // {{{ my_pdf_page_number($pdf)
     function my_pdf_page_number(&$pdf, $pdf_x, $pdf_y) {    
         if(isset($this->page_index[$this->page_number]) && $this->page_index[$this->page_number] == 'titlepage') return;
-        pdf_set_font($pdf, $this->pdf_font, -10, 'winansi');
-        $dx = pdf_stringwidth($pdf,"- $this->page_number -");
+        $fnt = pdf_set_font($pdf, $this->pdf_font, -10, 'winansi');
+        $dx = pdf_stringwidth($pdf,"- $this->page_number -",$fnt,-10);
         $x = (int)($pdf_x/2 - $dx/2);
-        $pdf_cy = pdf_get_value($pdf, "texty");
+        $pdf_cy = pdf_get_value($pdf, "texty", null);
         pdf_show_xy($pdf, "- $this->page_number -", $x, $pdf_y-20);
     }
     // }}}
@@ -1150,8 +1173,8 @@ class pdf extends display {
     */
     function my_pdf_paginated_code(&$pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
         $data = strip_markups($data);    
-        pdf_set_font($pdf, $font, $fs, 'winansi');    
-        $cw = pdf_stringwidth($pdf,'m'); // Width of 1 char - assuming monospace
+        $fnt=pdf_set_font($pdf, $font, $fs, 'winansi');    
+        $cw = pdf_stringwidth($pdf,'m',$fnt,$fs); // Width of 1 char - assuming monospace
         $linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
     
         $pos = $i = 0;
@@ -1184,7 +1207,7 @@ class pdf extends display {
                 else pdf_continue_text($pdf, $l);
             }
             $pos += $nl+1;
-            if(pdf_get_value($pdf, "texty") >= ($y-$bm)) {
+            if(pdf_get_value($pdf, "texty", null) >= ($y-$bm)) {
                 $this->my_pdf_page_number($pdf, $x, $y);
                 $this->my_new_pdf_end_page($pdf);
                 $this->my_new_pdf_page($pdf, $x, $y, true);
@@ -1207,7 +1230,7 @@ class pdf extends display {
         $this->page_number = 0;
         $this->pdf = pdf_new();
         if(!empty($pdfResourceFile)) pdf_set_parameter($this->pdf, "resourcefile", $pdfResourceFile);
-        pdf_open_file($this->pdf);
+        pdf_open_file($this->pdf,null);
         pdf_set_info($this->pdf, "Author",isset($presentation->speaker)?$presentation->speaker:"Anonymous");
         pdf_set_info($this->pdf, "Title",isset($presentation->title)?$presentation->title:"No Title");
         pdf_set_info($this->pdf, "Creator", "See Author");
@@ -1230,22 +1253,22 @@ class pdf extends display {
         }
 
         $this->my_new_pdf_page($this->pdf, $this->pdf_x, $this->pdf_y, true);
-        pdf_set_font($this->pdf, $this->pdf_font , -20, 'winansi');
-        $dx = pdf_stringwidth($this->pdf, "Index");
+        $fnt = pdf_set_font($this->pdf, $this->pdf_font , -20, 'winansi');
+        $dx = pdf_stringwidth($this->pdf, "Index",$fnt,-20);
         $x = (int)($this->pdf_x/2 - $dx/2);
         pdf_set_parameter($this->pdf, "underline", 'true');
         pdf_show_xy($this->pdf,"Index",$x,60);
         pdf_set_parameter($this->pdf, "underline", 'false');
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty")+30;
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null)+30;
         $old_cy = $this->pdf_cy;
-        pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+        $fnt = pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
 
         foreach($this->page_index as $pn=>$ti) {
             if($ti=='titlepage') continue;
             $ti.='    ';
-            while(pdf_stringwidth($this->pdf,$ti)<($this->pdf_x-$this->pdf_cx*2.5-140)) $ti.='.';
+            while(pdf_stringwidth($this->pdf,$ti,$fnt,-12)<($this->pdf_x-$this->pdf_cx*2.5-140)) $ti.='.';
             pdf_show_xy($this->pdf, $ti, $this->pdf_cx*2.5, $this->pdf_cy);
-            $dx = pdf_stringwidth($this->pdf, $pn);
+            $dx = pdf_stringwidth($this->pdf, $pn,$fnt,-12);
             pdf_show_xy($this->pdf, $pn, $this->pdf_x-2.5*$this->pdf_cx-$dx, $this->pdf_cy);
             $this->pdf_cy+=15;
             if($this->pdf_cy > ($this->pdf_y-50)) {
@@ -1281,73 +1304,73 @@ class pdf extends display {
                                     !empty($p->url) + !empty($p->subtitle) )/2;
             if(!empty($p->title)) {
                 pdf_set_font($this->pdf, $this->pdf_font, -36, 'winansi');
-                pdf_show_boxed($this->pdf, $p->title, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->title, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             }
 
             if(!empty($p->subtitle)) {
                 $loc += 50;
                 pdf_set_font($this->pdf, $this->pdf_font , -22, 'winansi');
-                pdf_show_boxed($this->pdf, $p->subtitle, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->subtitle, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             }
             
             if(!empty($p->event)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->event, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->event, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             }
 
             if(!empty($p->date) && !empty($p->location)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->date.'. '.$p->location, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->date.'. '.$p->location, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             } else if(!empty($p->date)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->date, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->date, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             } else if(!empty($p->location)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->location, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->location, 10, $loc, $this->pdf_x-20, 40, 'center',null);
 
             }
             if(!empty($p->speaker) && !empty($p->email)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->speaker.' <'.$p->email.'>', 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->speaker.' <'.$p->email.'>', 10, $loc, $this->pdf_x-20, 40, 'center',null);
             } else if(!empty($p->speaker)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font, -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->speaker, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->speaker, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             } else if(!empty($p->email)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, ' <'.$p->email.'>', 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, ' <'.$p->email.'>', 10, $loc, $this->pdf_x-20, 40, 'center',null);
             }
             if(!empty($p->url)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
-                pdf_show_boxed($this->pdf, $p->url, 10, $loc, $this->pdf_x-20, 40, 'center');
+                pdf_show_boxed($this->pdf, $p->url, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             }
             if(!empty($p->copyright)) {
                 pdf_moveto($this->pdf, 60, $this->pdf_y-60);
                 pdf_lineto($this->pdf, $this->pdf_x-60, $this->pdf_y-60);
                 pdf_stroke($this->pdf);
-                pdf_set_font($this->pdf, $this->pdf_font , -10, 'winansi');
-                $x = (int)($this->pdf_x/2 - pdf_stringwidth($this->pdf, $p->copyright)/2);
+                $fnt = pdf_set_font($this->pdf, $this->pdf_font , -10, 'winansi');
+                $x = (int)($this->pdf_x/2 - pdf_stringwidth($this->pdf, $p->copyright, $fnt, -10)/2);
                 $str = str_replace('(c)',chr(0xa9), $p->copyright);
                 $str = str_replace('(R)',chr(0xae), $str);
                 pdf_show_xy($this->pdf, $str, $x, $this->pdf_y-45);
             }
             $this->page_index[$this->page_number] = 'titlepage';
         } else { // No header on the title page
-            pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
-            pdf_show_boxed($this->pdf, "Slide $this->slideNum/$this->maxSlideNum", $this->pdf_cx, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'left');
+            $fnt = pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+            pdf_show_boxed($this->pdf, "Slide $this->slideNum/$this->maxSlideNum", $this->pdf_cx, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'left',null);
             if(isset($p->date)) $this->d = $this->date;
             else $this->d = strftime("%B %e %Y");
-            $w = pdf_stringwidth($this->pdf, $this->d);
-            pdf_show_boxed($this->pdf, $this->d, 40, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'right');
+            $w = pdf_stringwidth($this->pdf, $this->d, $fnt, -12);
+            pdf_show_boxed($this->pdf, $this->d, 40, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'right',null);
             pdf_set_font($this->pdf, $this->pdf_font , -24, 'winansi');
-            pdf_show_boxed($this->pdf, strip_markups($slide->title), 40, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'center');
+            pdf_show_boxed($this->pdf, strip_markups($slide->title), 40, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'center',null);
 
             $this->page_index[$this->page_number] = strip_markups($slide->title);
         }
@@ -1366,11 +1389,11 @@ class pdf extends display {
         if($blurb->type=='speaker' && !$_SESSION['show_speaker_notes']) return;
         if(!empty($blurb->title)) {
             if($blurb->type=='speaker') {
-                pdf_setcolor($this->pdf,'fill','rgb',1,0,0);
+                pdf_setcolor($this->pdf,'fill','rgb',1,0,0,null);
             }
-            pdf_set_font($this->pdf, $this->pdf_font , -16, 'winansi');
-            $dx = pdf_stringwidth($this->pdf,$blurb->title);
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $fnt = pdf_set_font($this->pdf, $this->pdf_font , -16, 'winansi');
+            $dx = pdf_stringwidth($this->pdf,$blurb->title, $fnt, -16);
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             switch($blurb->talign) {
                 case 'center':
                     $x = (int)($this->pdf_x/2 - $dx/2);
@@ -1385,11 +1408,11 @@ class pdf extends display {
             }
             pdf_set_text_pos($this->pdf,$x,$this->pdf_cy);
             pdf_continue_text($this->pdf, strip_markups($blurb->title));
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             pdf_set_text_pos($this->pdf,$x,$this->pdf_cy+5);
-            pdf_setcolor($this->pdf,'fill','rgb',0,0,0);
+            pdf_setcolor($this->pdf,'fill','rgb',0,0,0,null);
         }
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
 
         switch(strtolower($blurb->align)) {
             case 'right':
@@ -1407,7 +1430,7 @@ class pdf extends display {
         pdf_translate($this->pdf,0,$this->pdf_y);
         pdf_scale($this->pdf,1, -1);
         pdf_set_font($this->pdf, $this->pdf_font , 12, 'winansi');
-        $leading = pdf_get_value($this->pdf, "leading");
+        $leading = pdf_get_value($this->pdf, "leading", null);
         $height = $inc = 12+$leading;    
         $txt = strip_markups($blurb->text);
 
@@ -1425,24 +1448,24 @@ class pdf extends display {
 
         pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
         if($blurb->type=='speaker') {
-            pdf_setcolor($this->pdf,'fill','rgb',1,0,0);
+            pdf_setcolor($this->pdf,'fill','rgb',1,0,0,null);
         }
-        pdf_show_boxed($this->pdf, str_replace("\n",' ',$txt), $this->pdf_cx+20, $this->pdf_cy-$height, $this->pdf_x-2*($this->pdf_cx+20), $height, $align);
+        pdf_show_boxed($this->pdf, str_replace("\n",' ',$txt), $this->pdf_cx+20, $this->pdf_cy-$height, $this->pdf_x-2*($this->pdf_cx+20), $height, $align,null);
         pdf_continue_text($this->pdf, "\n");
-        pdf_setcolor($this->pdf,'fill','rgb',0,0,0);
+        pdf_setcolor($this->pdf,'fill','rgb',0,0,0,null);
     }
 
     function _image(&$image) {
         if(isset($image->title)) {
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             pdf_set_text_pos($this->pdf,$this->pdf_cx,$this->pdf_cy);
             pdf_set_font($this->pdf, $this->pdf_font , -16, 'winansi');
             pdf_continue_text($this->pdf, $image->title);
             pdf_continue_text($this->pdf, "\n");
         }
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty")-5;
-        pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
-        $cw = pdf_stringwidth($this->pdf,'m');  // em unit width
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null)-5;
+        $fnt = pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+        $cw = pdf_stringwidth($this->pdf,'m', $fnt, -12);  // em unit width
         if ($image->width) {
             $dx = $image->height;
             $dy = $image->width;
@@ -1469,7 +1492,7 @@ class pdf extends display {
                 break;
         }
         if(isset($im)) {
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             if(($this->pdf_cy + $dy) > ($this->pdf_y-60)) {
                 $this->my_pdf_page_number($this->pdf, $this->pdf_x, $this->pdf_y);
                 $this->my_new_pdf_end_page($this->pdf);
@@ -1519,13 +1542,13 @@ class pdf extends display {
         }
 
         if(!empty($example->title)) {
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             pdf_set_text_pos($this->pdf,$this->pdf_cx,$this->pdf_cy);  // Force to left-margin
             pdf_set_font($this->pdf, $this->pdf_font , -16, 'winansi');
             pdf_continue_text($this->pdf, strip_markups($example->title));
             pdf_continue_text($this->pdf, "");
         }
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
 
         if(!$example->hide) {
             if(!empty($example->filename)) {
@@ -1557,16 +1580,16 @@ class pdf extends display {
             }
             
         }            
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
         if($example->result && $example->type != 'iframe' && (empty($example->condition) || isset(${$example->condition})) && (empty($example->required_extension) || extension_loaded($example->required_extension))) {
             if(!$example->hide) {
-                $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+                $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
                 pdf_set_text_pos($this->pdf,$this->pdf_cx+20,$this->pdf_cy);  // Force to left-margin
                 pdf_set_font($this->pdf, $this->pdf_font , -14, 'winansi');
                 pdf_continue_text($this->pdf, "Output:");
                 pdf_continue_text($this->pdf, "");
             }
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
 
             if(!empty($example->global) && !isset($GLOBALS[$example->global])) {
                 global ${$example->global};
@@ -1599,7 +1622,7 @@ class pdf extends display {
                                 break;
                         }
                         if(isset($im)) {
-                            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+                            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
                             if(($this->pdf_cy + $dy) > ($this->pdf_y-60)) {
                                 $this->my_pdf_page_number($this->pdf, $this->pdf_x, $this->pdf_y);
                                 $this->my_new_pdf_end_page($this->pdf);
@@ -1664,7 +1687,7 @@ class pdf extends display {
     function _list(&$list) {
         if (!isset($list->bullets)) return;
         if(isset($list->title)) {
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             pdf_set_text_pos($this->pdf,$this->pdf_cx,$this->pdf_cy);
             pdf_set_font($this->pdf, $this->pdf_font, -16, 'winansi');
             pdf_continue_text($this->pdf, strip_markups($list->title));
@@ -1683,7 +1706,7 @@ class pdf extends display {
 
     function _bullet(&$bullet) {
         $type = '';
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
     
         pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
         $height=10;    
@@ -1693,7 +1716,7 @@ class pdf extends display {
         pdf_translate($this->pdf,0,$this->pdf_y);
         pdf_scale($this->pdf,1, -1);
         pdf_set_font($this->pdf, $this->pdf_font , 12, 'winansi');
-        $leading = pdf_get_value($this->pdf, "leading");
+        $leading = pdf_get_value($this->pdf, "leading", null);
         $inc = $leading;    
         while(pdf_show_boxed($this->pdf, $txt, $this->pdf_cx+30, $this->pdf_y-$this->pdf_cy, $this->pdf_x-2*($this->pdf_cx+20), $height, 'left', 'blind')) $height+=$inc;
 
@@ -1720,7 +1743,7 @@ class pdf extends display {
 
         pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
         if($bullet->type=='speaker') {
-            pdf_setcolor($this->pdf,'fill','rgb',1,0,0);
+            pdf_setcolor($this->pdf,'fill','rgb',1,0,0,null);
         }
 
         if(!empty($bullet->start)) {
@@ -1768,16 +1791,16 @@ class pdf extends display {
         }
 
         pdf_show_xy($this->pdf, $symbol, $this->pdf_cx+20 + $bullet->level*10, $this->pdf_cy+$leading-1);
-        pdf_show_boxed($this->pdf, $txt, $this->pdf_cx+40 + $bullet->level*10, $this->pdf_cy-$height, $this->pdf_x-2*($this->pdf_cx+20), $height, 'left');
+        pdf_show_boxed($this->pdf, $txt, $this->pdf_cx+40 + $bullet->level*10, $this->pdf_cy-$height, $this->pdf_x-2*($this->pdf_cx+20), $height, 'left',null);
         pdf_continue_text($this->pdf,"\n");
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
         pdf_set_text_pos($this->pdf, $this->pdf_cx, $this->pdf_cy-$leading/2);
-        pdf_setcolor($this->pdf,'fill','rgb',0,0,0);
+        pdf_setcolor($this->pdf,'fill','rgb',0,0,0,null);
     }
 
     function _table(&$table) {
         if(isset($table->title)) {
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             pdf_set_text_pos($this->pdf,$this->pdf_cx,$this->pdf_cy);
             pdf_set_font($this->pdf, $this->pdf_font, -16, 'winansi');
             pdf_continue_text($this->pdf, strip_markups($table->title));
@@ -1816,7 +1839,7 @@ class pdf extends display {
         $row_text[] = $cell->text;
         if(!$cell->end_row) return;
         
-        $this->pdf_cy = pdf_get_value($this->pdf, "texty");
+        $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
     
         pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
         $height=10;    
@@ -1834,7 +1857,7 @@ class pdf extends display {
         else if(!empty($obj->bold) && $obj->bold) pdf_set_font($this->pdf, $this->pdf_font_bold, -12, 'winansi');
         $off = 0;
         foreach($row_text as $t) {
-            pdf_show_boxed($this->pdf, strip_markups($t), 60+$off, $this->pdf_cy-$height, 60+$off+$cell->offset, $height, 'left');
+            pdf_show_boxed($this->pdf, strip_markups($t), 60+$off, $this->pdf_cy-$height, 60+$off+$cell->offset, $height, 'left',null);
             $off += $cell->offset;
         }
         $this->pdf_cy+=$height;
@@ -1849,12 +1872,12 @@ class pdf extends display {
         else $leader='';
 
         if(!empty($link->text)) {
-            $this->pdf_cy = pdf_get_value($this->pdf, "texty")+10;
-            pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
-            if(strlen($leader)) $lx = pdf_stringwidth($this->pdf, $leader);
+            $this->pdf_cy = pdf_get_value($this->pdf, "texty", null)+10;
+            $fnt = pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
+            if(strlen($leader)) $lx = pdf_stringwidth($this->pdf, $leader, $fnt, -12);
             else $lx=0;
-            $dx = pdf_stringwidth($this->pdf, $link->text);
-            $cw = pdf_stringwidth($this->pdf,'m');  // em unit width
+            $dx = pdf_stringwidth($this->pdf, $link->text, $fnt, -12);
+            $cw = pdf_stringwidth($this->pdf,'m', $fnt, -12);  // em unit width
             switch($link->align) {
                 case 'center':
                     $x = (int)($this->pdf_x/2-$dx/2-$lx/2);
