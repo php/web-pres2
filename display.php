@@ -461,7 +461,10 @@ ENDD;
                         echo '<img src="'.$this->slideDir.$example->filename."\">\n";
                         break;
                     case 'iframe':
-                        echo "<iframe width=\"$example->iwidth\" height=\"$example->iheight\" src=\"$this->slideDir$example->filename\"><a href=\"$this->slideDir$example->filename\" class=\"resultlink\">$example->linktext</a></iframe>\n";
+			if(substr($example->filename,0,5)=='http:')
+                        	echo "<iframe width=\"$example->iwidth\" height=\"$example->iheight\" src=\"$example->filename\"><a href=\"$example->filename\" class=\"resultlink\">$example->linktext</a></iframe>\n";
+			else
+                        	echo "<iframe width=\"$example->iwidth\" height=\"$example->iheight\" src=\"$this->slideDir$example->filename\"><a href=\"$this->slideDir$example->filename\" class=\"resultlink\">$example->linktext</a></iframe>\n";
                         break;
                     case 'link':
                         echo "<a href=\"$this->slideDir$example->filename\" class=\"resultlink\">$example->linktext</a><br />\n";
