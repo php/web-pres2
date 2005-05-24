@@ -1,0 +1,81 @@
+# Spanish translation of PRES2
+# Copyright (C) PHP
+# Jesus M. Castagnetto <jmcastagnetto@php.net>, 2005.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2005-05-07 23:21-0500\n"
+"PO-Revision-Date: 2005-05-07 23:26-0500\n"
+"Last-Translator: Jesus M. Castagnetto <jmcastagnetto@php.net>\n"
+"Language-Team:\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "SLIDES_NOT_FOUND"
+msgstr"No pude encontrar diapositivas (archivos xml) en"
+
+msgid "MODIFY_CONFIG"
+msgstr"Por favor modifique"
+
+msgid "PRES2_TITLE"
+msgstr"Sistema de Presentaciones de PHP"
+
+msgid "WELCOME_MSG"
+msgstr"Bienvenido al Sistema de Presentaciones de PHP. Aqui listamos todas las categorias de presentaciones disponibles en nuestro sistema."
+
+msgid "SELECT_MODE"
+msgstr"Por favor seleccione un modo de exhibici&oacute;n:"
+
+msgid "OPT_FANCYHTML"
+msgstr"HTML Din&aacute;mico (Mejor con Mozilla)"
+
+msgid "OPT_PLAINHTML"
+msgstr"HTML Simple"
+
+msgid "OPT_FLASH"
+msgstr"Flash 5 (barra de navegaci&oacute;n solamente)"
+
+msgid "OPT_PDFLETTER"
+msgstr"PDF (Tama&ntilde;o carta, US)"
+
+msgid "OPT_PDFLEGAL"
+msgstr"PDF (Tama&ntilde;o oficio, US)"
+
+msgid "OPT_PDFA4"
+msgstr"PDF (Tama&ntilde;o A4)"
+
+msgid "SHOW_NOTES"
+msgstr"Mostrar las Notas de Presentador:"
+
+msgid "HTML_KEYBOARD_CONTROLS"
+msgstr"Controles de teclado disponibles:\n&lt;flecha-izquierda&gt; diapositiva previa\n&lt;flecha-derecha&gt; diapositiva siguiente\ntambi&eacute;n use &lt;flecha-derecha&gt; para activar diapositivas animadas."
+
+msgid "HTML_NO_KEYBOARD_CONTROLS"
+msgstr"Controles de teclado no disponibles."
+
+msgid "FLASH_KEYBOARD_CONTROLS"
+msgstr"Controles de teclado disponibles:\n&lt;Barra de espacio&gt; or &lt;Tecla de retorno&gt; diapositiva siguiente\n&lt;Tecla de retroceso&gt; diapositiva previa"
+
+msgid "NO_PDF_EXTENSION"
+msgstr"La extensi&ooacute;n de PDF no esta cargada, de manera que este formato no esta disponible aqui."
+
+msgid "AVAILABLE_PRESENTATIONS"
+msgstr"Las presentaciones disponibles son... (la m&aacute;s reciente primera)"
+
+msgid "PRES_TITLE"
+msgstr"T&iacute;tulo"
+
+msgid "PRES_DATE"
+msgstr"Fecha"
+
+msgid "PRES_LOCATION"
+msgstr"Locaci&oacute;n"
+
+msgid "PRES_SPEAKER"
+msgstr"Presentador"
+
+msgid "PRES_SLIDES"
+msgstr"Diapositivas"

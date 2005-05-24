@@ -5,6 +5,7 @@
 
 	require 'config.php';
 	require 'XML_Presentation.php';
+    require_once 'messages.php';
 
 	session_start();
 	
@@ -23,8 +24,8 @@
 	}
 	
 	if (!$ps) {
-		echo "Could not find any slides (xml files) in \$presentationDir $presentationDir<BR>";
-		echo "Please modify config.php<BR>";
+		echo message('SLIDES_NOT_FOUND')." \$presentationDir $presentationDir<BR>";
+		echo message('MODIFY_CONFIG')." config.php<BR>";
 		exit;
 	}
 	
@@ -109,7 +110,7 @@ function change_mode() {
 		echo "<img src=\"$logo2\" align=\"right\" style=\"float: right;\">";
 	}
  
-	echo "<div style=\"font-size: 3em; margin: 0 2.5em 0 0;\">PHP Presentation System</div>";
+	echo "<div style=\"font-size: 3em; margin: 0 2.5em 0 0;\">".message('PRES2_TITLE')."</div>";
 
 	echo '</div></div>';
 ?>
@@ -117,8 +118,7 @@ function change_mode() {
 <div class="shadow" style="margin: 1em 4em 0.8em 3em;">
 <div class="output" style="font-size: 1.8em; margin: -0.5em 0 0 -0.5em;">
 <?php if(!isset($topic)){ ?>
-<p> Welcome to the PHP Presentation System. Here we list all of the available presentation categories stored
-within this system.</p>
+<p><?php echo message('WELCOME_MSG'); ?></p>
 <?php 
 	ksort($topics);
 	print('<table width="100%"><tr>'."\n");
@@ -144,51 +144,50 @@ within this system.</p>
 	$_SESSION['selected_display_mode'] = $display_mode;
 ?>
 <form name="modes_form" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
-<p>Please select a display mode:
+<p><?php echo message('SELECT_MODE'); ?>
 <select name="modes" onChange="change_mode()">
-<option value="html" <?php echo ($display_mode=='html')?'SELECTED':''?>>Fancy HTML (Best with Mozilla)</option>
-<option value="plainhtml" <?php echo ($display_mode=='plainhtml')?'SELECTED':''?>>Plain HTML</option>
-<option value="flash" <?php echo ($display_mode=='flash')?'SELECTED':''?>>Flash 5 (navbar only)</option>
-<option value="pdfus" <?php echo ($display_mode=='pdfus')?'SELECTED':''?>>PDF (US-Letter)</option>
-<option value="pdfusl" <?php echo ($display_mode=='pdfusl')?'SELECTED':''?>>PDF (US-Legal)</option>
-<option value="pdfa4" <?php echo ($display_mode=='pdfa4')?'SELECTED':''?>>PDF (A4)</option>
+<option value="html" <?php echo ($display_mode=='html')?'SELECTED':''?>><?php echo message('OPT_FANCYHTML'); ?></option>
+<option value="plainhtml" <?php echo ($display_mode=='plainhtml')?'SELECTED':''?>><?php echo message('OPT_PLAINHTML'); ?></option>
+<option value="flash" <?php echo ($display_mode=='flash')?'SELECTED':''?>><?php echo message('OPT_FLASH'); ?></option>
+<option value="pdfus" <?php echo ($display_mode=='pdfus')?'SELECTED':''?>><?php echo message('OPT_PDFLETTER'); ?></option>
+<option value="pdfusl" <?php echo ($display_mode=='pdfusl')?'SELECTED':''?>><?php echo message('OPT_PDFLEGAL'); ?></option>
+<option value="pdfa4" <?php echo ($display_mode=='pdfa4')?'SELECTED':''?>><?php echo message('OPT_PDFA4'); ?></option>
 </select>
 <br />
-Show Speaker Notes: <input type="checkbox" name="speaker" <?php echo ($form_speaker=='true')?'checked':''?> onChange="change_mode()">
+<?php echo message('SHOW_NOTES'); ?> <input type="checkbox" name="speaker" <?php echo ($form_speaker=='true')?'checked':''?> onChange="change_mode()">
 </p>
 </form>
 <?php
 switch($display_mode) {
 	case 'html':
 		if($jsKeyboard) {
-			echo "<p>Keyboard controls are available: <br />\n".
-				 " &lt;cursor-left&gt; previous slide<br />\n".
-				 " &lt;cursor-right&gt; next slide<br />\n".
-				 " also use &lt;cursor-right&gt; to step through animated slides.</p>\n";
+			echo "<p>".nl2br(message('HTML_KEYBOARD_CONTROLS'))."</p>\n";
 		} else {
-			echo "<p>Keyboard controls disabled</p>\n";
+			echo "<p>".message('HTML_NO_KEYBOARD_CONTROLS')."</p>\n";
 			break;
 		}
 		break;
 
 	case 'flash':
-		echo "<p>Keyboard controls available: <br />\n".
-			 " &lt;Space&gt; or &lt;Enter&gt; next slide<br />\n".
-			 " &lt;Backspace&gt; previous slide<br />\n";	
+        echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
 		break;
 
 	case 'pdfus':
 	case 'pdfusl':
 	case 'pdfa4':
 		if (!extension_loaded("pdf")) {
-			echo "<p>The PDF extension is not loaded, so this format is not available here.</p>";
+			echo "<p>".message('NO_PDF_EXTENSION')."</p>\n";
 		}
 		break;
 }
 ?>
-<p>The available presentations are... (most recent first)</p>
+<p><?php echo message('AVAILABLE_PRESENTATIONS'); ?></p>
 <table align="center" class="index">
-<tr><th>Title</th><th>Date</th><th>Location</th><th>Speaker</th><th>Slides</th></tr>
+<tr><th><?php echo message('PRES_TITLE'); ?></th>
+    <th><?php echo message('PRES_DATE'); ?></th>
+    <th><?php echo message('PRES_LOCATION'); ?></th>
+    <th><?php echo message('PRES_SPEAKER'); ?></th>
+    <th><?php echo message('PRES_SLIDES'); ?></th></tr>
 <?php
 $prnum = sizeof($pr);
 

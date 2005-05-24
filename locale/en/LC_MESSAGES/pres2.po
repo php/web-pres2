@@ -1,0 +1,82 @@
+# English message strings for PRES2
+# Copyright (C) PHP
+# Jesus M. Castagnetto <jmcastagnetto@php.net>, 2005.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2005-05-07 23:21-0500\n"
+"PO-Revision-Date: 2005-05-07 23:26-0500\n"
+"Last-Translator: Jesus M. Castagnetto <jmcastagnetto@php.net>\n"
+"Language-Team:\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "SLIDES_NOT_FOUND"
+msgstr "Could not find any slides (xml files) in"
+
+msgid "MODIFY_CONFIG"
+msgstr "Please modify"
+
+msgid "PRES2_TITLE"
+msgstr "PHP Presentation System"
+
+msgid "WELCOME_MSG"
+msgstr "Welcome to the PHP Presentation System. Here we list all of the available presentation categories stored within this system."
+
+msgid "SELECT_MODE"
+msgstr "Please select a display mode:"
+
+msgid "OPT_FANCYHTML"
+msgstr "Fancy HTML (Best with Mozilla)"
+
+msgid "OPT_PLAINHTML"
+msgstr "Plain HTML"
+
+msgid "OPT_FLASH"
+msgstr "Flash 5 (navbar only)"
+
+msgid "OPT_PDFLETTER"
+msgstr "PDF (US-Letter)"
+
+msgid "OPT_PDFLEGAL"
+msgstr "PDF (US-Legal)"
+
+msgid "OPT_PDFA4"
+msgstr "PDF (A4)"
+
+msgid "SHOW_NOTES"
+msgstr "Show Speaker Notes:"
+
+msgid "HTML_KEYBOARD_CONTROLS"
+msgstr "Keyboard controls are available:\n&lt;cursor-left&gt; previous slide\n&lt;cursor-right&gt; next slide\nalso use &lt;cursor-right&gt; to step through animated slides."
+
+msgid "HTML_NO_KEYBOARD_CONTROLS"
+msgstr "Keyboard controls disabled"
+
+msgid "FLASH_KEYBOARD_CONTROLS"
+msgstr "Keyboard controls available:\n&lt;Space&gt; or &lt;Enter&gt; next slide\n&lt;Backspace&gt; previous slide"
+
+msgid "NO_PDF_EXTENSION"
+msgstr "The PDF extension is not loaded, so this format is not available here."
+
+msgid "AVAILABLE_PRESENTATIONS"
+msgstr "The available presentations are... (most recent first)"
+
+msgid "PRES_TITLE"
+msgstr "Title"
+
+msgid "PRES_DATE"
+msgstr "Date"
+
+msgid "PRES_LOCATION"
+msgstr "Location"
+
+msgid "PRES_SPEAKER"
+msgstr "Speaker"
+
+msgid "PRES_SLIDES"
+msgstr "Slides"
+
