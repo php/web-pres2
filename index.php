@@ -193,7 +193,6 @@ $prnum = sizeof($pr);
 
 function cmp($a,$b) {
 	return strtotime($a['date']) < strtotime($b['date']);
-return 1;
 }
 usort($pr,'cmp');
 
