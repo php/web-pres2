@@ -143,7 +143,7 @@ function change_mode() {
 	$_SESSION['show_speaker_notes'] = ($form_speaker=='true');
 	$_SESSION['selected_display_mode'] = $display_mode;
 ?>
-<form name="modes_form" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+<form name="modes_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
 <p><?php echo message('SELECT_MODE'); ?>
 <select name="modes" onChange="change_mode()">
 <option value="html" <?php echo ($display_mode=='html')?'SELECTED':''?>><?php echo message('OPT_FANCYHTML'); ?></option>
@@ -193,6 +193,7 @@ $prnum = sizeof($pr);
 
 function cmp($a,$b) {
 	return strtotime($a['date']) < strtotime($b['date']);
+return 1;
 }
 usort($pr,'cmp');
 
