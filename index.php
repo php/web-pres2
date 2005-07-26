@@ -5,7 +5,7 @@
 
 	require 'config.php';
 	require 'XML_Presentation.php';
-    require_once 'messages.php';
+	require_once 'messages.php';
 
 	session_start();
 	
@@ -143,17 +143,17 @@ function change_mode() {
 	$_SESSION['show_speaker_notes'] = ($form_speaker=='true');
 	$_SESSION['selected_display_mode'] = $display_mode;
 
-    // flags for extensions
-    if (!extension_loaded('ming')) {
-        $flag_ext_ming = false;
-    } else {
-        $flag_ext_ming = true;
-    }
-    if (!extension_loaded('pdf')) {
-        $flag_ext_pdf = false;
-    } else {
-        $flag_ext_pdf = true;
-    }
+	// flags for extensions
+	if (!extension_loaded('ming')) {
+		$flag_ext_ming = false;
+	} else {
+		$flag_ext_ming = true;
+	}
+	if (!extension_loaded('pdf')) {
+		$flag_ext_pdf = false;
+	} else {
+		$flag_ext_pdf = true;
+	}
 
 ?>
 <form name="modes_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
@@ -161,14 +161,14 @@ function change_mode() {
 <select name="modes" onChange="change_mode()">
 <option value="html" <?php echo ($display_mode=='html')?'SELECTED':''?>><?php echo message('OPT_FANCYHTML'); ?></option>
 <option value="plainhtml" <?php echo ($display_mode=='plainhtml')?'SELECTED':''?>><?php echo message('OPT_PLAINHTML'); ?></option>
-    <?php if ($flag_ext_ming) { ?>
+	<?php if ($flag_ext_ming) { ?>
 <option value="flash" <?php echo ($display_mode=='flash')?'SELECTED':''?>><?php echo message('OPT_FLASH'); ?></option>
-    <?php } ?>
-    <?php if ($flag_ext_pdf) { ?>
+	<?php } ?>
+	<?php if ($flag_ext_pdf) { ?>
 <option value="pdfus" <?php echo ($display_mode=='pdfus')?'SELECTED':''?>><?php echo message('OPT_PDFLETTER'); ?></option>
 <option value="pdfusl" <?php echo ($display_mode=='pdfusl')?'SELECTED':''?>><?php echo message('OPT_PDFLEGAL'); ?></option>
 <option value="pdfa4" <?php echo ($display_mode=='pdfa4')?'SELECTED':''?>><?php echo message('OPT_PDFA4'); ?></option>
-    <?php } ?>
+	<?php } ?>
 </select>
 <br />
 <?php echo message('SHOW_NOTES'); ?> <input type="checkbox" name="speaker" <?php echo ($form_speaker=='true')?'checked':''?> onChange="change_mode()">
@@ -186,11 +186,11 @@ switch($display_mode) {
 		break;
 
 	case 'flash':
-        echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
+		echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
 		break;
 
-    /* this is a redundant check w/ the flags above -- JMC */
-    /*
+	/* this is a redundant check w/ the flags above -- JMC */
+	/*
 	case 'pdfus':
 	case 'pdfusl':
 	case 'pdfa4':
@@ -198,16 +198,16 @@ switch($display_mode) {
 			echo "<p>".message('NO_PDF_EXTENSION')."</p>\n";
 		}
 		break;
-        */
+		*/
 }
 ?>
 <p><?php echo message('AVAILABLE_PRESENTATIONS'); ?></p>
 <table align="center" class="index">
 <tr><th><?php echo message('PRES_TITLE'); ?></th>
-    <th><?php echo message('PRES_DATE'); ?></th>
-    <th><?php echo message('PRES_LOCATION'); ?></th>
-    <th><?php echo message('PRES_SPEAKER'); ?></th>
-    <th><?php echo message('PRES_SLIDES'); ?></th></tr>
+	<th><?php echo message('PRES_DATE'); ?></th>
+	<th><?php echo message('PRES_LOCATION'); ?></th>
+	<th><?php echo message('PRES_SPEAKER'); ?></th>
+	<th><?php echo message('PRES_SLIDES'); ?></th></tr>
 <?php
 $prnum = sizeof($pr);
 
