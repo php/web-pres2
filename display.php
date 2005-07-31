@@ -1107,7 +1107,7 @@ type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->date</div><br />\n";
             else if(!empty($p->location))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->location</div><br />\n";
-            if(!empty($p->email) && !empty($p->email))
+            if(!empty($p->email) && !empty($p->speaker))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker &lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
             else if(!empty($p->email))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
