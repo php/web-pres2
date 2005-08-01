@@ -315,15 +315,19 @@ ENDD;
     }
 
     function _blurb(&$blurb) {
+        $effect = '';
+        if($blurb->effect) $effect = "style='' effect='$blurb->effect'";
+
         if ($this->pres->template == 'css') {
+	    if(!empty($blurb->title)) {
+                echo '<div class="blurb-title">'.markup_text($blurb->title)."</div>\n";
+            }
             $class = isset($blurb->class) ? $blurb->class : 'blurb';
-            echo "<div class='{$class}'>".markup_text($blurb->text)."</div>";
+            echo "<div {$effect}class='{$class}'>".markup_text($blurb->text)."</div>\n";
             return;
         }
 
         if($blurb->type=='speaker' && !$_SESSION['show_speaker_notes']) return;
-        $effect = '';
-        if($blurb->effect) $effect = "effect=\"$blurb->effect\"";
         if(!empty($blurb->title)) {
             if($blurb->type=='speaker') $blurb->titlecolor='#ff3322';
             echo "<div $effect align=\"$blurb->talign\" style=\"font-size: $blurb->fontsize; color: $blurb->titlecolor\">".markup_text($blurb->title)."</div>\n";
@@ -379,7 +383,10 @@ ENDD;
             $$_html_key = $_html_val;
         }
 
-        if(isset($example->title)) echo '<div style="font-size: '.(4*(float)$example->fontsize/3).'em;">'.markup_text($example->title)."</div>\n";
+        if(isset($example->title)) {
+             if ($this->pres->template == 'css') echo '<div class="example-title">'.markup_text($example->title)."</div>\n";
+             else  echo '<div style="font-size: '.(4*(float)$example->fontsize/3).'em;">'.markup_text($example->title)."</div>\n";
+        }
         if(!$example->hide) {
             if ($this->pres->template != 'css') {
                 $_html_sz = (float) $example->fontsize;
@@ -423,7 +430,7 @@ ENDD;
             if (!$example->hide) {
                 if ($this->pres->template == 'css' and (isset($example->class))) {
                     if (!isset($example->output_word)) {
-                        $example->output_word = 'output:';
+                        $example->output_word = 'Output:';
                     }
                     echo "<div class='{$example->class}_output_text'>{$example->output_word}</div>\n";
                 } else {
@@ -661,9 +668,12 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             if (isset($bullet->effect) && !empty($bullet->effect)) {
                 $attrs = " style='' effect='{$bullet->effect}'";
             }
-            echo "<div $attrs><li class='$class'>$markedText</li></div>";
+            if ($symbol != '&bull;')
+                echo "\n<div $attrs><li class='$class' style='list-style-type: none;'><tt>{$symbol}</tt> $markedText</li></div>";
+            else 
+                echo "\n<div $attrs><li class='$class'>$markedText</li></div>";
         } else {
-            echo "<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
+            echo "\n<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
         }
     }
 
@@ -720,7 +730,14 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         else $leader='';
         if (empty($link->target)) $link->target = '_self';
         if(!empty($link->text)) {
-            echo "<div align=\"$link->align\" style=\"font-size: $link->fontsize; color: $link->textcolor; margin-left: $link->marginleft; margin-right: $link->marginright; margin-top: $link->margintop; margin-bottom: $link->marginbottom;\">$leader<a href=\"$link->href\" target=\"{$link->target}\">".markup_text($link->text)."</a></div><br />\n";
+	    if ($this->pres->template == 'css') {
+                $class = '';
+                if (empty($link->class)) $link->class = 'link'; 
+                echo "<div class='{$link->class}'>".markup_text($leader)."<a href='{$link->href}' target='{$link->target}'>".markup_text($link->text)."</a></div>\n";
+            }
+            else {
+                echo "<div align=\"$link->align\" style=\"font-size: $link->fontsize; color: $link->textcolor; margin-left: $link->marginleft; margin-right: $link->marginright; margin-top: $link->margintop; margin-bottom: $link->marginbottom;\">$leader<a href=\"$link->href\" target=\"{$link->target}\">".markup_text($link->text)."</a></div><br />\n";
+            }
         }
     }
 
