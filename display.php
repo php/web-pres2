@@ -694,7 +694,10 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             if(!($i % $table->columns)) {
                 echo "<tr>\n";
             }
-            echo " <td>";
+            echo " <td ";
+            if(isset($cell->align)) echo "align=\"".$cell->align."\"";
+            if(isset($cell->bgcolor)) echo "bgcolor=\"".$cell->bgcolor."\"";
+            echo ">";
             $cell->display();
             echo " </td>";
             if(!(($i+1) % $table->columns)) {
