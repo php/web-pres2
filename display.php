@@ -1,5 +1,4 @@
 <?php
-
 if(!function_exists('pdf_set_font')) {
     function pdf_set_font($pdf, $font_name, $fs, $encoding) {
         $font = pdf_findfont($pdf, $font_name, $encoding, 0);
