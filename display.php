@@ -1621,7 +1621,7 @@ class pdf extends display {
                 switch($example->type) {
                     case 'genimage':
                         $fn = tempnam("/tmp","pres2");
-                        $img = file_get_contents("http://localhost/".$this->baseDir.$this->slideDir.$example->filename,"r");
+                        $img = file_get_contents("http://".$_SERVER['HTTP_HOST']."/".$this->baseDir.$this->slideDir.$example->filename,"r");
                         $fp_out = fopen($fn,"wb");
                         fwrite($fp_out,$img);
                         fclose($fp_out);
