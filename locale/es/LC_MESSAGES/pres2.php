@@ -22,6 +22,7 @@ $messages = array(
 			    " &lt;Barra de espacio&gt; or &lt;Tecla de retorno&gt; diapositiva siguiente\n".
 			    " &lt;Tecla de retroceso&gt; diapositiva previa",
     'NO_PDF_EXTENSION' => 'La extensi&ooacute;n de PDF no esta cargada, de manera que este formato no esta disponible aqui.',
+    'FONT_SIZES' => 'You may need to play with your font sizes a bit to get these to display nicely.',
     'AVAILABLE_PRESENTATIONS' => 'Las presentaciones disponibles son... (la m&aacute;s reciente primera)',
     'PRES_TITLE' => 'T&iacute;tulo',
     'PRES_DATE' => 'Fecha',

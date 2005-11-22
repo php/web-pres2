@@ -22,6 +22,7 @@ $messages = array(
 			    " &lt;Space&gt; or &lt;Enter&gt; next slide\n".
 			    " &lt;Backspace&gt; previous slide",
     'NO_PDF_EXTENSION' => 'The PDF extension is not loaded, so this format is not available here.',
+    'FONT_SIZES' => 'You may need to play with your font sizes a bit to get these to display nicely.',
     'AVAILABLE_PRESENTATIONS' => 'The available presentations are... (most recent first)',
     'PRES_TITLE' => 'Title',
     'PRES_DATE' => 'Date',

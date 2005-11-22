@@ -1160,6 +1160,7 @@ class pdf extends display {
         pdf_translate($pdf,0,$y);
         pdf_scale($pdf, 1, -1);   // Reflect across horizontal axis
         pdf_set_value($pdf,"horizscaling",-100); // Mirror
+
     }
     // }}}
 

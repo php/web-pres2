@@ -85,7 +85,6 @@ class XML_Presentation extends XML_Parser
     function XML_Presentation($handle = '')
     {
         $this->XML_Parser();
-
         if (@is_resource($handle)) {
             $this->setInput($handle);
         } elseif ($handle != '') {

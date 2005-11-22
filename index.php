@@ -201,6 +201,7 @@ switch($display_mode) {
 		*/
 }
 ?>
+<p><?php echo message('FONT_SIZES'); ?></p>
 <p><?php echo message('AVAILABLE_PRESENTATIONS'); ?></p>
 <table align="center" class="index">
 <tr><th><?php echo message('PRES_TITLE'); ?></th>
