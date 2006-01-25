@@ -252,10 +252,12 @@ function strip_markups($str) {
 				'py' => 'python',
 				'pl' => 'perl',
 				'php' => 'php',
+				'inc' => 'php',
 				'html' => 'html',
 				'sql' => 'sql',
 				'java' => 'java',
 				'xml' => 'xml',
+				'js' => 'javascript',
 				'c' => 'c'
 			);
 
@@ -312,6 +314,14 @@ function strip_markups($str) {
 						$prog = trim(`which code2html`);
 						if (!empty($prog)) {
 							print nl2br(trim(`$prog -lpython --no-header -ohtml $_html_filename | sed -e 's/\t/\&nbsp\;\&nbsp;\&nbsp\; /g'`));
+						} else {
+							$this->_highlight_none($_html_filename);
+						}
+						break;
+					case 'javascript':
+						$prog = trim(`which code2html`);
+						if (!empty($prog)) {
+							print nl2br(trim(`$prog -ljavascript -ohtml-light --no-header $_html_filename | sed -e 's/  /\&nbsp\;\&nbsp; /g'`));
 						} else {
 							$this->_highlight_none($_html_filename);
 						}
