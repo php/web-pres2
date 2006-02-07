@@ -496,7 +496,9 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                             $result = ob_get_contents();
                             ob_end_clean();
                             echo iconv($example->encoding, 'utf8', $result);
-                        }
+                        } else {
+                            include $_html_filename;
+						}
                         break;
                 }
             } else {
