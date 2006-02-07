@@ -490,7 +490,13 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                         system("DISPLAY=localhost:0 $this->slideDir$example->filename");
                         break;    
                     default:
-                        include $_html_filename;
+                        if (isset($example->encoding)) {
+                            ob_start();
+                            include $_html_filename;
+                            $result = ob_get_contents();
+                            ob_end_clean();
+                            echo iconv($example->encoding, 'utf8', $result);
+                        }
                         break;
                 }
             } else {
@@ -1920,6 +1926,12 @@ class pdf extends display {
             pdf_show_xy($this->pdf, strip_markups($leader).strip_markups($link->text), $x, $this->pdf_cy);
             pdf_continue_text($this->pdf,"");
         }
+    }
+
+    function _div(&$div) {
+    }
+
+    function _div_end(&$div) {
     }
 
     function _divide(&$divide) { /* empty */ }
