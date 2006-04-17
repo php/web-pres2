@@ -370,7 +370,7 @@ ENDD;
     // variables so we don't get run over
     function _example(&$example) {
         global $pres;
-        $example->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$example->text);
+        if(empty($example->filename)) $example->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$example->text);
 
         $_html_effect = '';
         if($example->effect) $_html_effect = "effect=\"$example->effect\"";
