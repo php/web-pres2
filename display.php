@@ -736,8 +736,8 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
     }
 
     function _link(&$link) {
-        if(empty($link->text)) $link->text = $link->href;
-        if(!empty($link->leader)) $leader = $link->leader;
+        if(empty($link->text)) $link->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->href);
+        if(!empty($link->leader)) $leader = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->leader);
         else $leader='';
         if (empty($link->target)) $link->target = '_self';
         if(!empty($link->text)) {
@@ -1899,8 +1899,8 @@ class pdf extends display {
     }
 
     function _link(&$link) {
-        if(empty($link->text)) $link->text = $link->href;
-        if(!empty($link->leader)) $leader = $link->leader;
+        if(empty($link->text)) $link->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->href);
+        if(!empty($link->leader)) $leader = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->leader);
         else $leader='';
 
         if(!empty($link->text)) {
