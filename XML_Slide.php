@@ -217,7 +217,6 @@ class XML_Slide extends XML_Parser
     function cdataHandler($parser, $cdata)
     {
         if(empty($this->activeTag)) return;
-
         $el = strtolower($this->activeTag);
         if($el == 'bullet') {
             $idx = count($this->objects[$this->coid]->bullets) - 1;
