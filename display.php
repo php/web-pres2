@@ -697,12 +697,18 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         if(!empty($table->width)) {
             $width = $table->width;
         }
-        echo '<table '.$align.' width="'.$width.'" border="'.$table->border.'" '.(isset($table->bgcolor)?"bgcolor=\"{$table->bgcolor}\"":'').'>';
+        if ($this->pres->template == 'css') {
+            $class = isset($table->class) ? " class='{$table->class}'" : "";
+            echo "<table$class>";
+        } else {
+            echo '<table '.$align.' width="'.$width.'" border="'.$table->border.'" '.(isset($table->bgcolor)?"bgcolor=\"{$table->bgcolor}\"":'').'>';
+        }
         while(list($k,$cell)=each($table->cells)) {
             if(!($i % $table->columns)) {
                 echo "<tr>\n";
             }
             echo " <td ";
+            if(isset($cell->class)) echo "class=\"".$cell->class."\"";
             if(isset($cell->align)) echo "align=\"".$cell->align."\"";
             if(isset($cell->bgcolor)) echo "bgcolor=\"".$cell->bgcolor."\"";
             echo ">";
@@ -717,6 +723,10 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
     }
 
     function _cell(&$cell) {
+        if ($this->pres->template = "css") {
+            echo markup_text($cell->text);
+            return;
+        }
         $style='';
         if(!empty($cell->fontsize)) $style .= "font-size: ".$cell->fontsize.';';
         else if(!empty($this->objs[$this->coid]->fontsize)) $style .= "font-size: ".(2*(float)$this->objs[$this->coid]->fontsize/3).'em;';

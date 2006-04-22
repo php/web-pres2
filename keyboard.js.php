@@ -52,6 +52,7 @@ onload = function() {
 	}	
 	?>
 	
+<?php if (!isset($_GET['effects']) || ($_GET['effects'] != 'no')) { ?>
 	// find any div objects with an effect attribute 
 	var divs = document.getElementsByTagName('div');
 	for (var i=0; i < divs.length; i++) {
@@ -70,6 +71,7 @@ onload = function() {
 			effects[effects.length] = divs[i];
 	    }
 	}
+<?php } ?>
 }
 
 function fixNavigation() {  //helper function for making navbar sticky
