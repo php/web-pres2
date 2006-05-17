@@ -7,7 +7,7 @@
 	             'pdf_font_bold', 'pdf_example_font', 'jsKeyboard', 'css_supports_fixed');
 	require_once 'sniff.php';
 	if ($browser_is_IE) {
-  		echo "Please use a browser that works";
+  		echo "IE is not supported - please use Firefox, Safari, Konqueror or just about anything else.";
   		exit;
 	}
 	set_time_limit(0); // PDF generation can take a while
