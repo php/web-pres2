@@ -783,7 +783,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 <param name="autoplay" value="{$movie->autoplay}">
 <param name="controller" value="false">
 <!--[if !IE]> -->
-<object data="weemovie.mov" type="video/quicktime" width="{$movie->width}" height="{$movie->height}">
+<object data="{$this->slideDir}{$movie->filename}" type="video/quicktime" width="{$movie->width}" height="{$movie->height}">
 <param name="src" value="{$this->slideDir}{$movie->filename}" >
 <param name="autoplay" value="{$movie->autoplay}">
 <param name="controller" value="false">
