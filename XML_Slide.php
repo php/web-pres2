@@ -106,6 +106,7 @@ class XML_Slide extends XML_Parser
             case 'SLIDE':
             case 'BLURB':
             case 'IMAGE':
+            case 'MOVIE':
             case 'LIST':
 			case 'BREAK':
             case 'EXAMPLE':

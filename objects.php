@@ -520,4 +520,19 @@ function strip_markups($str) {
 		/* empty */
 	}
 	// }}}
+
+	// {{{ Movie Class
+	class _movie extends _tag {
+
+		function _movie() {
+			$this->filename = '';
+			$this->autoplay = 'true';
+			$this->width = 800;
+			$this->height = 600;
+            $this->marginleft = "auto";
+            $this->marginright = "auto";
+		}
+
+	}
+	// }}}
 ?>

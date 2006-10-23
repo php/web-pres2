@@ -746,8 +746,8 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
     }
 
     function _link(&$link) {
-        if(empty($link->text)) $link->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->href);
-        if(!empty($link->leader)) $leader = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->leader);
+        if(empty($link->text)) $link->text = preg_replace('/:-:(.*?):-:/e','isset($this->pres->\\1)?$this->pres->\\1:""',$link->href);
+        if(!empty($link->leader)) $leader = preg_replace('/:-:(.*?):-:/e','isset($this->pres->\\1)?$this->pres->\\1:""',$link->leader);
         else $leader='';
         if (empty($link->target)) $link->target = '_self';
         if(!empty($link->text)) {
@@ -773,6 +773,25 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                 echo "</div>\n<div class=\"c2rightnb\">\n";
                 break;
         }
+    }
+
+    function _movie(&$movie) {
+        echo <<<EOB
+<div align="{$movie->align}" style="margin-left: <?php echo {$movie->marginleft}; margin-right: {$movie->marginright};">
+<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="{$movie->width}" height="{$movie->height}" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+<param name="src" value="{$this->slideDir}{$movie->filename}" >
+<param name="autoplay" value="{$movie->autoplay}">
+<param name="controller" value="false">
+<!--[if !IE]> -->
+<object data="weemovie.mov" type="video/quicktime" width="{$movie->width}" height="{$movie->height}">
+<param name="src" value="{$this->slideDir}{$movie->filename}" >
+<param name="autoplay" value="{$movie->autoplay}">
+<param name="controller" value="false">
+</object>
+<!-- <![endif]-->
+</object>
+</div>
+EOB;
     }
 
     function _footer(&$footer) {
@@ -1281,8 +1300,9 @@ class pdf extends display {
         while(list($this->slideNum,$slide) = each($presentation->slides)) {
           // testing hack
           $slideDir = dirname($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename).'/';
-            $r =& new XML_Slide($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename);
-            $r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
+			$fn = $this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename;
+            $r =& new XML_Slide($fn);
+            $r->setErrorHandling(PEAR_ERROR_DIE,"%s ($fn)\n");
             $r->parse();
 
             $this->objs = $r->getObjects();
@@ -1948,6 +1968,8 @@ class pdf extends display {
     }
 
     function _divide(&$divide) { /* empty */ }
+
+    function _movie(&$movie) { /* empty */ }
     
     function _footer(&$footer) {        
         if($this->objs[1]->template != 'titlepage') {

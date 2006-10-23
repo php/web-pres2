@@ -120,7 +120,6 @@
 	$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
-
 	// Display slide
 	$mode->objs = $r->getObjects();
 	$mode->pres =& $pres;
