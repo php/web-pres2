@@ -57,7 +57,7 @@ class html extends display {
         echo <<<HEADER
 <html>
 <head>
-<base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<base href="http://$_SERVER[HTTP_HOST]$this->baseDir"/>
 <title>{$presentation->title}</title>
 HEADER;
         switch($presentation->template) {
@@ -71,6 +71,7 @@ HEADER;
             $body_style = "margin-top: " . ($browser_is_IE ? "0px" : "8em") . ";";
             break;
         }
+        $this->body_style = $body_style;
         include 'getwidth.php';
         include $presentation->stylesheet;
         /* the following includes scripts necessary for various animations */
@@ -79,17 +80,22 @@ HEADER;
         if($this->slideNum) echo '<link rel="prev" href="'.$this->presentationDir.'/'.$presentation->slides[$this->prevSlideNum]->filename."\" />\n";
         if($this->nextSlideNum) echo '<link rel="next" href="'.$this->presentationDir.'/'.$presentation->slides[$this->nextSlideNum]->filename."\" />\n";
         echo '</head>';
-        echo "<body onResize=\"get_dims();\" style=\"".$body_style."\">\n";
         while(list($this->coid,$obj) = each($this->objs)) {
             $obj->display();
         }
         echo <<<FOOTER
-</body>
 </html>
 FOOTER;
 }
 
     function _slide(&$slide) {
+        $body_style = $this->body_style;
+        $class = '';
+        if ($this->pres->template != 'php')
+        {
+            $class = " class='{$slide->template}'";
+        }
+        echo "<body onResize=\"get_dims();\" style=\"".$body_style."\"$class>\n";
         $currentPres = $_SESSION['currentPres'];
         
         $navsize = $slide->navsize;
@@ -117,7 +123,7 @@ FOOTER;
             break;
 
         case 'php2':
-            echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+            echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"align: {$slide->titleAlign}; width: 100%\"><div class=\"navbar\">";
             echo "<table style=\"float: left;\" width=\"60%\" border=\"0\" cellpadding=0 cellspacing=0><tr>\n";
             if(!empty($slide->logo1)) $logo1 = $slide->logo1;
             else $logo1 = $this->pres->logo1;
@@ -229,7 +235,8 @@ ENDD;
                 echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
                 echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
             }
-            echo '</div></div><div class="mainarea">';
+            echo "</div></div>\n";
+            echo "<div class=\"mainarea\">\n";
             break;
 
         case 'php':
@@ -340,7 +347,9 @@ ENDD;
     function _image(&$image) {
         $effect = '';
         $class = '';
+        $alt = ' alt=""';
         if($image->effect) $effect = "effect=\"$#image->effect\"";
+        if(isset($image->alt)) $alt = " alt='{$image->title}'";
         if(isset($image->title)) echo "<h1 align=\"{$image->talign}\">".markup_text($image->title)."</h1>\n";
         if ($image->width) {
             $size = "width=\"{$image->width}\" height=\"{$image->height}\"";
@@ -359,7 +368,7 @@ ENDD;
         }
 ?>
 <div <?php echo $effect?> align="<?php echo $image->align?>" style="margin-left: <?php echo $image->marginleft?>; margin-right: <?php echo $image->marginright?>;">
-<img align="<?php echo $image->align?>" src="<?php echo $this->slideDir.$image->filename?>" <?php echo $size?><?php echo $class?>>
+<img align="<?php echo $image->align?>" src="<?php echo $this->slideDir.$image->filename?>" <?php echo $size?><?php echo $class?><?php echo $alt?>/>
 </div>
 <?php
         if(isset($image->clear)) echo "<br clear=\"".$image->clear."\"/>\n";
@@ -670,16 +679,16 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             if (isset($bullet->class)) {
                 $class = $bullet->class;
             } else {
-                $class = "pres_bullet'";
+                $class = "pres_bullet";
             }
             $attrs = '';
             if (isset($bullet->effect) && !empty($bullet->effect)) {
                 $attrs = " style='' effect='{$bullet->effect}'";
             }
             if ($symbol != '&bull;')
-                echo "\n<div $attrs><li class='$class' style='list-style-type: none;'><tt>{$symbol}</tt> $markedText</li></div>";
+                echo "\n<li class='$class' style='list-style-type: none;'><div $attrs><tt>{$symbol}</tt> $markedText</div></li>";
             else 
-                echo "\n<div $attrs><li class='$class'>$markedText</li></div>";
+                echo "\n<li class='$class'><div $attrs>$markedText</div></li>";
         } else {
             echo "\n<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
         }
@@ -751,7 +760,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         else $leader='';
         if (empty($link->target)) $link->target = '_self';
         if(!empty($link->text)) {
-	    if ($this->pres->template == 'css') {
+            if ($this->pres->template == 'css') {
                 $class = '';
                 if (empty($link->class)) $link->class = 'link'; 
                 echo "<div class='{$link->class}'>".markup_text($leader)."<a href='{$link->href}' target='{$link->target}'>".markup_text($link->text)."</a></div>\n";
@@ -815,6 +824,9 @@ EOB;
                 <?php
                 }
                 break;
+            case 'css':
+                echo "</div>\n";
+
 /* (this seemed too intrusive)
             case 'php2':
                 if($this->nextTitle) {
@@ -827,6 +839,7 @@ EOB;
                 break;
 */
         }
+        echo "</body>\n";
     }
 }
 
@@ -1298,10 +1311,11 @@ class pdf extends display {
         pdf_set_info($this->pdf, "Subject", isset($presentation->topic)?$presentation->topic:"");
 
         while(list($this->slideNum,$slide) = each($presentation->slides)) {
-          // testing hack
-          $slideDir = dirname($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename).'/';
-			$fn = $this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename;
-            $r =& new XML_Slide($fn);
+            // testing hack
+            $slideDir = dirname($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename).'/';
+            $fn = $this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename;
+            $fh = fopen($fn, "rb");
+            $r =& new XML_Slide($fh);
             $r->setErrorHandling(PEAR_ERROR_DIE,"%s ($fn)\n");
             $r->parse();
 

@@ -1,5 +1,5 @@
 <?php
-	error_reporting(E_ALL);
+///	error_reporting(E_ALL);
 
 	require_once 'config.php';
 	$c = compact('presentationDir', 'baseDir', 'showScript', 'helpPage', 'baseFontSize', 
@@ -22,7 +22,8 @@
 	session_start();
 
 	// Figure out which presentation file to read and slide to show
-	$presFile = trim(trim($_SERVER['PATH_INFO']),'/');
+	$presFile = trim($_SERVER['PATH_INFO']);
+	$presFile = trim($presFile ,'/');
 	if (substr($presFile,-4) == ".pdf") {
 		$navmode = 'pdfus';
 		$presFile = substr($presFile, 0, -4);
@@ -36,7 +37,7 @@
 	Adding support for URLs such as
 	http://shiflett.org/talks/oscon2004/php-security
 	*/
-	$urlArray = explode('/', $presFile);
+	$urlArray = explode('/', (string) $presFile);
 	$slideNumIndex = sizeof($urlArray) - 1;
 	if ($urlArray[$slideNumIndex] == strval(intval($urlArray[$slideNumIndex]))) {
 		$slideNum = $urlArray[$slideNumIndex];
@@ -53,11 +54,12 @@
 	*/
 	
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
-	$presFile = str_replace('..','',$_SESSION['currentPres']); // anti-hack
+	$presFile = str_replace('..','',(string)$_SESSION['currentPres']); // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
 
 	// Load in the presentation
-	$p =& new XML_Presentation($presFile);
+	$fh = fopen($presFile, "rb");
+	$p =& new XML_Presentation($fh);
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();
@@ -117,7 +119,8 @@
 
 	// Load the slide
 	$mode->slideDir = dirname($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename).'/';
-	$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename);
+	$fh = fopen($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename, "rb");
+	$r =& new XML_Slide($fh);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
 	// Display slide
@@ -128,9 +131,10 @@
 function get_all_titles($pres) {
 	global $presentationDir;
 
-	reset($pres);
 	while(list($slideNum,$slide) = each($pres->slides)) {
-		$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$slideNum]->filename);
+//		$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$slideNum]->filename);
+		$fh = fopen($presentationDir.'/'.$pres->slides[$slideNum]->filename, "rb");
+		$r =& new XML_Slide($fh);
 		$r->parse();
 
 		$objs = $r->getObjects();

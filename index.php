@@ -32,8 +32,8 @@
 	$i = 0;
 		
 	foreach($ps as $pres_id=>$filename) {
-
-		$p = &new XML_Presentation($filename);
+		$fh = fopen($filename, "rb");
+		$p = &new XML_Presentation($fh);
 		$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 		$p->parse();
 		$pres = $p->getObjects();
@@ -75,7 +75,7 @@
 	unset($pres);
 
 	// default options for the file..
-	$p = &new XML_Presentation("index.xml");
+	$p = &new XML_Presentation(fopen("index.xml", "rb"));
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();   
@@ -87,7 +87,7 @@
 <base href="<?php echo "http://".$_SERVER['HTTP_HOST'].$baseDir?>">
 <title>PHP Presents</title>
 <?php include("css.php"); ?>
-<script language="JavaScript1.2">
+<script language="JavaScript1.2" type="text/javascript">
 <!--
 function change_mode() {
 	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked;

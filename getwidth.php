@@ -1,4 +1,4 @@
-<?/*
+<?php /*
  A bit of fancy footwork to get the browser's inside dimensions in
  pixels.  Should work on both NS4+ and IE4+.  If it doesn't we default
  it to something sane.  The dimensions are returned to the server via
@@ -6,7 +6,7 @@
  function is called if we don't have the dimensions already, or on a
  resize event to fetch the new window dimensions.
 */?>
-<script language="JavaScript" defer="defer">
+<script type="text/javascript" language="JavaScript" defer="defer">
 <!--
 function get_dims() {
     var winW = 1024;

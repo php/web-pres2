@@ -77,7 +77,6 @@ class XML_Slide extends XML_Parser
     function XML_Slide($handle = '')
     {
         $this->XML_Parser();
-
         if (@is_resource($handle)) {
             $this->setInput($handle);
         } elseif ($handle != '') {
@@ -99,7 +98,7 @@ class XML_Slide extends XML_Parser
      * @param  array  Attributes of XML tag
      * @return void
      */
-    function startHandler($parser, $element, $attribs)
+    function startHandler($parser, $element, &$attribs)
     {
         switch ($element) {
             /* These tags can have other tags inside */
@@ -113,6 +112,15 @@ class XML_Slide extends XML_Parser
             case 'LINK':
             case 'PHP':
 			case 'TABLE':
+                $cl = '_'.strtolower($element);
+                $this->objects[++$this->coid] = new $cl();
+                $this->stack[] = $this->coid;
+                $this->insideTag = $element;
+                $this->_add_attribs($this->objects[$this->coid], $attribs);
+                $this->activeTag = 'text';
+                break;
+
+            case 'DIV':
                 $cl = '_'.strtolower($element);
                 $this->objects[++$this->coid] = new $cl();
                 $this->stack[] = $this->coid;
@@ -181,7 +189,7 @@ class XML_Slide extends XML_Parser
 
         switch ($element) {
             case 'SLIDE':
-                $this->objects[++$this->coid] = new _footer();
+                $this->objects[] = new _footer();
                 /* fall-through */
             case 'BLURB':
             case 'IMAGE':
@@ -190,7 +198,10 @@ class XML_Slide extends XML_Parser
             case 'LINK':
             case 'PHP':
             case 'DIVIDE':
-			case 'TABLE':
+                $this->coid = array_pop($this->stack);
+                break;
+            case 'DIV':
+                $this->objects[++$this->coid] = new _div_end();
                 $this->coid = array_pop($this->stack);
                 break;
 			case 'BULLET':
