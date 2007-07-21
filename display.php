@@ -512,21 +512,25 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                         break;
                 }
             } else {
-                switch($example->type) {
-                    default:
-                        if (isset($example->encoding)) {
-                            $example->text = iconv('utf8', $example->encoding, $example->text);
-                            ob_start();
-                            eval('?>'.$example->text);
-                            $result = ob_get_contents();
-                            ob_end_clean();
-                            echo iconv($example->encoding, 'utf8', $result);
-                        }
-                        else
-                        {
-                            eval('?>'.$example->text);
-                        }
-                        break;
+                if (isset($example->encoding)) {
+                    $example->text = iconv('utf8', $example->encoding, $example->text);
+                    ob_start();
+                    if($example->type=='marked') {
+                        $text = preg_replace("/^\|/m","",$example->text);
+                        eval('?>'.$text);
+                    } else {
+                        eval('?>'.$example->text);
+                    }
+                    $result = ob_get_contents();
+                    ob_end_clean();
+                    echo iconv($example->encoding, 'utf8', $result);
+                } else {
+                    if($example->type=='marked') {
+                        $text = preg_replace("/^\|/m","",$example->text);
+                        eval('?>'.$text);
+                    } else {
+                        eval('?>'.$example->text);
+                    }
                 }
             }
             if ($this->pres->template == 'css' and (isset($example->class))) {

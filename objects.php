@@ -361,6 +361,12 @@ function strip_markups($str) {
 				}
 			} else {
 				switch($this->type) {
+                    case 'marked':
+                        echo "<pre>";
+                        echo preg_replace('/^\|(.*)$/m','<font color="#802000">\1</font>',htmlspecialchars($this->text));
+                        echo "</pre>";
+                        break;
+
 					case 'php':
 						if ($this->linenumbers) {
 							$text = add_line_numbers($this->text);
@@ -369,6 +375,7 @@ function strip_markups($str) {
 							highlight_string($this->text);
 						}
 						break;
+
 					case 'shell':
 						echo '<pre>'.markup_text(htmlspecialchars($this->text))."</pre>\n";
 						break;
