@@ -391,7 +391,6 @@ function strip_markups($str) {
 						print `echo "{$text}" | c2html -cs`;
 						break;
 					case 'xml':
-
 						$prog = trim(`which code2html`);
 						if (!empty($prog)) {
 							$text = str_replace('"', '\\"', $this->text);
@@ -400,6 +399,17 @@ function strip_markups($str) {
 							echo "</pre>";
 						} else {
 							echo "<pre>".htmlspecialchars($this->text)."</pre>\n";
+						}
+						break;
+					case 'javascript':
+						$prog = trim(`which code2html`);
+						if (!empty($prog)) {
+							$text = str_replace('"', '\\"', $this->text);
+							echo "<pre>\n";
+							print `echo "{$text}" | $prog -ljavascript -ohtml-light --no-header | sed -e 's/  /\&nbsp\;\&nbsp; /g'`;
+							echo "</pre>";
+						} else {
+							$this->_highlight_none($_html_filename);
 						}
 						break;
 
