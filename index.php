@@ -232,7 +232,7 @@ echo '</table>';
 </div>
 </body>
 </html>
-<?
+<?php
 /*
  * Local variables:
  * tab-width: 4
