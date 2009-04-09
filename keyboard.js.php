@@ -9,7 +9,7 @@ if(!document.all) {
 }
 function keypressHandler(e) {
 	var e;
-	if(document.all) { //it's IE
+	if(document.all) { //it's IE & Opera
 		e = window.event.keyCode;
 	} else {
 		e = e.which;
@@ -44,13 +44,6 @@ onload = function() {
 	<?php if(!isset($_COOKIE['dims'])) {?>
 	get_dims();
 	<?php } ?>
-
-	// make banner sticky on old Windows IEs
-	<?php 
-	if (!$GLOBALS['css_supports_fixed']) {
-		echo('window.setInterval("fixNavigation()", 250);');
-	}	
-	?>
 	
 <?php if (!isset($_GET['effects']) || ($_GET['effects'] != 'no')) { ?>
 	// find any div objects with an effect attribute 
@@ -89,3 +82,9 @@ function fixNavigation() {  //helper function for making navbar sticky
 
 //-->
 </script>
+
+<!--[if lt IE 6]>
+<script type="text/javascript">
+window.setInterval("fixNavigation()", 250);
+</script>
+<![endif]-->

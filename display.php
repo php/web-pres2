@@ -40,7 +40,7 @@ class display {
 class html extends display {
 
     function _presentation(&$presentation) {
-        global $pres, $browser_is_IE;
+        global $pres;
 
         // Determine if we should cache
         // need to fix this check
@@ -68,7 +68,17 @@ HEADER;
             $body_style = "margin-top: 5em;";
             break;
         default:
-            $body_style = "margin-top: " . ($browser_is_IE ? "0px" : "8em") . ";";
+            $body_style = "margin-top: 8em;";
+
+            /* Not too nice, since $body_style is saved to $this->body_style
+             * but I don't think it will have this big impact
+             */
+            echo "<!--[if lt IE 8]>\n";
+            echo "<style type=\"text/css\">\n";
+            echo "body { margin-top: 0px; }\n";
+            echo "</style>\n";
+            echo "<![endif]>\n";
+
             break;
         }
         $this->body_style = $body_style;
@@ -311,12 +321,16 @@ ENDD;
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
             if(!empty($p->url)) 
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
+            if(!empty($p->twitter)) {
+                echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">Twitter: $p->twitter</div><br />\n";
+            }
             if(!empty($p->copyright)) {
                 for($i=10; $i>$parts; $i--) echo "<br />\n";
                 $str = str_replace('(c)','&copy;',$p->copyright);
                 $str = str_replace('(R)','&reg;',$str);
                 echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
             }    
+
         }
     }
 
@@ -819,14 +833,12 @@ EOB;
         // Navbar layout templates
         switch($pres->template) {
             case 'mysql':
-                if(!strstr($_SERVER['HTTP_USER_AGENT'],'MSIE')) {
                 ?>
                 <div class="bsticky">
                 <img style="margin-bottom: -0.3em" src="images/bottomswoop.gif" width="100%" height="50" />
                 <span class="c4">&copy; Copyright 2002 MySQL AB</span>
                 </div>
                 <?php
-                }
                 break;
             case 'css':
                 echo "</div>\n";

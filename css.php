@@ -1,7 +1,4 @@
 <?php
-require_once 'sniff.php';
-global $css_supports_fixed;
-
 if (empty($pres)) $pres = $presentation;
 ?>
 <style title="Default" type="text/css">
@@ -21,11 +18,7 @@ body {
 }
 div.sticky {
 	margin: 0;
-<?php if(!$css_supports_fixed): // Need a much smarter check here ?>
-	position: absolute;
-<?php else:?>
 	position: fixed;
-<?php endif?>
 	top: 0em;
 	left: 0em;
 	right: auto;
@@ -34,11 +27,7 @@ div.sticky {
 }
 div.bsticky {
 	margin: 0;
-<?php if(!$css_supports_fixed): // Need a much smarter check here ?>
-	position: absolute;
-<?php else:?>
 	position: fixed;
-<?php endif?>
 	top: auto; 
 	left: 0em;
 	right: auto;
@@ -163,3 +152,11 @@ span.c5 {position: fixed; bottom: 0.5em; right: 1em; top: auto; left: auto; colo
 td.c1 {font-family: arial,helvetica,verdana; font-size: 80%}
 
 </style>
+
+<!--[if lt IE 6]>
+<style type="text/css">
+div.sticky, div.bsticky {
+	position: absolute;
+}
+</style>
+<![endif]-->

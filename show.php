@@ -4,12 +4,8 @@
 	require_once 'config.php';
 	$c = compact('presentationDir', 'baseDir', 'showScript', 'helpPage', 'baseFontSize', 
 	             'flashFontScale', 'pdfFontScale', 'pdfResourceFile', 'pdf_font', 
-	             'pdf_font_bold', 'pdf_example_font', 'jsKeyboard', 'css_supports_fixed');
-	require_once 'sniff.php';
-	if ($browser_is_IE) {
-  		echo "IE is not supported - please use Firefox, Safari, Konqueror or just about anything else.";
-  		exit;
-	}
+	             'pdf_font_bold', 'pdf_example_font', 'jsKeyboard');
+
 	set_time_limit(0); // PDF generation can take a while
 	if(!strlen($_SERVER['PATH_INFO'])) {
 		header('Location: http://'.$_SERVER['HTTP_HOST'].$baseDir);
