@@ -1238,7 +1238,8 @@ class pdf extends display {
     // {{{ my_pdf_page_number($pdf)
     function my_pdf_page_number(&$pdf, $pdf_x, $pdf_y) {    
         if(isset($this->page_index[$this->page_number]) && $this->page_index[$this->page_number] == 'titlepage') return;
-        $fnt = pdf_set_font($pdf, $this->pdf_font, -10, 'winansi');
+        pdf_set_font($pdf, $this->pdf_font, -10, 'winansi');
+        $fnt = pdf_findfont($pdf, $this->pdf_font, 'winansi', 0); 
         $dx = pdf_stringwidth($pdf,"- $this->page_number -",$fnt,-10);
         $x = (int)($pdf_x/2 - $dx/2);
         $pdf_cy = pdf_get_value($pdf, "texty", null);
@@ -1263,7 +1264,8 @@ class pdf extends display {
     */
     function my_pdf_paginated_code(&$pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
         $data = strip_markups($data);    
-        $fnt=pdf_set_font($pdf, $font, $fs, 'winansi');    
+        pdf_set_font($pdf, $font, $fs, 'winansi');    
+        $fnt = pdf_findfont($pdf, $font, 'winansi', 0);
         $cw = pdf_stringwidth($pdf,'m',$fnt,$fs); // Width of 1 char - assuming monospace
         $linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
     
@@ -1345,7 +1347,8 @@ class pdf extends display {
         }
 
         $this->my_new_pdf_page($this->pdf, $this->pdf_x, $this->pdf_y, true);
-        $fnt = pdf_set_font($this->pdf, $this->pdf_font , -20, 'winansi');
+        pdf_set_font($this->pdf, $this->pdf_font , -20, 'winansi');
+        $fnt = pdf_findfont($this->pdf, $this->pdf_font, 'winansi', 0);
         $dx = pdf_stringwidth($this->pdf, "Index",$fnt,-20);
         $x = (int)($this->pdf_x/2 - $dx/2);
         pdf_set_parameter($this->pdf, "underline", 'true');
@@ -1353,7 +1356,7 @@ class pdf extends display {
         pdf_set_parameter($this->pdf, "underline", 'false');
         $this->pdf_cy = pdf_get_value($this->pdf, "texty", null)+30;
         $old_cy = $this->pdf_cy;
-        $fnt = pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+        pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
 
         foreach($this->page_index as $pn=>$ti) {
             if($ti=='titlepage') continue;
@@ -1447,7 +1450,8 @@ class pdf extends display {
                 pdf_moveto($this->pdf, 60, $this->pdf_y-60);
                 pdf_lineto($this->pdf, $this->pdf_x-60, $this->pdf_y-60);
                 pdf_stroke($this->pdf);
-                $fnt = pdf_set_font($this->pdf, $this->pdf_font , -10, 'winansi');
+                pdf_set_font($this->pdf, $this->pdf_font , -10, 'winansi');
+                $fnt = pdf_findfont($this->pdf, $this->pdf_font, 'winansi', 0);
                 $x = (int)($this->pdf_x/2 - pdf_stringwidth($this->pdf, $p->copyright, $fnt, -10)/2);
                 $str = str_replace('(c)',chr(0xa9), $p->copyright);
                 $str = str_replace('(R)',chr(0xae), $str);
@@ -1455,7 +1459,8 @@ class pdf extends display {
             }
             $this->page_index[$this->page_number] = 'titlepage';
         } else { // No header on the title page
-            $fnt = pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+            pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+            $fnt = pdf_findfont($this->pdf, $this->pdf_font, 'winansi', 0);
             pdf_show_boxed($this->pdf, "Slide $this->slideNum/$this->maxSlideNum", $this->pdf_cx, $this->pdf_cy, $this->pdf_x-2*$this->pdf_cx, 1, 'left',null);
             if(isset($p->date)) $this->d = $this->date;
             else $this->d = strftime("%B %e %Y");
@@ -1483,7 +1488,8 @@ class pdf extends display {
             if($blurb->type=='speaker') {
                 pdf_setcolor($this->pdf,'fill','rgb',1,0,0,null);
             }
-            $fnt = pdf_set_font($this->pdf, $this->pdf_font , -16, 'winansi');
+            pdf_set_font($this->pdf, $this->pdf_font , -16, 'winansi');
+            $fnt = pdf_findfont($this->$pdf, $this->pdf_font, 'winansi', 0);
             $dx = pdf_stringwidth($this->pdf,$blurb->title, $fnt, -16);
             $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
             switch($blurb->talign) {
@@ -1556,7 +1562,8 @@ class pdf extends display {
             pdf_continue_text($this->pdf, "\n");
         }
         $this->pdf_cy = pdf_get_value($this->pdf, "texty", null)-5;
-        $fnt = pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+        pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
+        $fnt = pdf_findfont($this->pdf, $this->pdf_font, 'winansi', 0);
         $cw = pdf_stringwidth($this->pdf,'m', $fnt, -12);  // em unit width
         if ($image->width) {
             $dx = $image->height;
@@ -1965,7 +1972,8 @@ class pdf extends display {
 
         if(!empty($link->text)) {
             $this->pdf_cy = pdf_get_value($this->pdf, "texty", null)+10;
-            $fnt = pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
+            pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
+            $fnt = pdf_findfont($this->pdf, $this->pdf_font, 'winansi', 0);
             if(strlen($leader)) $lx = pdf_stringwidth($this->pdf, $leader, $fnt, -12);
             else $lx=0;
             $dx = pdf_stringwidth($this->pdf, $link->text, $fnt, -12);
