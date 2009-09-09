@@ -84,7 +84,7 @@
 
 <html>
 <head>
-<base href="<?php echo "http://".$_SERVER['HTTP_HOST'].$baseDir?>">
+<base href="<?php echo "http://".htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir?>">
 <title>PHP Presents</title>
 <?php include("css.php"); ?>
 <script language="JavaScript1.2" type="text/javascript">
