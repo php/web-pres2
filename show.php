@@ -52,6 +52,10 @@
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
 	$presFile = str_replace('..','',(string)$_SESSION['currentPres']); // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
+	
+	if (!file_exists($presFile)) {
+		$presFile = "$baseDir/tools/missing.xml";
+	}
 
 	// Load in the presentation
 	$fh = fopen($presFile, "rb");
