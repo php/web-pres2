@@ -541,9 +541,21 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                 } else {
                     if($example->type=='marked') {
                         $text = preg_replace("/^\|/m","",$example->text);
-                        eval('?>'.$text);
+						if($example->pre) echo "<pre>";
+						$code = '';
+						if($example->pre_code) $code = "<?php ".$example->pre_code."?>";
+						$code .= $text;
+						if($example->post_code) $code .= "<?php ".$example->post_code."?>";
+                        eval('?>'.$code);
+						if($example->pre) echo "</pre>";
                     } else {
-                        eval('?>'.$example->text);
+						if($example->pre) echo "<pre>";
+						$code = '';
+						if($example->pre_code) $code = "<?php ".$example->pre_code."?>";
+						$code .= $example->text;
+						if($example->post_code) $code .= "<?php ".$example->post_code."?>";
+                        eval('?>'.$code);
+						if($example->pre) echo "</pre>";
                     }
                 }
             }
@@ -580,7 +592,9 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         if (isset($list->class)) {
             echo "<ul class='{$list->class}'>";
         } else {
-            echo '<ul class="pres">';
+            if(!empty($list->lineheight)) $style = "line-height: ".$list->lineheight.';';
+            if(!empty($list->marginleft)) $style .= "margin-left: ".$list->marginleft.';';
+            echo '<ul class="pres" style="'.$style.'">';
         }
         while(list($k,$bul)=each($list->bullets)) { $bul->display(); }
         echo '</ul>';
@@ -600,6 +614,8 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         if($ml) {
             $style .= "margin-left: ".$ml."em;";
         }
+
+        if(!empty($bullet->lineheight)) $style .= "line-height: ".$bullet->lineheight.';';
 
         if(!empty($bullet->start)) {
             if(is_numeric($bullet->start)) {
@@ -1358,7 +1374,7 @@ class pdf extends display {
         $old_cy = $this->pdf_cy;
         pdf_set_font($this->pdf, $this->pdf_font , -12, 'winansi');
 
-        foreach($this->page_index as $pn=>$ti) {
+        if(is_array($this->page_index)) foreach($this->page_index as $pn=>$ti) {
             if($ti=='titlepage') continue;
             $ti.='    ';
             while(pdf_stringwidth($this->pdf,$ti,$fnt,-12)<($this->pdf_x-$this->pdf_cx*2.5-140)) $ti.='.';

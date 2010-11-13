@@ -387,7 +387,8 @@ function strip_markups($str) {
 						print `echo "{$text}" | perl2html -cs`;
 						break;
 					case 'c':
-						$text = str_replace('"', '\\"', $this->text);
+						$text = str_replace('"', '\'', $this->text);
+						$text = str_replace('\\n', '', $text);
 						print `echo "{$text}" | c2html -cs`;
 						break;
 					case 'xml':
