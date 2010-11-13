@@ -1,1 +1,1 @@
-/var/www/pres2/presentations/slides/wepay/wepay_api.inc
+presentations/slides/wepay/wepay_api.inc
