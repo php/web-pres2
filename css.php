@@ -61,6 +61,11 @@ div.output {
 	padding: 0.5em;
 }
 
+div.nobox {
+	font-family: monospace;
+	background: <?php echo $pres->outputbackground; ?>;
+}
+
 table.index {
  background: <?php echo $pres->examplebackground; ?>;
  border: thin dotted #000000;                                                                                                 

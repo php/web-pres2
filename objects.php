@@ -148,7 +148,7 @@ function strip_markups($str) {
 			$this->navbarbackground = 'url(images/trans.png) transparent fixed';
 			$this->navbartopiclinks = true;
 			$this->navbarheight = '6em';
-			$this->examplebackground = '#cccccc';
+			$this->examplebackground = '#dcdcdc';
 			$this->outputbackground = '#eeee33';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';

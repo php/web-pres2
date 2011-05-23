@@ -64,6 +64,9 @@ HEADER;
         case 'simple':
             $body_style = "margin-top: 1em;";
             break;
+        case 'empty':
+            $body_style = "margin-top: 0em;";
+            break;
         case 'php2':
             $body_style = "margin-top: 5em;";
             break;
@@ -130,6 +133,9 @@ FOOTER;
         case 'simple':
             $slide->titleColor = '#000000';
             echo "<div align=\"$slide->titleAlign\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
+            break;
+        case 'empty':
+            $slide->titleColor = '#000000';
             break;
 
         case 'php2':
@@ -473,16 +479,19 @@ ENDD;
             if ($this->pres->template == 'css' and (isset($example->class))) {
                 echo "<div class='{$example->class}_output'>";
             } else {
-                echo '<div class="shadow" style="margin: '.
-                    ((float)$example->margintop).'em '.
-                    ((float)$example->marginright+1).'em '.
-                    ((float)$example->marginbottom).'em '.
-                    ((float)$example->marginleft).'em;'.
-                    ((!empty($example->rwidth)) ? "width: $example->rwidth;" : "").
-                    '">';
-                echo '<div '.$_html_effect.' class="output" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
-                    ((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
-                    "\">\n";
+                if(!empty($example->class)) echo '<div class="'.$example->class.'" style="margin: ';
+                else echo '<div class="shadow" style="margin: ';
+                echo ((float)$example->margintop).'em '.
+                     ((float)$example->marginright+1).'em '.
+                     ((float)$example->marginbottom).'em '.
+                     ((float)$example->marginleft).'em;'.
+                     ((!empty($example->rwidth)) ? "width: $example->rwidth;" : "").
+                     '">';
+                if(!empty($example->class)) $output_class=$example->class;
+                else $output_class = "output";
+                echo '<div '.$_html_effect.' class="'.$output_class.'" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
+                     ((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
+                     "\">\n";
             }
             if(!empty($example->filename)) {
                 $_html_filename = preg_replace('/\?.*$/','',$this->slideDir.$example->filename);
@@ -541,21 +550,9 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
                 } else {
                     if($example->type=='marked') {
                         $text = preg_replace("/^\|/m","",$example->text);
-						if($example->pre) echo "<pre>";
-						$code = '';
-						if($example->pre_code) $code = "<?php ".$example->pre_code."?>";
-						$code .= $text;
-						if($example->post_code) $code .= "<?php ".$example->post_code."?>";
-                        eval('?>'.$code);
-						if($example->pre) echo "</pre>";
+                        eval('?>'.$text);
                     } else {
-						if($example->pre) echo "<pre>";
-						$code = '';
-						if($example->pre_code) $code = "<?php ".$example->pre_code."?>";
-						$code .= $example->text;
-						if($example->post_code) $code .= "<?php ".$example->post_code."?>";
-                        eval('?>'.$code);
-						if($example->pre) echo "</pre>";
+                        eval('?>'.$example->text);
                     }
                 }
             }
@@ -593,7 +590,6 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             echo "<ul class='{$list->class}'>";
         } else {
             if(!empty($list->lineheight)) $style = "line-height: ".$list->lineheight.';';
-            if(!empty($list->marginleft)) $style .= "margin-left: ".$list->marginleft.';';
             echo '<ul class="pres" style="'.$style.'">';
         }
         while(list($k,$bul)=each($list->bullets)) { $bul->display(); }
