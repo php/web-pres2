@@ -416,12 +416,18 @@ ENDD;
              if ($this->pres->template == 'css') echo '<div class="example-title">'.markup_text($example->title)."</div>\n";
              else  echo '<div style="font-size: '.(4*(float)$example->fontsize/3).'em;">'.markup_text($example->title)."</div>\n";
         }
+        if(!empty($pres->exampleclass)) $_html_exampleclass = $pres->exampleclass;
+        if(!empty($this->objs[1]->exampleclass)) $_html_exampleclass = $this->objs[1]->exampleclass;
+        if(!empty($example->class)) $_html_exampleclass = $example->class;
+        if(!empty($pres->exampleoutputclass)) $_html_exampleoutputclass = $pres->exampleoutputclass;
+        if(!empty($this->objs[1]->exampleoutputclass)) $_html_exampleoutputclass = $this->objs[1]->exampleoutputclass;
+        if(!empty($example->outputclass)) $_html_exampleoutputclass = $example->outputclass;
         if(!$example->hide) {
             if ($this->pres->template != 'css') {
                 $_html_sz = (float) $example->fontsize;
                 if(!$_html_sz) $_html_sz = 0.1;
                 $_html_offset = (1/$_html_sz).'em';
-                echo '<div '.$_html_effect.' class="shadow" style="margin: '.
+                echo '<div '.$_html_effect.' class="'.(empty($_html_exampleclass)?'shadow':$_html_exampleclass).'" style="margin: '.
                     ((float)$example->margintop).'em '.
                     ((float)$example->marginright+1).'em '.
                     ((float)$example->marginbottom).'em '.
@@ -436,7 +442,7 @@ ENDD;
             if (($this->pres->template == 'css') and (isset($example->class))) {
                 echo "<div class='{$example->class}'>";
             } else {
-*/                echo '<div class="emcode" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
+*/                echo '<div class="'.(empty($_html_exampleoutputclass)?'emcode':$_html_exampleoutputclass).'" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset;".
                     ((!empty($_html_examplebackground)) ? "background: $_html_examplebackground;" : '').
                     (($example->type=='shell') ? 'font-family: monotype.com, courier, monospace; background: #000000; color: #ffffff; padding: 0px;' : '').
                     '">';
@@ -479,17 +485,14 @@ ENDD;
             if ($this->pres->template == 'css' and (isset($example->class))) {
                 echo "<div class='{$example->class}_output'>";
             } else {
-                if(!empty($example->class)) echo '<div class="'.$example->class.'" style="margin: ';
-                else echo '<div class="shadow" style="margin: ';
+                echo '<div class="'.(empty($_html_exampleclass)?'shadow':$_html_exampleclass).'" style="margin: ';
                 echo ((float)$example->margintop).'em '.
                      ((float)$example->marginright+1).'em '.
                      ((float)$example->marginbottom).'em '.
                      ((float)$example->marginleft).'em;'.
                      ((!empty($example->rwidth)) ? "width: $example->rwidth;" : "").
                      '">';
-                if(!empty($example->class)) $output_class=$example->class;
-                else $output_class = "output";
-                echo '<div '.$_html_effect.' class="'.$output_class.'" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
+                echo '<div '.$_html_effect.' class="'.(empty($_html_exampleoutputclass)?'output':$_html_exampleoutputclass).'" style="font-size: '.$_html_sz."em; margin: -$_html_offset 0 0 -$_html_offset; ".
                      ((!empty($_html_outputbackground)) ? "background: $_html_outputbackground;" : '').
                      "\">\n";
             }

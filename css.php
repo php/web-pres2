@@ -61,7 +61,7 @@ div.output {
 	padding: 0.5em;
 }
 
-div.nobox {
+div.noshadow {
 	font-family: monospace;
 	background: <?php echo $pres->outputbackground; ?>;
 }
