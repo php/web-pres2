@@ -102,7 +102,8 @@ FOOTER;
 }
 
     function _slide(&$slide) {
-        $body_style = $this->body_style;
+        if(!empty($slide->body_style) $body_style = $this->body_style;
+        else $body_style = $slide->body_style;
         $class = '';
         if ($this->pres->template != 'php')
         {
