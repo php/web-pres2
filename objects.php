@@ -35,13 +35,13 @@ function format_tt($arg) {
 	#id#		  Entity
 */
 function markup_text($str) {
-  global $p;
-  $pres = $p->objects[1];
+	global $p;
+	$pres = $p->objects[1];
 
-  $ret = $str;
+	$ret = $str;
 #	$ret = preg_replace('/\*([\S ]+?)([^\\\])\*/','<strong>\1\2</strong>',$str);
 	$ret = preg_replace('/#([[:alnum:]]+?)#/','&\1;',$ret);
-	$ret = preg_replace('/\b_([\S ]+?)_\b/','<u>\1</u>',$ret);
+	$ret = preg_replace('/\b_([^_][\S ]+?)_\b/','<u>\1</u>',$ret);
 
 	// blink
 	$ret = str_replace('\*',chr(1),$ret);
@@ -72,7 +72,7 @@ function markup_text($str) {
 	$ret = preg_replace('/TAB\//',' ',$ret);
 
 	$ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
-    $ret = preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
+	$ret = preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
 	return $ret;
 }
 // }}}

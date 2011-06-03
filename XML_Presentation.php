@@ -121,29 +121,29 @@ class XML_Presentation extends XML_Parser
             /* Special case for array properties */
             case 'SLIDE':
                 $this->objects[$this->coid]->slides[] = new _pres_slide();
-				$idx = count($this->objects[$this->coid]->slides)-1;
+                $idx = count($this->objects[$this->coid]->slides)-1;
                 $this->_add_attribs($this->objects[$this->coid]->slides[$idx], $attribs);
                 $this->activeTag = $element;
-				if(!empty($this->activeSection)) {
-					$this->objects[$this->coid]->slides[$idx]->Section = $this->activeSection;
-				}
-				if(!empty($this->activeChapter)) {
-					$this->objects[$this->coid]->slides[$idx]->Chapter = $this->activeChapter;
-				}
+                if(!empty($this->activeSection)) {
+                    $this->objects[$this->coid]->slides[$idx]->Section = $this->activeSection;
+                }
+                if(!empty($this->activeChapter)) {
+                    $this->objects[$this->coid]->slides[$idx]->Chapter = $this->activeChapter;
+                }
                 break; 
 
             /* Everything else can't */
-			case 'SECTION':
-				if(!empty($attribs['TITLE'])) {
-					$this->activeSection = $attribs['TITLE'];
-				}
-				break;
+            case 'SECTION':
+                if(!empty($attribs['TITLE'])) {
+                    $this->activeSection = $attribs['TITLE'];
+                }
+                break;
 
-			case 'CHAPTER':
-				if(!empty($attribs['TITLE'])) {
-					$this->activeChapter = $attribs['TITLE'];
-				}
-				break;
+            case 'CHAPTER':
+                if(!empty($attribs['TITLE'])) {
+                    $this->activeChapter = $attribs['TITLE'];
+                }
+                break;
 
             default:
                 $this->activeTag = $element;
