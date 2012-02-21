@@ -109,7 +109,7 @@ FOOTER;
         {
             $class = " class='{$slide->template}'";
         }
-        echo "<body onResize=\"get_dims();\" style=\"".$body_style."\"$class>\n";
+        echo "<body style=\"".$body_style."\"$class>\n";
         $currentPres = $_SESSION['currentPres'];
         
         $navsize = $slide->navsize;
