@@ -1,0 +1,25 @@
+h1
+{
+	background-color: #1a3e7f;
+}
+
+div.footer
+{
+	height: 105px;
+	width: 1024px;
+	top: 645px;
+	position: absolute;
+	background-color: #1a3e7f;
+	clear: both;
+}
+
+div.footer img
+{
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+pre
+{
+	font-size: 150%;
+}
