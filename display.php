@@ -387,9 +387,25 @@ ENDD;
         if (isset($image->class)) {
             $class=" class='{$image->class}'";
         }
+	$style = '';
+	if (isset($image->margintop)) {
+	    $style.="margin-top: {$image->margintop};";
+	}
+	if (isset($image->marginbottom)) {
+	    $style.="margin-bottom: {$image->marginbottom};";
+	}
+	if (isset($image->marginleft)) {
+	    $style.="margin-left: {$image->marginleft};";
+	}
+	if (isset($image->marginright)) {
+	    $style.="margin-right: {$image->marginright};";
+	}
+	if(!empty($style)) {
+	    $style="style=\"$style\"";
+	}
 ?>
 <div <?php echo $effect?> align="<?php echo $image->align?>" style="margin-left: <?php echo $image->marginleft?>; margin-right: <?php echo $image->marginright?>;">
-<img align="<?php echo $image->align?>" src="<?php echo $this->slideDir.$image->filename?>" <?php echo $size?><?php echo $class?><?php echo $alt?>/>
+<img align="<?php echo $image->align?>" src="<?php echo $this->slideDir.$image->filename?>" <?php echo $size?> <?php echo $class?> <?php echo $style?> <?php echo $alt?>/>
 </div>
 <?php
         if(isset($image->clear)) echo "<br clear=\"".$image->clear."\"/>\n";
