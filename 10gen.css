@@ -1,4 +1,4 @@
-h1
+h1, h2
 {
 	background-color: #1a3e7f;
 }
@@ -21,5 +21,11 @@ div.footer img
 
 pre
 {
-	font-size: 150%;
+	font-size: 135%;
+}
+
+div.big-centre
+{
+    font-size: 250%;
+    text-align: center;
 }
