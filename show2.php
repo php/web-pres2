@@ -52,6 +52,11 @@ class PresFormatter implements ezcTemplateCustomFunction
 		$ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$ret);
 		$ret = str_replace(chr(1),'\*',$ret);
 
+		// strike
+		$ret = str_replace('\-\-\-',chr(1),$ret);
+		$ret = preg_replace('/\-\-\-([\S ]+?)\-\-\-/','<s>\1</s>',$ret);
+		$ret = str_replace(chr(1),'\-\-\-',$ret);
+
 		// italics
 		$ret = str_replace('\~',chr(1),$ret);
 		$ret = preg_replace('/~([\S ]+?)~/','<i>\1</i>',$ret);

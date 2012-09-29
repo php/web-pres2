@@ -27,7 +27,6 @@ body
 div.whole-slide
 {
 	width: 1024px;
-	height: 760px;
 }
 
 div.title-slide
@@ -45,8 +44,7 @@ div.section-slide
 div.section-slide div p
 {
 	text-align: center;
-	color: #eeeeec;
-	background-color: #75507b;
+	color: #abdc45;
 	margin-top: 320px;
 	margin-bottom: 0px;
 }
@@ -552,8 +550,29 @@ p.extend
 
 table.xdebug-error
 {
-	width: 80%;
-	margin: 0 auto;
+	width: 100%;
+	margin: 0;
+	font-size: 150%;
+	font-family: serif;
+	text-align: left;
+}
+
+table.xdebug-error tr.yll th
+{
+	background-color: #f57900;
+	color: black;
+}
+
+table.xdebug-error tr.tle th
+{
+	background-color: #e9b96e;
+	color: black;
+}
+
+table.xdebug-error tr.hdr th
+{
+	background-color: #eeeeec;
+	color: black;
 }
 
 .vim-export
@@ -573,6 +592,13 @@ div.center-page
 	text-align: center;
 }
 
+div.quote-page
+{
+	font-size: 250%;
+	text-align: center;
+	padding-top: 3em;
+}
+
 div.text-overlay
 {
 	position: absolute;
@@ -585,4 +611,31 @@ div.text-overlay h1
 	font-size: 3em;
 	text-align: center;
 	opacity: 0.8;
+}
+
+div table
+{
+	text-align: center;
+	width: 95%;
+}
+
+table
+{
+	margin: 25px;
+	font-size: 24pt;
+	text-align: center;
+	border: solid 1px black;
+}
+
+th
+{
+	background: blue;
+	color: white;
+}
+
+th, td, tr
+{
+	border: black;
+	border: solid 1px gray;
+	padding: 0px;
 }
