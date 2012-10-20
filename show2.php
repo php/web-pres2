@@ -198,6 +198,7 @@ class Presentation
 		$tpl = new ezcTemplate();
 		$tpl->send->node = $xml->documentElement;
 		$tpl->send->pres = $this;
+		$tpl->send->pres->forPdf = isset( $_GET['pdf'] );
 		$tpl->send->slideNr = $slideNr;
 		$tpl->send->css = $this->css;
 
