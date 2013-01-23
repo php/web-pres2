@@ -1,6 +1,6 @@
 body, h1, h2
 {
-	background-color: #1a3e7f;
+	background-color: #013290;
 	color: #eeeeec;
 }
 
@@ -19,6 +19,9 @@ h2
 div.title-slide
 {
 	color: #eeeeec;
+	margin-left: 60px;
+	margin-right: 100px;
+	text-align: left;
 }
 
 div.template-white div.title-slide
@@ -38,23 +41,32 @@ pre.xdebug-var-dump
 
 p
 {
-	font-family: Arial;
+	font-family: "PT Sans", Arial;
+	font-size: 1.75em;
+}
+
+div.event-title p
+{
+	font-family: "PT Sans Caption", Arial;
+	font-weight: bold;
+	font-size: 220%;
+	padding: 0;
+}
+
+div.event-date, div.event-presenter
+{
+	font-size: 100%;
 }
 
 div.footer
 {
-	height: 105px;
-	width: 1024px;
-	top: 645px;
+	border-top: 3px solid #3366ff;
+	width: 870px;
+	top: 585px;
 	position: absolute;
-	background-color: #1a3e7f;
+	background-color: #013290;
 	clear: both;
-}
-
-div.footer img
-{
-	margin-left: 20px;
-	margin-right: 20px;
+	padding-top: 50px;
 }
 
 pre
