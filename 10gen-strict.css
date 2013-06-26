@@ -2,12 +2,56 @@ body, h1, h2
 {
 	background-color: #013290;
 	color: #eeeeec;
+	font-size: 150%;
+}
+
+body.agenda-slide, body.slide
+{
+	background-color: #eeeeec;
+	text-align: left;
+	color: #444;
+}
+
+div.agenda-slide h1, div.slide h1, div.slide h2
+{
+	background-color: #eeeeec;
+	color: #444;
+	margin-bottom: 0.5em;
+}
+
+div.slide h2
+{
+	font-size: 1.5em;
+	margin-top: -1.0em;
+	margin-bottom: 0.5em;
+}
+
+div.section-slide div p
+{
+	color: #eee;
+	font-weight: bold;
+	text-align: left;
+	margin: 1em;
+	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
+}
+
+ul ul li
+{
+	font-size: 80%;
+	list-style-type: disc;
+}
+
+img.right
+{
+	margin: 0em 2em 0em 0.5em;
 }
 
 h1
 {
 	color: #abdc45;
 	margin-bottom: 0em;
+	font-family: "PT Sans", Arial;
+	font-size: 2em;
 }
 
 h2
@@ -49,14 +93,16 @@ div.event-title p
 {
 	font-family: "PT Sans Caption", Arial;
 	font-weight: bold;
-	font-size: 220%;
+	font-size: 180%;
 	padding: 0;
+	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
 }
 
-div.event-date, div.event-presenter
+div.event-date, div.event-presenter, div.pres-url-small
 {
-	font-size: 100%;
+	font-size: 95%;
 }
+
 
 div.footer
 {
@@ -69,9 +115,20 @@ div.footer
 	padding-top: 50px;
 }
 
+div.footer-thanks
+{
+	border-top: 3px solid #3366ff;
+	top: 620px;
+	position: absolute;
+	background-color: #013290;
+	clear: both;
+	padding-top: 20px;
+	width: 1024px;
+}
+
 pre
 {
-	font-size: 135%;
+	font-size: 105%;
 }
 
 div.result pre {
@@ -86,7 +143,7 @@ div.big-centre
 
 a
 {
-	color: #fff;
+	color: #000;
 }
 
 div.html
@@ -101,4 +158,14 @@ div.html
 div.html a
 {
 	color: #777;
+}
+
+table
+{
+	font-size: 22pt;
+}
+
+pre.code strong
+{
+	color: #f00;
 }
