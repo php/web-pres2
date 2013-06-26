@@ -117,7 +117,7 @@ $tc = ezcTemplateConfiguration::getInstance();
 $tc->addExtension( 'PresFormatter' );
 $tc->addExtension( 'PresRst' );
 
-$base = $_SERVER['DOCUMENT_ROOT'] . 'presentations/';
+$base = $_SERVER['DOCUMENT_ROOT'] . '/presentations/';
 @list( $dummy, $prest, $slideNr ) = explode( '/', $_SERVER['PATH_INFO'] );
 if ( $slideNr === null || $slideNr === '' )
 {
@@ -157,7 +157,7 @@ class Presentation
 		foreach (
 			array(
 				'title', 'event', 'location', 'date', 'speaker',
-				'email', 'url', 'joindin', 'twitter'
+				'email', 'url', 'joindin', 'twitter', 'lat', 'lon',
 			) as $prop )
 		{
 			$this->properties[$prop] = (string) $xml->$prop;

@@ -52,7 +52,7 @@ div.section-slide div p
 div.event-title 
 {
 	font-size: 2em;
-	margin-top: 3em;
+	margin-top: 2.5em;
 	margin-bottom: 1em;
 }
 
@@ -625,6 +625,25 @@ table
 	font-size: 24pt;
 	text-align: center;
 	border: solid 1px black;
+}
+
+table.columns
+{
+	margin: 0.5em;
+	font-size: 1em;
+	text-align: left;
+	border: none;
+	width: 90%;
+}
+
+table.columns td
+{
+	border: none;
+}
+
+table.columns tr
+{
+	border: none;
 }
 
 th
