@@ -14,7 +14,8 @@ if(!empty($argv[2])) $reveal_template = $argv[2];
 else $reveal_template = "./reveal_template.php";
 
 // Massive shortcut!
-extract((array)simplexml_load_file($pres_xml));
+$pres = simplexml_load_file($pres_xml);
+extract((array)$pres);
 $slides = '';
 
 // Now do the real work
@@ -45,7 +46,10 @@ foreach($slide as $sld) {
 		$slides .= "\t\t<section id=\"{$s['section']}\">\n";
 		$vertical = true;
 	}
-	if(!empty($s['title'])) $slides .= "\t\t<h2 margin-bottom=\"2em\">{$s['title']}</h2><br>\n";
+	if(!empty($s['title'])) {
+		$text = markup_text((string)$s['title']);
+		$slides .= "\t\t<h2 margin-bottom=\"2em\">$text</h2><br>\n";
+	}
 	foreach($s as $k=>$e) {
 		switch($k) {
 			case 'image':
@@ -65,7 +69,8 @@ foreach($slide as $sld) {
 				break;
 			case 'title':
 				if(empty($s['title']) && !empty($e['title'])) 
-					$slides .= "\t\t<h2 margin-bottom=\"2em\">{$e['title']}</h2><br>\n";
+					$text = markup_text((string)$s['title']);
+					$slides .= "\t\t<h2 margin-bottom=\"2em\">$text</h2><br>\n";
 				break;
 			case 'break':
 				if($vertical && !empty($e['section'])) {
@@ -95,16 +100,22 @@ function render_blurb($e) {
 	$size = (int)$e['fontsize'];
 	$style = '';
 	if($size >= 8) $tag = 'h2';
-	else if($size >= 6) { $tag = 'h3'; $style = " style=\"text-align:left;\""; }
-	else if($size >= 4) { $tag = 'h4'; $style = " style=\"text-align:left;\""; }
-	else { $tag = 'p'; $style = " style=\"text-align:left;\""; }
-	return "\t\t<$tag{$style}>$e</$tag>\n";
+	else if($size >= 6) { $tag = 'h3'; $style = " style=\"text-align:left;margin-top:0.5em;\""; }
+	else if($size >= 4) { $tag = 'h4'; $style = " style=\"text-align:left;margin-top:0.5em;\""; }
+	else { $tag = 'p'; $style = " style=\"text-align:left;margin-top:0.4em;\""; }
+	$text = markup_text((string)$e);
+	return "\t\t<$tag{$style}>$text</$tag>\n";
 }
 
 function render_list($e) {
-	$ret = "\t\t<ul>\n";
+	$ret = "\t\t<ul style=\"display:inline\">\n";
 	foreach($e->item as $v) {
-		$ret .= "\t\t\t<li>$v</li>\n";	
+		$text = markup_text((string)$v);
+		$ret .= "\t\t\t<li>$text</li>\n";	
+	}
+	foreach($e->bullet as $v) {
+		$text = markup_text((string)$v);
+		$ret .= "\t\t\t<li>$text</li>\n";	
 	}
 	$ret .= "\t\t</ul>\n";
 	return $ret;
@@ -125,4 +136,48 @@ function render_example($e) {
 		$ret .= "\t\t</code></pre>";
 	}
 	return $ret;
+}
+
+function format_tt($arg) {
+  return("<tt>".str_replace(' ', '&nbsp;', $arg[1])."</tt>");
+}
+
+function markup_text($str) {
+    global $pres;
+
+    $ret = $str;
+    $ret = preg_replace('/#([[:alnum:]]+?)#/','&\1;',$ret);
+    $ret = preg_replace('/\b_([^_][\S ]+?)_\b/','<u>\1</u>',$ret);
+
+    // blink
+    $ret = str_replace('\*',chr(1),$ret);
+    $ret = preg_replace('/\*\*([\S ]+?)\*\*/','<blink>\1</blink>',$ret);
+    $ret = str_replace(chr(1),'\*',$ret);
+
+    // bold
+    $ret = str_replace('\*',chr(1),$ret);
+    $ret = preg_replace('/\*([\S ]+?)\*/','<strong>\1</strong>',$ret);
+    $ret = str_replace(chr(1),'\*',$ret);
+
+    // italics
+    $ret = str_replace('\~',chr(1),$ret);
+    $ret = preg_replace('/~([\S ]+?)~/','<i>\1</i>',$ret);
+    $ret = str_replace(chr(1),'\~',$ret);
+
+    // monospace font
+    $ret = str_replace('\%',chr(1),$ret);
+    $ret = preg_replace_callback('/%([\S ]+?)%/', 'format_tt', $ret);
+    $ret = str_replace(chr(1),'%',$ret);
+
+    // Hack by arjen: allow more than one word to be coloured
+    $ret = preg_replace('/\|([0-9a-fA-F]+?)\|([\S ]+?)\|/','<font color="\1">\2</font>',$ret);
+    $ret = preg_replace('/\^([[:alnum:]]+?)\^/','<sup>\1</sup>',$ret);
+    $ret = preg_replace('/\@([[:alnum:]]+?)\@/','<sub>\1</sub>',$ret);
+    // Quick hack by arjen: BR/ and TAB/ pseudotags from conversion
+    $ret = preg_replace('/BR\//','<BR/>',$ret);
+    $ret = preg_replace('/TAB\//',' ',$ret);
+
+    $ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
+    $ret = preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
+    return $ret;
 }
