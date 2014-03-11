@@ -1,6 +1,6 @@
-@import url(../../../fonts/stylesheet.css);
+@import url(/fonts/stylesheet.css);
 /**
- * samdark theme for reveal.js.
+ * modified samdark theme for reveal.js.
  */
 .reveal table {
   table-layout: fixed;
@@ -25,8 +25,24 @@
   box-shadow: none !important;
 }
 
+.reveal section h3.p {
+  text-align: left;
+  margin-top: 0.5em;
+}
+
+.reveal section h4.p {
+  text-align: left;
+  margin-top: 0.5em;
+}
+
+.reveal section p.p {
+  text-align: left;
+  margin-top: 0.4em;
+}
+
 .reveal ul {
   list-style: none;
+  display: inline;
   padding: 0;
   margin: 0;
 }

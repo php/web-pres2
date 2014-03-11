@@ -68,9 +68,10 @@ foreach($slide as $sld) {
 				$slides .= render_list($e);	
 				break;
 			case 'title':
-				if(empty($s['title']) && !empty($e['title'])) 
-					$text = markup_text((string)$s['title']);
+				if(empty($s['title']) && !empty($e['title'])) {
+					$text = markup_text((string)$e['title']);
 					$slides .= "\t\t<h2 margin-bottom=\"2em\">$text</h2><br>\n";
+				}
 				break;
 			case 'break':
 				if($vertical && !empty($e['section'])) {
@@ -88,27 +89,27 @@ foreach($slide as $sld) {
 // And plug everything into the Reveal template
 include $reveal_template;
 
-function render_image($e, $style="border:0px") {
+function render_image($e) {
 	global $slide_path;
 	return <<<EOB
-		<img src="/{$slide_path}/{$e[filename]}" width="{$e[width]}" height="{$e[height]}" style="$style">
+		<img src="/{$slide_path}/{$e[filename]}" width="{$e[width]}" height="{$e[height]}">
 
 EOB;
 }
 
 function render_blurb($e) {
 	$size = (int)$e['fontsize'];
-	$style = '';
+	$class = '';
 	if($size >= 8) $tag = 'h2';
-	else if($size >= 6) { $tag = 'h3'; $style = " style=\"text-align:left;margin-top:0.5em;\""; }
-	else if($size >= 4) { $tag = 'h4'; $style = " style=\"text-align:left;margin-top:0.5em;\""; }
-	else { $tag = 'p'; $style = " style=\"text-align:left;margin-top:0.4em;\""; }
+	else if($size >= 6) { $tag = 'h3'; $class = " class=\"p\""; }
+	else if($size >= 4) { $tag = 'h4'; $class = " class=\"p\""; }
+	else { $tag = 'p'; $class = " class=\"p\""; }
 	$text = markup_text((string)$e);
-	return "\t\t<$tag{$style}>$text</$tag>\n";
+	return "\t\t<$tag{$class}>$text</$tag>\n";
 }
 
 function render_list($e) {
-	$ret = "\t\t<ul style=\"display:inline\">\n";
+	$ret = "\t\t<ul>\n";
 	foreach($e->item as $v) {
 		$text = markup_text((string)$v);
 		$ret .= "\t\t\t<li>$text</li>\n";	
