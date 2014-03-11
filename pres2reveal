@@ -1,0 +1,128 @@
+#!/usr/bin/env php
+<?php
+if($argc<2) {
+	echo "Usage: {$argv[0]} <presentation.xml> [<reveal_template.php>]\n";
+	exit(1);
+}
+$pres_xml = $argv[1];
+if(!file_exists($argv[1])) {
+	echo "Unable to open {$argv[1]}\n";
+	exit(1);
+}
+$base_path = dirname($pres_xml);
+if(!empty($argv[2])) $reveal_template = $argv[2];
+else $reveal_template = "./reveal_template.php";
+
+// Massive shortcut!
+extract((array)simplexml_load_file($pres_xml));
+$slides = '';
+
+// Now do the real work
+foreach($slide as $sld) {
+	$s = simplexml_load_file($base_path.'/'.$sld);
+	$slide_path = dirname($base_path.'/'.$sld);
+
+	// The titlepage is the first section in the reveal template
+	if($s['template'] == 'titlepage') continue;
+
+	$bgcolor = '';
+	$vertical = false;
+
+	if(!empty($s['body_style'])) {
+		foreach(explode(';',$s['body_style']) as $str) {
+			// Add support for other body styles here
+			if(preg_match('/background:(.*[^;])/', $str, $regs)) {
+				$bgcolor = $regs[1];
+			}
+		}
+	}
+	$slides .= "\t<section";
+	if(!empty($bgcolor)) $slides .= " data-background=\"$bgcolor\"";
+	if(!empty($s['data-transition'])) $slides .= " data-transition=\"{$s['data-transition']}\"";
+	$slides .= ">\n";
+
+	if(!empty($s['section'])) {
+		$slides .= "\t\t<section id=\"{$s['section']}\">\n";
+		$vertical = true;
+	}
+	if(!empty($s['title'])) $slides .= "\t\t<h2 margin-bottom=\"2em\">{$s['title']}</h2><br>\n";
+	foreach($s as $k=>$e) {
+		switch($k) {
+			case 'image':
+			case 'blurb':
+			case 'example':
+				$fnc ="render_$k";
+				if(is_array(e)) {
+					foreach($e as $ee) {
+						$slides .= $fnc($ee);
+					}
+				} else {
+					$slides .= $fnc($e);
+				}
+				break;
+			case 'list':
+				$slides .= render_list($e);	
+				break;
+			case 'title':
+				if(empty($s['title']) && !empty($e['title'])) 
+					$slides .= "\t\t<h2 margin-bottom=\"2em\">{$e['title']}</h2><br>\n";
+				break;
+			case 'break':
+				if($vertical && !empty($e['section'])) {
+					$slides .= "\t\t</section>\n";
+					$slides .= "<section id=\"{$e['section']}\">\n";
+				}
+				break;
+		}
+	}
+
+	if($vertical) $slides .= "\t\t</section>";
+	$slides .= "\t</section>\n";
+}
+
+// And plug everything into the Reveal template
+include $reveal_template;
+
+function render_image($e, $style="border:0px") {
+	global $slide_path;
+	return <<<EOB
+		<img src="/{$slide_path}/{$e[filename]}" width="{$e[width]}" height="{$e[height]}" style="$style">
+
+EOB;
+}
+
+function render_blurb($e) {
+	$size = (int)$e['fontsize'];
+	$style = '';
+	if($size >= 8) $tag = 'h2';
+	else if($size >= 6) { $tag = 'h3'; $style = " style=\"text-align:left;\""; }
+	else if($size >= 4) { $tag = 'h4'; $style = " style=\"text-align:left;\""; }
+	else { $tag = 'p'; $style = " style=\"text-align:left;\""; }
+	return "\t\t<$tag{$style}>$e</$tag>\n";
+}
+
+function render_list($e) {
+	$ret = "\t\t<ul>\n";
+	foreach($e->item as $v) {
+		$ret .= "\t\t\t<li>$v</li>\n";	
+	}
+	$ret .= "\t\t</ul>\n";
+	return $ret;
+}
+
+function render_example($e) {
+	$ret = '';
+	$code = (string)$e;
+	if(substr($code,0,5)=="<?php") {
+		$code = substr($code,5);
+	}
+	if(empty($e['hide'])) $ret .= "\t\t<pre><code data-trim class=\"php\">$code</code></pre>\n";
+	if(!empty($e['result'])) {
+		$ret .= "\t\t<pre><code data-trim class=\"php\">";
+		ob_start();
+		eval("?>$code");
+		$ret .= ob_get_clean();
+		$ret .= "\t\t</code></pre>";
+	}
+	return $ret;
+}
