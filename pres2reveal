@@ -91,10 +91,15 @@ include $reveal_template;
 
 function render_image($e) {
 	global $slide_path;
-	return <<<EOB
+	$ret = '';
+	if(!empty($e['title'])) {
+		$ret .= "<p>{$e['title']}</p>\n";
+	}
+	$ret .= <<<EOB
 		<img src="/{$slide_path}/{$e[filename]}" width="{$e[width]}" height="{$e[height]}">
 
 EOB;
+	return $ret;
 }
 
 function render_blurb($e) {
