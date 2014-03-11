@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="/samdark.css" id="theme">
 
 		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="/github.css">
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
