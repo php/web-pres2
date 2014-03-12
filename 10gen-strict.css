@@ -98,11 +98,15 @@ div.event-title p
 	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
 }
 
-div.event-date, div.event-presenter, div.pres-url-small
+div.event-presenter
 {
-	font-size: 95%;
+	font-size: 1.25em;
 }
 
+div.pres-url-small
+{
+	font-size: 85%;
+}
 
 div.footer
 {
@@ -168,4 +172,13 @@ table
 pre.code strong
 {
 	color: #f00;
+}
+
+div.float
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
