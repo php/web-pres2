@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="/samdark.css" id="theme">
 
 		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="/github.css">
+		<link rel="stylesheet" href="/styles/github.css">
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
@@ -81,7 +81,7 @@
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
 					{ src: '/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: '/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: '/reveal.js/plugin/zoom-js/zoom.js', async: true, callback: function() { return !!document.body.classList; } },
 					{ src: '/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]

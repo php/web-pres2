@@ -131,11 +131,12 @@ function render_example($e) {
 	$ret = '';
 	$code = (string)$e;
 	if(substr($code,0,5)=="<?php") {
-		$code = substr($code,5);
+		$code = trim(substr($code,5));
 	}
-	if(empty($e['hide'])) $ret .= "\t\t<pre><code data-trim class=\"php\">$code</code></pre>\n";
+	$code = htmlspecialchars($code);
+	if(empty($e['hide'])) $ret .= "\t\t<pre><code>$code</code></pre>\n";
 	if(!empty($e['result'])) {
-		$ret .= "\t\t<pre><code data-trim class=\"php\">";
+		$ret .= "\t\t<pre><code>";
 		ob_start();
 		eval("?>$code");
 		$ret .= ob_get_clean();
