@@ -8,6 +8,7 @@ class PresFormatter implements ezcTemplateCustomFunction
 		switch ( $name )
 		{
 			case 'format_text':
+			case 'has_attribute':
 			case 'get_attribute':
 			case 'replace_properties':
 			case 'run_code':
@@ -90,6 +91,12 @@ class PresFormatter implements ezcTemplateCustomFunction
 	{
 		$attr_value = $node->getAttribute( $attribute );
 		return PresFormatter::replace_properties( $GLOBALS['pres'], $attr_value );
+	}
+
+	static public function has_attribute( $node, $attribute )
+	{
+		$attr_value = $node->hasAttribute( $attribute );
+		return $attr_value;
 	}
 }
 

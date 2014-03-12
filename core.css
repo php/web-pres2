@@ -446,7 +446,7 @@ ul.lifeline li:first-child
 	border-top: none;
 }
 
-div.flickr div.center
+div.flickr div.center, div.center
 {
 	text-align: center;
 }
