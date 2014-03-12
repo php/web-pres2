@@ -1,7 +1,0 @@
-Options FollowSymLinks
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /pres2
-RewriteRule ^([^\.\?/]+)$       /index.php/$1        [QSA]
-</IfModule>
-php_flag register_globals on
