@@ -37,7 +37,13 @@
 		$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 		$p->parse();
 		$pres = $p->getObjects();
-		
+	
+		// Do we have a generated reveal.js version of this presentation?	
+		if(file_exists(substr($filename,0,strrpos($filename,'.')).".html")) {
+			$pr[$i]['generated'] = basename(substr($filename,0,strrpos($filename,'.')));
+		} else {
+			$pr[$i]['generated'] = false;
+		}
 		$pr[$i]['id'] = $pres_id;
 		$pr[$i]['slidecount'] = count($pres[1]->slides);
 		$pr[$i]['title'] = $pres[1]->title;
@@ -86,7 +92,7 @@
 <head>
 <base href="<?php echo "http://".htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir?>">
 <title>PHP Presents</title>
-<?php include("css.php"); ?>
+<?php include "css.php"; ?>
 <script language="JavaScript1.2" type="text/javascript">
 <!--
 function change_mode() {
@@ -220,8 +226,12 @@ usort($pr,'cmp');
 for($j=0; $j < $prnum; $j++) {
 
 	if(strtolower($pr[$j]['topic']) == strtolower($topic)) {
-		print("<tr><td class='index'><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>");
+		if(!$pr[$j]['generated']) {
+			echo "<tr><td class='index'><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>";
+		} else {
+			echo "<tr><td class='index'><a href=\"$baseDir{$pr[$j]['generated']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>";
 
+		}
 	}
 
 }
