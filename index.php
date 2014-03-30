@@ -210,11 +210,11 @@ switch($display_mode) {
 <p><?php echo message('FONT_SIZES'); ?></p>
 <p><?php echo message('AVAILABLE_PRESENTATIONS'); ?></p>
 <table align="center" class="index">
-<tr><th><?php echo message('PRES_TITLE'); ?></th>
-	<th><?php echo message('PRES_DATE'); ?></th>
-	<th><?php echo message('PRES_LOCATION'); ?></th>
-	<th><?php echo message('PRES_SPEAKER'); ?></th>
-	<th><?php echo message('PRES_SLIDES'); ?></th></tr>
+<tr><th align="left"> &nbsp;<?php echo message('PRES_TITLE'); ?></th>
+	<th align="left"> &nbsp;<?php echo message('PRES_DATE'); ?></th>
+	<th align="left"> &nbsp;<?php echo message('PRES_LOCATION'); ?></th>
+	<th align="left"> &nbsp;<?php echo message('PRES_SPEAKER'); ?></th>
+	<th align="left"> &nbsp;<?php echo message('PRES_SLIDES'); ?></th></tr>
 <?php
 $prnum = sizeof($pr);
 
