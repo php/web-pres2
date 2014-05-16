@@ -14,6 +14,8 @@
 
 .reveal code {
   font-family: Monaco, consolas, monospace;
+  font-size: 150%;
+  line-height: 125%;
 }
 
 .reveal pre.big code {
