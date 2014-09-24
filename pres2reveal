@@ -144,7 +144,9 @@ function render_example($e) {
 		$code = trim(substr($code,5));
 	}
 	$code = htmlspecialchars($code);
-	if(empty($e['hide'])) $ret .= "\t\t<pre><code>$code</code></pre>\n";
+	$class = ''; 
+	if(!empty($e['type'])) $class = ' class="'.$e['type'].'"';
+	if(empty($e['hide'])) $ret .= "\t\t<pre><code$class>$code</code></pre>\n";
 	if(!empty($e['result'])) {
 		$ret .= "\t\t<pre><code>";
 		ob_start();
