@@ -219,7 +219,7 @@ switch($display_mode) {
 $prnum = sizeof($pr);
 
 function cmp($a,$b) {
-	return strtotime($a['date']) < strtotime($b['date']);
+	return strtotime($b['date']) - strtotime($a['date']);
 }
 usort($pr,'cmp');
 
