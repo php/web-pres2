@@ -87,19 +87,17 @@
 	$pres = $p->getObjects();   
 	$pres = $pres[1];
 ?>
-
+<!doctype html>
 <html>
 <head>
 <base href="<?php echo "http://".htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir?>">
 <title>PHP Presents</title>
 <?php include "css.php"; ?>
-<script language="JavaScript1.2" type="text/javascript">
-<!--
+<script>
 function change_mode() {
 	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked;
 	top.location=top.location.href;
 }
--->
 </script>
 </head>
 <body>
