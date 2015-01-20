@@ -123,7 +123,7 @@ function change_mode() {
 <br /><br /><br /><br /><br /><br />
 <div class="shadow" style="margin: 1em 4em 0.8em 3em;">
 <div class="output" style="font-size: 1.8em; margin: -0.5em 0 0 -0.5em;">
-<?php if(!isset($topic)){ ?>
+<?php if(empty($topic)){ ?>
 <p><?php echo message('WELCOME_MSG'); ?></p>
 <?php 
 	ksort($topics);
