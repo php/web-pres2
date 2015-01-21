@@ -646,6 +646,11 @@ table.columns tr
 	border: none;
 }
 
+table.leftalign td
+{
+	text-align: left;
+}
+
 th
 {
 	background: blue;
