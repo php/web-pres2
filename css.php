@@ -157,11 +157,3 @@ span.c5 {position: fixed; bottom: 0.5em; right: 1em; top: auto; left: auto; colo
 td.c1 {font-family: arial,helvetica,verdana; font-size: 80%}
 
 </style>
-
-<!--[if lt IE 6]>
-<style type="text/css">
-div.sticky, div.bsticky {
-	position: absolute;
-}
-</style>
-<![endif]-->

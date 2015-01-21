@@ -1,7 +1,6 @@
-<script type="text/javascript" language="javascript" src="1k.js"></script>
-<script type="text/javascript" language="javascript" src="slide.js"></script>
-<script type="text/javascript" language="JavaScript1.2">
-<!--
+<script src="1k.js"></script>
+<script src="slide.js"></script>
+<script>
 if(!document.all) {
 	window.captureEvents(Event.KEYUP);
 } else {
@@ -66,25 +65,4 @@ onload = function() {
 	}
 <?php } ?>
 }
-
-function fixNavigation() {  //helper function for making navbar sticky
-	 if (document.layers) {
-		document.layers["stickyBar"].left = window.pageXOffset;
-		document.layers["stickyBar"].top = window.pageYOffset;
-	} else if (document.all) {
-		document.all("stickyBar").style.posLeft = document.body.scrollLeft;
-		document.all("stickyBar").style.posTop = document.body.scrollTop;
- 	} else if (document.getElementById) {
-		document.getElementById("stickyBar").style.left = window.pageXOffset;
-		document.getElementById("stickyBar").style.top = window.pageYOffset;
-	}
-}
-
-//-->
 </script>
-
-<!--[if lt IE 6]>
-<script type="text/javascript">
-window.setInterval("fixNavigation()", 250);
-</script>
-<![endif]-->

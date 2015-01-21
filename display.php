@@ -40,7 +40,7 @@ class display {
 class html extends display {
 
     function _presentation(&$presentation) {
-        global $pres;
+        global $pres, $showScript;
 
         // Determine if we should cache
         // need to fix this check
@@ -55,9 +55,10 @@ class html extends display {
         // allow caching
         if($cache_ok) header("Last-Modified: " . date("r", filemtime($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename)));
         echo <<<HEADER
+<!doctype html>
 <html>
 <head>
-<base href="http://$_SERVER[HTTP_HOST]$this->baseDir"/>
+<base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
 <title>{$presentation->title}</title>
 HEADER;
         switch($presentation->template) {
@@ -72,16 +73,6 @@ HEADER;
             break;
         default:
             $body_style = "margin-top: 8em;";
-
-            /* Not too nice, since $body_style is saved to $this->body_style
-             * but I don't think it will have this big impact
-             */
-            echo "<!--[if lt IE 8]>\n";
-            echo "<style type=\"text/css\">\n";
-            echo "body { margin-top: 0px; }\n";
-            echo "</style>\n";
-            echo "<![endif]>\n";
-
             break;
         }
         $this->body_style = $body_style;
@@ -90,8 +81,11 @@ HEADER;
         /* the following includes scripts necessary for various animations */
         if($presentation->animate || $presentation->jskeyboard) include 'keyboard.js.php';
         // Link Navigation (and next slide pre-fetching)
-        if($this->slideNum) echo '<link rel="prev" href="'.$this->presentationDir.'/'.$presentation->slides[$this->prevSlideNum]->filename."\" />\n";
-        if($this->nextSlideNum) echo '<link rel="next" href="'.$this->presentationDir.'/'.$presentation->slides[$this->nextSlideNum]->filename."\" />\n";
+        $pres_url = explode('/', trim($_SERVER['PATH_INFO'], '/'));
+        $pres_url = $showScript.'/'.$pres_url[0];
+
+        if($this->slideNum) echo '<link rel="prev" href="'.$pres_url.'/'.$this->prevSlideNum."\">\n";
+        if($this->nextSlideNum) echo '<link rel="next" href="'.$pres_url.'/'.$this->nextSlideNum."\">\n";
         echo '</head>';
         while(list($this->coid,$obj) = each($this->objs)) {
             $obj->display();
@@ -102,8 +96,10 @@ FOOTER;
 }
 
     function _slide(&$slide) {
-        if(!empty($slide->body_style)) $body_style = $slide->body_style;
-        else $body_style = $slide->body_style;
+        if(!empty($slide->body_style))
+            $body_style = $slide->body_style;
+        else
+            $body_style = $this->body_style;
         $class = '';
         if ($this->pres->template != 'php')
         {
