@@ -91,6 +91,7 @@
 <html>
 <head>
 <base href="<?php echo "http://".htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir?>">
+<meta charset="utf-8">
 <title>PHP Presents</title>
 <?php include "css.php"; ?>
 <script>

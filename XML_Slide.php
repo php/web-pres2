@@ -76,7 +76,7 @@ class XML_Slide extends XML_Parser
      */
     function XML_Slide($handle = '')
     {
-        $this->XML_Parser();
+        parent::__construct('UTF-8');
         if (@is_resource($handle)) {
             $this->setInput($handle);
         } elseif ($handle != '') {

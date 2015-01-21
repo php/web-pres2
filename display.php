@@ -59,6 +59,7 @@ class html extends display {
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<meta charset="utf-8">
 <title>{$presentation->title}</title>
 HEADER;
         switch($presentation->template) {
@@ -881,9 +882,11 @@ class plainhtml extends html {
         global $pres;
 
         echo <<<HEADER
+<!doctype html>
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<meta charset="utf-8">
 <title>{$presentation->title}</title>
 </head>
 <body>
