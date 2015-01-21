@@ -59,7 +59,7 @@
 
 	// Load in the presentation
 	$fh = fopen($presFile, "rb");
-	$p =& new XML_Presentation($fh);
+	$p = new XML_Presentation($fh);
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();
@@ -120,7 +120,7 @@
 	// Load the slide
 	$mode->slideDir = dirname($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename).'/';
 	$fh = fopen($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename, "rb");
-	$r =& new XML_Slide($fh);
+	$r = new XML_Slide($fh);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
 	// Display slide
@@ -134,7 +134,7 @@ function get_all_titles($pres) {
 	while(list($slideNum,$slide) = each($pres->slides)) {
 //		$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$slideNum]->filename);
 		$fh = fopen($presentationDir.'/'.$pres->slides[$slideNum]->filename, "rb");
-		$r =& new XML_Slide($fh);
+		$r = new XML_Slide($fh);
 		$r->parse();
 
 		$objs = $r->getObjects();

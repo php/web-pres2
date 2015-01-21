@@ -1,9 +1,9 @@
 <?php
 
 // interim fix until someone changes the config.php on talks.php.net
-if (!defined('PRES_LOCALE')) { define('PRES2_LOCALE', 'en'); }
-if (!defined('PRES_LOCALEDIR')) { define('PRES2_LOCALEDIR', 'locale'); }
-if (!defined('PRES_USE_GETTEXT')) { define('PRES2_USE_GETTEXT', false); }
+if (!defined('PRES2_LOCALE')) { define('PRES2_LOCALE', 'en'); }
+if (!defined('PRES2_LOCALEDIR')) { define('PRES2_LOCALEDIR', 'locale'); }
+if (!defined('PRES2_USE_GETTEXT')) { define('PRES2_USE_GETTEXT', false); }
 // after config.php has been changed the lines above can be removed
 
 // set locale and bindings if we are using gettext
