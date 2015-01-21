@@ -3,7 +3,6 @@
 
 require_once 'display.php';
 
-require_once 'compat.php';
 // {{{ Helper functions
 
 // {{{ getFLashDimensions - Find the height and width of the given flash string

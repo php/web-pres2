@@ -192,17 +192,6 @@ switch($display_mode) {
 	case 'flash':
 		echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
 		break;
-
-	/* this is a redundant check w/ the flags above -- JMC */
-	/*
-	case 'pdfus':
-	case 'pdfusl':
-	case 'pdfa4':
-		if (!extension_loaded("pdf")) {
-			echo "<p>".message('NO_PDF_EXTENSION')."</p>\n";
-		}
-		break;
-		*/
 }
 ?>
 <p><?php echo message('FONT_SIZES'); ?></p>

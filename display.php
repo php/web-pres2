@@ -870,18 +870,6 @@ EOB;
                 break;
             case 'css':
                 echo "</div>\n";
-
-/* (this seemed too intrusive)
-            case 'php2':
-                if($this->nextTitle) {
-                ?>
-                <span class="C5">
-                    <?php echo 'next: '.markup_text($this->nextTitle);?>
-                </span>
-                <?php
-                }
-                break;
-*/
         }
         echo "</body>\n";
     }

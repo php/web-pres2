@@ -1,6 +1,4 @@
 <?php
-///	error_reporting(E_ALL);
-
 	require_once 'config.php';
 	$c = compact('presentationDir', 'baseDir', 'showScript', 'helpPage', 'baseFontSize', 
 	             'flashFontScale', 'pdfFontScale', 'pdfResourceFile', 'pdf_font', 
@@ -44,11 +42,6 @@
 	}
 	$_SESSION['currentPres'] = trim(implode('-', $urlArray), '-');
 
-	/*
-	Old way:
-	@list($_SESSION['currentPres'],$slideNum) = explode('/',$presFile);
-	*/
-	
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
 	$presFile = str_replace('..','',(string)$_SESSION['currentPres']); // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
@@ -132,7 +125,6 @@ function get_all_titles($pres) {
 	global $presentationDir;
 
 	while(list($slideNum,$slide) = each($pres->slides)) {
-//		$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$slideNum]->filename);
 		$fh = fopen($presentationDir.'/'.$pres->slides[$slideNum]->filename, "rb");
 		$r = new XML_Slide($fh);
 		$r->parse();
