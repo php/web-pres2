@@ -1,6 +1,4 @@
 <?php
-///	error_reporting(E_ALL);
-
 	require_once 'config.php';
 	$c = compact('presentationDir', 'baseDir', 'showScript', 'helpPage', 'baseFontSize', 
 	             'flashFontScale', 'pdfFontScale', 'pdfResourceFile', 'pdf_font', 
@@ -44,11 +42,6 @@
 	}
 	$_SESSION['currentPres'] = trim(implode('-', $urlArray), '-');
 
-	/*
-	Old way:
-	@list($_SESSION['currentPres'],$slideNum) = explode('/',$presFile);
-	*/
-	
 	if(!isset($_SESSION['titlesLoaded'])) $_SESSION['titlesLoaded'] = 0;
 	$presFile = str_replace('..','',(string)$_SESSION['currentPres']); // anti-hack
 	$presFile = "$presentationDir/$presFile".'.xml';
@@ -59,7 +52,7 @@
 
 	// Load in the presentation
 	$fh = fopen($presFile, "rb");
-	$p =& new XML_Presentation($fh);
+	$p = new XML_Presentation($fh);
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();
@@ -120,7 +113,7 @@
 	// Load the slide
 	$mode->slideDir = dirname($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename).'/';
 	$fh = fopen($presentationDir.'/'.$pres->slides[$mode->slideNum]->filename, "rb");
-	$r =& new XML_Slide($fh);
+	$r = new XML_Slide($fh);
 	$r->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$r->parse();
 	// Display slide
@@ -132,9 +125,8 @@ function get_all_titles($pres) {
 	global $presentationDir;
 
 	while(list($slideNum,$slide) = each($pres->slides)) {
-//		$r =& new XML_Slide($presentationDir.'/'.$pres->slides[$slideNum]->filename);
 		$fh = fopen($presentationDir.'/'.$pres->slides[$slideNum]->filename, "rb");
-		$r =& new XML_Slide($fh);
+		$r = new XML_Slide($fh);
 		$r->parse();
 
 		$objs = $r->getObjects();

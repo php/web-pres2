@@ -3,7 +3,6 @@
 
 require_once 'display.php';
 
-require_once 'compat.php';
 // {{{ Helper functions
 
 // {{{ getFLashDimensions - Find the height and width of the given flash string
@@ -72,7 +71,9 @@ function markup_text($str) {
 	$ret = preg_replace('/TAB\//',' ',$ret);
 
 	$ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
-	$ret = preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
+	$ret = preg_replace_callback('/:-:(.*?):-:/', function ($matches) {
+            return $pres->$match[1];
+        }, $ret);
 	return $ret;
 }
 // }}}

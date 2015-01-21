@@ -59,6 +59,7 @@ class html extends display {
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<meta charset="utf-8">
 <title>{$presentation->title}</title>
 HEADER;
         switch($presentation->template) {
@@ -596,7 +597,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 
     function _list(&$list) {
         if (!isset($list->bullets)) return;
-        $align = '';
+        $align = $style = '';
         if ( ($this->pres->template != 'css') && ( isset($list->title) )) {
             if(!empty($list->fontsize)) $style = "font-size: ".$list->fontsize.';';
             if(!empty($list->align)) $align = 'align="'.$list->align.'"';
@@ -870,18 +871,6 @@ EOB;
                 break;
             case 'css':
                 echo "</div>\n";
-
-/* (this seemed too intrusive)
-            case 'php2':
-                if($this->nextTitle) {
-                ?>
-                <span class="C5">
-                    <?php echo 'next: '.markup_text($this->nextTitle);?>
-                </span>
-                <?php
-                }
-                break;
-*/
         }
         echo "</body>\n";
     }
@@ -893,9 +882,11 @@ class plainhtml extends html {
         global $pres;
 
         echo <<<HEADER
+<!doctype html>
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<meta charset="utf-8">
 <title>{$presentation->title}</title>
 </head>
 <body>
@@ -1361,7 +1352,7 @@ class pdf extends display {
             $slideDir = dirname($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename).'/';
             $fn = $this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename;
             $fh = fopen($fn, "rb");
-            $r =& new XML_Slide($fh);
+            $r = new XML_Slide($fh);
             $r->setErrorHandling(PEAR_ERROR_DIE,"%s ($fn)\n");
             $r->parse();
 

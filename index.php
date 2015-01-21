@@ -33,7 +33,7 @@
 		
 	foreach($ps as $pres_id=>$filename) {
 		$fh = fopen($filename, "rb");
-		$p = &new XML_Presentation($fh);
+		$p = new XML_Presentation($fh);
 		$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 		$p->parse();
 		$pres = $p->getObjects();
@@ -81,7 +81,7 @@
 	unset($pres);
 
 	// default options for the file..
-	$p = &new XML_Presentation(fopen("index.xml", "rb"));
+	$p = new XML_Presentation(fopen("index.xml", "rb"));
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();   
@@ -91,6 +91,7 @@
 <html>
 <head>
 <base href="<?php echo "http://".htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir?>">
+<meta charset="utf-8">
 <title>PHP Presents</title>
 <?php include "css.php"; ?>
 <script>
@@ -192,17 +193,6 @@ switch($display_mode) {
 	case 'flash':
 		echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
 		break;
-
-	/* this is a redundant check w/ the flags above -- JMC */
-	/*
-	case 'pdfus':
-	case 'pdfusl':
-	case 'pdfa4':
-		if (!extension_loaded("pdf")) {
-			echo "<p>".message('NO_PDF_EXTENSION')."</p>\n";
-		}
-		break;
-		*/
 }
 ?>
 <p><?php echo message('FONT_SIZES'); ?></p>
