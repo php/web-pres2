@@ -106,7 +106,8 @@ EOB;
 function render_blurb($e) {
 	$size = (int)$e['fontsize'];
 	$class = '';
-	if($size >= 8) $tag = 'h2';
+	if($size >= 20) $tag = 'h1';
+	else if($size >= 8) $tag = 'h2';
 	else if($size >= 6) { $tag = 'h3'; $class = " class=\"p\""; }
 	else if($size >= 4) { $tag = 'h4'; $class = " class=\"p\""; }
 	else { $tag = 'p'; $class = " class=\"p\""; }
