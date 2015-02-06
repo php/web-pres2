@@ -55,6 +55,8 @@ foreach($slide as $sld) {
 			case 'link':
 			case 'image':
 			case 'blurb':
+			case 'notes':
+			case 'literal':
 			case 'example':
 				$fnc ="render_$k";
 				if(is_array(e)) {
@@ -105,14 +107,22 @@ EOB;
 
 function render_blurb($e) {
 	$size = (int)$e['fontsize'];
-	$class = '';
+	$class = $style = '';
 	if($size >= 20) $tag = 'h1';
 	else if($size >= 8) $tag = 'h2';
 	else if($size >= 6) { $tag = 'h3'; $class = " class=\"p\""; }
 	else if($size >= 4) { $tag = 'h4'; $class = " class=\"p\""; }
-	else { $tag = 'p'; $class = " class=\"p\""; }
+	else {
+		$tag = 'p';
+		$class = " class=\"p\"";
+		if(!empty($e['fontsize'])) $style .= "font-size:".$e['fontsize'].';';
+	}
+
+	if(!empty($e['align'])) $style .= 'text-align:'.$e['align'].';';
+	if(!empty($style)) $style = " style=\"$style\"";
+
 	$text = markup_text((string)$e);
-	return "\t\t<$tag{$class}>$text</$tag>\n";
+	return "\t\t<$tag{$class}{$style}>$text</$tag>\n";
 }
 
 function render_link($link) {
@@ -125,43 +135,80 @@ function render_link($link) {
 }
 
 function render_list($e) {
-	$ret = "\t\t<ul>\n";
+	$ret = '';
+	if(!empty($e['title'])) {
+		$style = $align = '';
+		if(!empty($e['fontsize'])) $style .= "font-size: ".$e['fontsize'].';';
+		if(!empty($e['align'])) $align .= 'align="'.$e['align'].'"';
+		if(!empty($style)) $style = " style=\"$style\"";
+		if(!empty($align)) $align = " align=\"$align\"";
+		$ret .= "\t\t<div $align style=\"$style\">".markup_text($e['title'])."</div>\n";
+	}
+	$ret .= "\t\t<ul>\n";
 	foreach($e->item as $v) {
 		$text = markup_text((string)$v);
 		$ret .= "\t\t\t<li>$text</li>\n";	
 	}
 	foreach($e->bullet as $v) {
+		$style = '';
 		$text = markup_text((string)$v);
-		$ret .= "\t\t\t<li>$text</li>\n";	
+		if(!empty($v['fontsize'])) $style .= "font-size: ".$v['fontsize'].';';
+		if(!empty($v['lineheight'])) $style .= "line-height: ".$v['lineheight'].';';
+		if(!empty($style)) $style = " style=\"$style\"";
+		$ret .= "\t\t\t<li$style>$text</li>\n";
 	}
 	$ret .= "\t\t</ul>\n";
 	return $ret;
 }
 
 function render_example($e) {
-	$ret = '';
-	$code = (string)$e;
+	$ret = $style = '';
+	if(!empty($e['title'])) $ret .= '<p class="example">'.markup_text($e['title'])."</p>\n";
+	if(!empty($e['fontsize'])) $style = ' style="font-size:'.$e['fontsize'].';"';
+	$code = trim((string)$e);
+	$orig_code = $code;
 	if(substr($code,0,5)=="<?php") {
 		$code = trim(substr($code,5));
 	}
 	$code = htmlspecialchars($code);
 	$class = ''; 
 	if(!empty($e['type'])) $class = ' class="'.$e['type'].'"';
-	if(empty($e['hide'])) $ret .= "\t\t<pre><code$class>$code</code></pre>\n";
+	if(empty($e['hide'])) $ret .= "\t\t<pre><code$class data-trim$style>$code</code></pre>\n";
 	if(!empty($e['result'])) {
-		$ret .= "\t\t<pre><code>";
+		$ret .= "\t\t<pre class=\"output\"$style>";
 		ob_start();
-		eval("?>$code");
+		eval("?>$orig_code");
 		$ret .= ob_get_clean();
-		$ret .= "\t\t</code></pre>";
+		$ret .= "\t\t</pre>";
 	}
 	return $ret;
+}
+
+function render_notes($e) {
+	$notes = markup_text(nl2br((string)$e));
+	$ret = "<aside class=\"notes\">$notes</aside>\n";
+	return $ret;
+}
+
+function render_literal($e) {
+	return (string)$e;
 }
 
 function format_tt($arg) {
   return("<tt>".str_replace(' ', '&nbsp;', $arg[1])."</tt>");
 }
 
+/* {{{ string markup_text($str)
+	*word*		Bold
+	_word_		underline
+	%word%		monospaced word (ie. %function()%)
+	~word~		italics
+	|rrggbb|word| Colour a word
+	^N^		   Superscript
+	@N@		   Subscript
+	**word**	  Blink
+	#id#		  Entity
+*/
 function markup_text($str) {
     global $pres;
 

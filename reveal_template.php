@@ -30,6 +30,7 @@
                 display: block;
                 overflow-x: auto;
                 padding: 0.5em;
+                line-height: 125%;
                 background: #fff;
                 color: black;
                 -webkit-text-size-adjust: none;
@@ -46,6 +47,22 @@
             display: block;
             margin: 0 0 1em 3em;
         }
+		/* Example titles */
+		p.example {
+			text-align: left;
+			margin: 0 0 -0.5em 1em;
+			font-weight: bold;
+		}
+		/* Example output style */
+		pre.output {
+            display: block;
+            overflow-x: auto;
+            padding: 0.5em;
+            background: #ddd;
+            color: black;
+			line-height: 200%;
+            -webkit-text-size-adjust: none;
+		}
         </style>
 
 		 <!-- Printing and PDF exports -->
@@ -56,6 +73,12 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? '/reveal.js/css/print/pdf.css' : '/reveal.js/css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+        <!-- Needed for charts to work. Fall back to network if no local copy -->
+        <script type='text/javascript' src='/jquery.min.js'></script> 
+        <script>window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">\x3C/script>')</script>
+        <script src="/highcharts.js"></script>
+        <script>window.Highcharts || document.write('<script src="http://code.highcharts.com/highcharts.js">\x3C/script>')</script>
 
 		<!--[if lt IE 9]>
 		<script src="/reveal.js/lib/js/html5shiv.js"></script>
@@ -77,6 +100,9 @@
 					<p><?=$speaker?><br>
 					<small><a href="http://twitter.com/<?=$twitter?>"><?=$twitter?></a></small>
 					</p>
+					<aside class="notes">
+						<?=nl2br(trim($notes))?>
+					</aside>
 				</section>
 				<?=$slides?>
 			</div>
@@ -100,14 +126,25 @@
 				// Optional reveal.js plugins
 				dependencies: [
 					{ src: '/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: '/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: '/highlight.min.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: '/reveal.js/plugin/zoom-js/zoom.js', async: true },
 					{ src: '/reveal.js/plugin/notes/notes.js', async: true }
 				]
 			});
-
+			/* This draws the graph on the slide on a slidechanged event */
+			Reveal.addEventListener('slidechanged', function(event) {
+				var callback = "render_"+event.currentSlide.id;
+				if(typeof(window[callback])=="function") {
+					window[callback]();
+				}
+			} );
+			/* This draws the graph if we got here directly without coming from another slide */
+			Reveal.addEventListener('ready', function(event) {
+				var callback = "render_"+event.currentSlide.id;
+				if(typeof(window[callback])=="function") {
+					window[callback]();
+				}
+			} );
 		</script>
 
 	</body>
