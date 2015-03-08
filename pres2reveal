@@ -245,6 +245,7 @@ function markup_text($str) {
     $ret = preg_replace('/TAB\//',' ',$ret);
 
     $ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
-    $ret = preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
+#    $ret = @preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
+    $ret = preg_replace_callback('/:-:(.*?):-:/', function($m) { global $pres; return $pres->{$m[1]}; }, $ret);
     return $ret;
 }
