@@ -1,5 +1,5 @@
 <?php
-require '/home/derick/dev/zetacomponents/trunk/Base/src/ezc_bootstrap.php';
+require '../vendor/autoload.php';
 
 class PresFormatter implements ezcTemplateCustomFunction
 {

@@ -5,6 +5,7 @@ mkdir /tmp/yourdir
 cd /tmp/yourdir
 git clone git@git.php.net:/web/pres2.git
 git clone git@git.php.net:/presentations.git
+php composer.phar require zetacomponents/template
 cd pres2/
 git checkout dericks-renderer 
 ln -s ../presentations .
