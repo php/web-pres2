@@ -35,6 +35,16 @@
                 color: black;
                 -webkit-text-size-adjust: none;
         }
+
+        .reveal code.shell {
+            display: block;
+            overflow-x: auto;
+            padding: 0.5em;
+            background: #000;
+            color: #ddd;
+			line-height: 120%;
+            -webkit-text-size-adjust: none;
+        }
         /* Left-align h3 and h4 if they are p elements */
         h3.p {
                 text-align: left;
@@ -63,6 +73,7 @@
 			line-height: 200%;
             -webkit-text-size-adjust: none;
 		}
+
         </style>
 
 		 <!-- Printing and PDF exports -->
@@ -119,6 +130,8 @@
 				progress: true,
 				history: true,
 				center: true,
+				width: 1024,
+				height: 768,
 
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 				transitionSpeed: 'fast',
