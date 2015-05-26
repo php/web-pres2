@@ -28,6 +28,7 @@
 		*/
         .reveal pre code {
                 display: block;
+                max-height: 600px;
                 overflow-x: auto;
                 padding: 0.5em;
                 line-height: 125%;
@@ -42,7 +43,7 @@
             padding: 0.5em;
             background: #000;
             color: #ddd;
-			line-height: 120%;
+            line-height: 125%;
             -webkit-text-size-adjust: none;
         }
         /* Left-align h3 and h4 if they are p elements */
