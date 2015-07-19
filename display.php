@@ -413,7 +413,8 @@ ENDD;
     // variables so we don't get run over
     function _example(&$example) {
         global $pres;
-        if(empty($example->filename)) $example->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$example->text);
+		if(empty($example->filename)) $example->text = preg_replace_callback('/:-:(.*?):-:/', function($matches) { return $this->pres->{$matches[1]}; }, $example->text);
+
 
         $_html_effect = '';
         if($example->effect) $_html_effect = "effect=\"$example->effect\"";
@@ -802,8 +803,8 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
     }
 
     function _link(&$link) {
-        if(empty($link->text)) $link->text = preg_replace('/:-:(.*?):-:/e','isset($this->pres->\\1)?$this->pres->\\1:""',$link->href);
-        if(!empty($link->leader)) $leader = preg_replace('/:-:(.*?):-:/e','isset($this->pres->\\1)?$this->pres->\\1:""',$link->leader);
+        if(empty($link->text)) $link->text = preg_replace_callback('/:-:(.*?):-:/',function($matches) { return isset($this->pres->{$matches[1]}) ? $this->pres->{$matches[1]} : '';},$link->href);
+        if(empty($link->leader)) $leader = preg_replace_callback('/:-:(.*?):-:/',function($matches) { return isset($this->pres->{$matches[1]}) ? $this->pres->{$matches[1]} : '';},$link->leader);
         else $leader='';
         if (empty($link->target)) $link->target = '_self';
         if(!empty($link->text)) {
@@ -1985,8 +1986,8 @@ class pdf extends display {
     }
 
     function _link(&$link) {
-        if(empty($link->text)) $link->text = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->href);
-        if(!empty($link->leader)) $leader = preg_replace('/:-:(.*?):-:/e','$this->pres->\\1',$link->leader);
+		if(empty($link->text)) $link->text = preg_replace_callback('/:-:(.*?):-:/', function($matches) { return $this->pres->{$matches[1]}; }, $link->href);
+		if(empty($link->leader)) $leader = preg_replace_callback('/:-:(.*?):-:/', function($matches) { return $this->pres->{$matches[1]}; }, $link->leader);
         else $leader='';
 
         if(!empty($link->text)) {
