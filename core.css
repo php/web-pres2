@@ -313,8 +313,8 @@ p.attribution
 {
 	text-align: center;
 	font-size: 50%;
-	margin-top: -16px;
-	color: gray;
+	margin-top: 0px;
+	color: black;
 }
 
 img.inline
