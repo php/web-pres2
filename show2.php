@@ -1,5 +1,5 @@
 <?php
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 class PresFormatter implements ezcTemplateCustomFunction
 {
@@ -77,13 +77,25 @@ class PresFormatter implements ezcTemplateCustomFunction
 		$ret = preg_replace('/TAB\//',' ',$ret);
 
 		$ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
-		$ret = preg_replace('/:-:(.*?):-:/e','$pres->\\1',$ret);
+		$ret = preg_replace_callback(
+			'/:-:(.*?):-:/',
+			function($matches) use ($pres) {
+				return $pres->{$matches[1]}; // Careful!
+			},
+			$ret
+		);
 		return $ret;
 	}
 
 	static public function replace_properties( $pres, $value )
 	{
-		$value = preg_replace('/:-:(.*?):-:/e','$pres->\\1', $value);
+		$value = preg_replace_callback(
+			'/:-:(.*?):-:/',
+			function($matches) use ($pres) {
+				return $pres->{$matches[1]}; // Careful!
+			},
+			$value
+		);
 		return $value;
 	}
 

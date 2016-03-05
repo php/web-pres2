@@ -1,0 +1,21 @@
+body
+{ 
+	background-color: white !important;
+}
+
+h1 {
+	position: absolute;
+	color: white !important;
+	background-color: rgba( 0, 0, 0, 0.6) !important;
+	width: 100%;
+	text-align: center;
+}
+
+img {
+	position: absolute;
+	z-index: -4;
+	margin: 0;
+	padding: 0;
+	width: 1024px;
+	height: 767px;
+}

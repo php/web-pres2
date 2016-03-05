@@ -1,0 +1,32 @@
+body
+{ 
+	background-color: black !important;
+	color: white !important;
+}
+
+h1 {
+	position: absolute;
+	background-color: rgba( 255, 255, 255, 0.8) !important;
+	width: 100%;
+	text-align: center;
+}
+
+img {
+	position: absolute;
+	z-index: -4;
+	margin: 0;
+	padding: 0;
+	width: 1024px;
+	height: 767px;
+}
+
+div.center-blurb {
+	color: black;
+	background-color: rgba( 255, 255, 255, 0.6 );
+	margin: 0 auto;
+	width: 50%;
+}
+
+div.center-blurb div {
+	text-align: left;
+}

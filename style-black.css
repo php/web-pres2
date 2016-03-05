@@ -1,0 +1,16 @@
+body
+{ 
+	background-color: black !important;
+	color: white !important;
+}
+
+h1 {
+	position: absolute;
+	background-color: rgba( 255, 255, 255, 0.8) !important;
+	width: 100%;
+	text-align: center;
+}
+
+img {
+	z-index: -4;
+}

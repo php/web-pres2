@@ -1,0 +1,5 @@
+{
+    "require": {
+        "zetacomponents/template": "^1.5"
+    }
+}
