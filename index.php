@@ -34,8 +34,11 @@
 	foreach($ps as $pres_id=>$filename) {
 		$fh = fopen($filename, "rb");
 		$p = new XML_Presentation($fh);
-		$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
-		$p->parse();
+		$p->setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
+		$check = $p->parse();
+		if (PEAR::isError($check)) {
+			continue;
+		}
 		$pres = $p->getObjects();
 	
 		// Do we have a generated reveal.js version of this presentation?	
@@ -82,8 +85,11 @@
 
 	// default options for the file..
 	$p = new XML_Presentation(fopen("index.xml", "rb"));
-	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
-	$p->parse();
+	$p->setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
+	$check = $p->parse();
+	if (PEAR::isError($check)) {
+		die("Could not parse index.xml, not sure what to do");
+	}
 	$pres = $p->getObjects();   
 	$pres = $pres[1];
 ?>
