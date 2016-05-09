@@ -59,7 +59,7 @@ foreach($slide as $sld) {
 			case 'literal':
 			case 'example':
 				$fnc ="render_$k";
-				if(is_array(e)) {
+				if(is_array($e)) {
 					foreach($e as $ee) {
 						$slides .= $fnc($ee);
 					}
@@ -138,7 +138,7 @@ function render_link($link) {
     } else {
 		$text = $link['href'];
 	}
-	return "\t\t<div align=\"{$link['align']}\" style=\"font-size: {$link['fontsize']}; color: {$link['textcolor']}; margin-left: {$link['marginleft']}; margin-right: {$link['marginright']}; margin-top: {$link['margintop']}; margin-bottom: {$link['marginbottom']};\">{$link['leader']}<a href=\"{$link['href']}\" target=\"{$link['target']}\">".markup_text($text)."</a></div><br />\n";
+	return "\t\t<div align=\"{$link['align']}\" style=\"font-size: {$link['fontsize']}; color: {$link['textcolor']}; text-align: {$link['align']}; margin-left: {$link['marginleft']}; margin-right: {$link['marginright']}; margin-top: {$link['margintop']}; margin-bottom: {$link['marginbottom']};\">{$link['leader']}<a href=\"{$link['href']}\" target=\"{$link['target']}\">".markup_text($text)."</a></div>\n";
 }
 
 function render_list($e) {
@@ -161,6 +161,8 @@ function render_list($e) {
 		$text = markup_text((string)$v);
 		if(!empty($v['fontsize'])) $style .= "font-size: ".$v['fontsize'].';';
 		if(!empty($v['lineheight'])) $style .= "line-height: ".$v['lineheight'].';';
+		if(!empty($v['marginleft'])) $style .= "margin-left: ".$v['marginleft'].';';
+		if(!empty($v['type'])) $style .= "list-style-type: ".$v['type'].';';
 		if(!empty($style)) $style = " style=\"$style\"";
 		$ret .= "\t\t\t<li$style>$text</li>\n";
 	}
