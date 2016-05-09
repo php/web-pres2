@@ -28,3 +28,7 @@ Things to work on
 - Go through each XML tag and make sure the attributes are implemented and 
   consistent across all display modes.  And at the same time, document each
   tag in the intro presentation.
+
+- Add ability to find/view the "Most Recent Talks", perhaps as its own topic,
+  likely create a topic named "Most Recent Talks", sort all talks by date, then
+  add 20 or so there.
