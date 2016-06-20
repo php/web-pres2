@@ -36,7 +36,7 @@
 		$p = new XML_Presentation($fh);
 		$p->setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
 		$check = $p->parse();
-		if (PEAR::isError($check)) {
+		if ($p->isError($check)) {
 			continue;
 		}
 		$pres = $p->getObjects();
@@ -87,7 +87,7 @@
 	$p = new XML_Presentation(fopen("index.xml", "rb"));
 	$p->setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
 	$check = $p->parse();
-	if (PEAR::isError($check)) {
+	if ($p->isError($check)) {
 		die("Could not parse index.xml, not sure what to do");
 	}
 	$pres = $p->getObjects();   

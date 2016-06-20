@@ -105,8 +105,9 @@ function render_image($e) {
     if(!empty($e['align'])) {
         $align = "align=\"{$e['align']}\"";
     }
+
 	$ret .= <<<EOB
-		<img src="/{$slide_path}/{$e[filename]}" $align width="{$e[width]}" height="{$e[height]}">
+		<img src="/{$slide_path}/{$e['filename']}" $align width="{$e['width']}" height="{$e['height']}">
 
 EOB;
 	return $ret;

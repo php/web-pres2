@@ -130,7 +130,7 @@ function strip_markups($str) {
 	}
 	
 	class _presentation extends _tag {
-		function _presentation() {
+		function __construct() {
 			global $baseFontSize, $jsKeyboard, $baseDir;
 
 			$this->title = 'No Title Text for this presentation yet';
@@ -159,7 +159,7 @@ function strip_markups($str) {
 	}
 
 	class _pres_slide extends _tag {
-		function _pres_slide() {
+		function __construct() {
 			$this->filename = '';
 		}
 	}
@@ -168,7 +168,7 @@ function strip_markups($str) {
 	// {{{ Slide Class
 	class _slide extends _tag {
 
-		function _slide() {
+		function __construct() {
 			$this->title = 'No Title Text for this slide yet';
 			$this->subtitle = '';
 			$this->titleSize  = "3em";
@@ -187,7 +187,7 @@ function strip_markups($str) {
 	// {{{ Blurb Class
 	class _blurb extends _tag {
 
-		function _blurb() {
+		function __construct() {
 			$this->font  = 'fonts/Verdana.fdb';
 			$this->align = 'left';
 			$this->talign = 'left';
@@ -209,7 +209,7 @@ function strip_markups($str) {
 
 	// {{{ Image Class
 	class _image extends _tag {
-		function _image() {
+		function __construct() {
 			$this->filename = '';
 			$this->align = 'left';
 			$this->talign = 'left';
@@ -224,7 +224,7 @@ function strip_markups($str) {
 
 	// {{{ Example Class
 	class _example extends _tag {
-		function _example() {
+		function __construct() {
 			$this->filename = '';
 			$this->type = 'php';
 			$this->fontsize = '2em';
@@ -428,7 +428,7 @@ function strip_markups($str) {
 
 	// {{{ Break Class
 	class _break extends _tag {
-		function _break() {
+		function __construct() {
 			$this->lines = 1;
 		}
 
@@ -437,7 +437,7 @@ function strip_markups($str) {
 
 	// {{{ Div Class
 	class _div extends _tag {
-		function _div() {
+		function __construct() {
 			$this->effect = '';
 		}
 	}
@@ -449,7 +449,7 @@ function strip_markups($str) {
 
 	// {{{ List Class
 	class _list extends _tag {
-		function _list() {
+		function __construct() {
 			$this->fontsize	= '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
@@ -463,7 +463,7 @@ function strip_markups($str) {
 	// {{{ Bullet Class
 	class _bullet extends _tag {
 
-		function _bullet() {
+		function __construct() {
 			$this->text = '';
 			$this->effect = '';
 			$this->id = '';
@@ -475,7 +475,7 @@ function strip_markups($str) {
 
 	// {{{ Table Class
 	class _table extends _tag {
-		function _table() {
+		function __construct() {
 			$this->fontsize	= '3em';
 			$this->marginleft  = '0em';
 			$this->marginright = '0em';
@@ -490,7 +490,7 @@ function strip_markups($str) {
 	// {{{ Cell Class
 	class _cell extends _tag {
 
-		function _cell() {
+		function __construct() {
 			$this->text = '';
 			$this->slide = '';
 			$this->id = '';
@@ -504,7 +504,7 @@ function strip_markups($str) {
 	// {{{ Link Class
 	class _link extends _tag {
 
-		function _link() {
+		function __construct() {
 			$this->href  = '';
 			$this->align = 'left';
 			$this->fontsize	 = '2em';
@@ -521,7 +521,7 @@ function strip_markups($str) {
 	// {{{ PHP Eval Class
 	class _php extends _tag {
 
-		function _php() {
+		function __construct() {
 			$this->filename = '';
 		}
 
@@ -543,7 +543,7 @@ function strip_markups($str) {
 	// {{{ Movie Class
 	class _movie extends _tag {
 
-		function _movie() {
+		function __construct() {
 			$this->filename = '';
 			$this->autoplay = 'true';
 			$this->width = 800;

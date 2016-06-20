@@ -26,6 +26,10 @@
 		   Not actually sure why this block isn't being picked up from the syntax highlight css 
 		   If you change the syntax highlight theme, copy the first block here
 		*/
+        .reveal pre {
+                width: 100%;
+        }
+
         .reveal pre code {
                 display: block;
                 max-height: 600px;

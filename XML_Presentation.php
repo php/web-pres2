@@ -82,7 +82,7 @@ class XML_Presentation extends XML_Parser
      * @param mixed File pointer or name of the slide file.
      * @return void
      */
-    function XML_Presentation($handle = '')
+    function __construct($handle = '')
     {
         parent::__construct('UTF-8');
         if (@is_resource($handle)) {
