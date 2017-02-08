@@ -127,6 +127,7 @@ function render_blurb($e) {
 	}
 
 	if(!empty($e['align'])) $style .= 'text-align:'.$e['align'].';';
+	if(!empty($e['style'])) $style .= $e['style'];
 	if(!empty($style)) $style = " style=\"$style\"";
 
 	$text = markup_text((string)$e);
@@ -172,18 +173,19 @@ function render_list($e) {
 }
 
 function render_example($e) {
-	$ret = $style = '';
+	$ret = $extra = $style = '';
 	if(!empty($e['title'])) $ret .= '<p class="example">'.markup_text($e['title'])."</p>\n";
 	if(!empty($e['fontsize'])) $style = ' style="font-size:'.$e['fontsize'].';"';
 	$code = trim((string)$e);
 	$orig_code = $code;
-	if(substr($code,0,5)=="<?php") {
+	if(empty($e['nostrip']) && substr($code,0,5)=="<?php") {
 		$code = trim(substr($code,5));
 	}
 	$code = htmlspecialchars($code);
 	$class = ''; 
 	if(!empty($e['type'])) $class = ' class="'.$e['type'].'"';
-	if(empty($e['hide'])) $ret .= "\t\t<pre><code$class data-trim$style>$code</code></pre>\n";
+	if(!empty($e['extra'])) $extra = $e['extra'];
+	if(empty($e['hide'])) $ret .= "\t\t<pre><code$class data-trim$style $extra>$code</code></pre>\n";
 	if(!empty($e['result'])) {
 		$ret .= "\t\t<pre class=\"output\"$style>";
 		ob_start();

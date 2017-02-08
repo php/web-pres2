@@ -122,7 +122,7 @@
 					<small><a href="http://twitter.com/<?=$twitter?>"><?=$twitter?></a></small>
 					</p>
 					<aside class="notes">
-						<?=nl2br(trim($notes))?>
+						<?php if(!empty($notes)) echo nl2br(trim($notes)); ?>
 					</aside>
 				</section>
 				<?=$slides?>
@@ -151,7 +151,8 @@
 					{ src: '/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					{ src: '/highlight.min.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: '/reveal.js/plugin/zoom-js/zoom.js', async: true },
-					{ src: '/reveal.js/plugin/notes/notes.js', async: true }
+					{ src: '/reveal.js/plugin/notes/notes.js', async: true },
+					{ src: '/reveal.js/plugin/line-numbers/line-numbers.js' }
 				]
 			});
 			/* This draws the graph on the slide on a slidechanged event */
