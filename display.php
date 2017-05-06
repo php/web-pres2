@@ -24,7 +24,7 @@ if(!function_exists('pdf_set_font')) {
 class display {
 
     // dump in config values
-    function display($c) {
+    function __construct($c) {
         foreach($c as $k => $v) {
             $this->$k = $v;    
         }
@@ -1234,8 +1234,8 @@ type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo
 
 class pdf extends display {
 
-    function pdf($c) {
-        parent::display($c);
+    function __construct($c) {
+        parent::__construct($c);
     }
 
     // {{{ my_new_pdf_page($pdf, $x, $y, $new_page)
@@ -2037,26 +2037,26 @@ class pdf extends display {
 }
 
 class pdfus extends pdf {
-    function pdfus($c) {
+    function __construct($c) {
         // US-Letter
         $this->pdf_x = 612;  $this->pdf_y = 792;
-        parent::pdf($c);
+        parent::__construct($c);
     }
 }    
 
 class pdfusl extends pdf {
-    function pdfusl($c) {
+    function __construct($c) {
         // US-Legal
         $this->pdf_x = 612;  $this->pdf_y = 1008;
-        parent::pdf($c);
+        parent::__construct($c);
     }
 }    
 
 class pdfa4 extends pdf {
-    function pdfa4($c) {
+    function __construct($c) {
         // A4
         $this->pdf_x = 595;  $this->pdf_y = 842;
-        parent::pdf($c);
+        parent::__construct($c);
     }
 }    
 
