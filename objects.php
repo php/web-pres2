@@ -72,7 +72,7 @@ function markup_text($str) {
 
 	$ret = preg_replace('/([\\\])([*#_|^@%])/', '\2', $ret);
 	$ret = preg_replace_callback('/:-:(.*?):-:/', function ($matches) use ($pres) {
-            return $pres->{$matches[1]} ?? '';
+            return empty($pres->{$matches[1]}) ? '' : $pres->{$matches[1]};
         }, $ret);
 	return $ret;
 }
