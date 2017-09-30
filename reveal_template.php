@@ -55,6 +55,17 @@
             line-height: 125%;
             -webkit-text-size-adjust: none;
         }
+
+        .reveal code.result {
+            display: block;
+            overflow-x: auto;
+            padding: 0.5em;
+            background: #ddd;
+            color: #000;
+            line-height: 125%;
+            -webkit-text-size-adjust: none;
+        }
+
         /* Left-align h3 and h4 if they are p elements */
         h3.p {
                 text-align: left;
