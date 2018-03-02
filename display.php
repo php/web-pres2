@@ -2028,7 +2028,7 @@ class pdf extends display {
     function _divide(&$divide) { /* empty */ }
 
     function _movie(&$movie) { /* empty */ }
-    
+
     function _footer(&$footer) {        
         if($this->objs[1]->template != 'titlepage') {
             $this->my_pdf_page_number($this->pdf, $this->pdf_x, $this->pdf_y);

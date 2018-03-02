@@ -38,7 +38,7 @@ foreach($slide as $sld) {
 		}
 	}
 	$slides .= "\t<section";
-	if(!empty($bgcolor)) $slides .= " data-background=\"$bgcolor\"";
+	if(!empty($bgcolor)) $slides .= " data-background-color=\"$bgcolor\"";
 	if(!empty($s['data-transition'])) $slides .= " data-transition=\"{$s['data-transition']}\"";
 	$slides .= ">\n";
 
@@ -58,6 +58,7 @@ foreach($slide as $sld) {
 			case 'notes':
 			case 'literal':
 			case 'example':
+			case 'movie':
 				$fnc ="render_$k";
 				if(is_array($e)) {
 					foreach($e as $ee) {
@@ -193,6 +194,27 @@ function render_example($e) {
 		$ret .= ob_get_clean();
 		$ret .= "\t\t</pre>";
 	}
+	return $ret;
+}
+
+function render_movie($e) {
+	global $slide_path;
+
+	$width = $height = $poster = '';
+	if(!empty($e['width'])) $width = "width=\"{$e['width']}\" ";
+	if(!empty($e['height'])) $height = "height=\"{$e['height']}\" ";
+	if(!empty($e['poster'])) $poster = "poster=\"{$e['poster']}\" ";
+	$filename = $e['filename'];
+
+	$ret = <<<EOB
+	<div id="container">
+      <video id='video' controls="controls" preload='none'
+        $width $poster>
+        <source id='mp4' src="{$slide_path}/$filename" type='video/mp4'/>
+        <p>Your user agent does not support the HTML5 Video element.</p>
+      </video>
+    </div>
+EOB;
 	return $ret;
 }
 
