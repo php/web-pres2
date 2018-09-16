@@ -145,20 +145,18 @@ function render_link($link) {
 }
 
 function render_list($e) {
-	$ret = $columns = '';
+	$ret = $columns = $fontsize = $style = '';
+	if(!empty($e['style'])) $style = " style=\"{$e['style']}\"";
+
 	if(!empty($e['title'])) {
 		$style = $align = '';
-		if(!empty($e['fontsize'])) $style .= "font-size: ".$e['fontsize'].';';
+		if(!empty($e['fontsize'])) $lstyle .= "font-size: ".$e['fontsize'].';';
 		if(!empty($e['align'])) $align .= 'align="'.$e['align'].'"';
-		if(!empty($style)) $style = " style=\"$style\"";
+		if(!empty($lstyle)) $lstyle = " style=\"$lstyle\"";
 		if(!empty($align)) $align = " align=\"$align\"";
-		$ret .= "\t\t<div $align style=\"$style\">".markup_text($e['title'])."</div>\n";
+		$ret .= "\t\t<div $align style=\"$lstyle\">".markup_text($e['title'])."</div>\n";
 	}
-	if(!empty($e['column-count'])) {
-		$gap = $e['column-gap'] ?? "1.8em";
-		$columns = " style=\"column-count:{$e['column-count']};column-gap:{$gap}\"";
-	}
-	$ret .= "\t\t<ul{$columns}>\n";
+	$ret .= "\t\t<ul{$style}>\n";
 	foreach($e->item as $v) {
 		$text = markup_text((string)$v);
 		$ret .= "\t\t\t<li>$text</li>\n";	
