@@ -54,6 +54,7 @@ foreach($slide as $sld) {
 		switch($k) {
 			case 'link':
 			case 'image':
+			case 'object':
 			case 'blurb':
 			case 'notes':
 			case 'literal':
@@ -109,6 +110,24 @@ function render_image($e) {
 
 	$ret .= <<<EOB
 		<img src="/{$slide_path}/{$e['filename']}" $align width="{$e['width']}" height="{$e['height']}">
+
+EOB;
+	return $ret;
+}
+
+function render_object($e) {
+	global $slide_path;
+	$ret = '';
+	if(!empty($e['title'])) {
+		$ret .= "<p>{$e['title']}</p>\n";
+	}
+    $align="";
+    if(!empty($e['align'])) {
+        $align = "align=\"{$e['align']}\"";
+    }
+
+	$ret .= <<<EOB
+		<object data="/{$slide_path}/{$e['filename']}" type="{$e['type']}" $align width="{$e['width']}" height="{$e['height']}">Use a newer browser, please</object>
 
 EOB;
 	return $ret;
