@@ -145,7 +145,7 @@ function render_link($link) {
 }
 
 function render_list($e) {
-	$ret = '';
+	$ret = $columns = '';
 	if(!empty($e['title'])) {
 		$style = $align = '';
 		if(!empty($e['fontsize'])) $style .= "font-size: ".$e['fontsize'].';';
@@ -154,7 +154,11 @@ function render_list($e) {
 		if(!empty($align)) $align = " align=\"$align\"";
 		$ret .= "\t\t<div $align style=\"$style\">".markup_text($e['title'])."</div>\n";
 	}
-	$ret .= "\t\t<ul>\n";
+	if(!empty($e['column-count'])) {
+		$gap = $e['column-gap'] ?? "1.8em";
+		$columns = " style=\"column-count:{$e['column-count']};column-gap:{$gap}\"";
+	}
+	$ret .= "\t\t<ul{$columns}>\n";
 	foreach($e->item as $v) {
 		$text = markup_text((string)$v);
 		$ret .= "\t\t\t<li>$text</li>\n";	
