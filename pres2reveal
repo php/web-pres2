@@ -60,6 +60,8 @@ foreach($slide as $sld) {
 			case 'literal':
 			case 'example':
 			case 'movie':
+			case 'table':
+			case 'cell':
 				$fnc ="render_$k";
 				if(is_array($e)) {
 					foreach($e as $ee) {
@@ -108,8 +110,13 @@ function render_image($e) {
         $align = "align=\"{$e['align']}\"";
     }
 
+	if(substr($e['filename'], 0, 4) == 'http') {
+		$src = $e['filename'];
+	} else {
+		$src = "/{$slide_path}/{$e['filename']}";
+	}
 	$ret .= <<<EOB
-		<img src="/{$slide_path}/{$e['filename']}" $align width="{$e['width']}" height="{$e['height']}">
+		<img src="$src" $align width="{$e['width']}" height="{$e['height']}">
 
 EOB;
 	return $ret;
@@ -152,6 +159,61 @@ function render_blurb($e) {
 
 	$text = markup_text((string)$e);
 	return "\t\t<$tag{$class}{$style}>$text</$tag>\n";
+}
+
+
+function render_table($table) {
+    $align = '';
+	$ret = '';
+    if(!empty($table['align'])) $align = 'align="'.$table['align'].'"';
+    if(isset($table['title'])) {
+        if(!empty($table['fontsize'])) $style = "style=\"font-size: ".$table['fontsize'].';"';
+        $ret .= "<div $align $style>".markup_text($table['title'])."</div>\n";
+    }
+    $i=0;
+    $width="100%";
+    if(!empty($table['width'])) {
+        $width = $table['width'];
+    }
+	$style = '';
+	if(isset($table['marginleft'])) $style .= "margin-left: {$table['marginleft']};";
+	if(isset($table['marginright'])) $style .= "margin-right: {$table['marginright']};";
+	if(isset($table['fontsize'])) $ret .= "<font size=\"{$table['fontsize']}\">\n";
+    $ret .= '<table '.$align.' width="'.$width.'" border="'.$table['border'].'" '.(isset($table['bgcolor'])?"bgcolor=\"{$table['bgcolor']}\"":'')."style=\"$style\">";
+    foreach($table->cell as $k=>$cell) {
+        if(!($i % $table['columns'])) {
+            $ret .= "<tr>\n";
+        }
+        $ret .= " <td ";
+        if(isset($cell['class'])) $ret .= "class=\"".$cell['class']."\"";
+        if(isset($cell['align'])) $ret .= "align=\"".$cell['align']."\"";
+        if(isset($cell['bgcolor'])) $ret .= "bgcolor=\"".$cell['bgcolor']."\"";
+        $ret .= ">";
+        $ret .= render_cell($cell);
+        $ret .= " </td>";
+        if(!(($i+1) % $table['columns'])) {
+            $ret .= "</tr>\n";
+        }
+        $i++;
+    }
+    $ret .= '</table>';
+	if(isset($table['fontsize'])) $ret .= "</font>";
+	$ret .= "<br />\n";
+    return $ret;
+}
+
+function render_cell($cell) {
+    $style='';
+    if(!empty($cell['fontsize'])) $style .= "font-size: ".$cell['fontsize'].';';
+    if(!empty($cell['marginleft'])) $style .= "margin-left: ".$cell['marginleft'].';';
+
+    if(!empty($cell['marginright'])) $style .= "margin-right: ".$cell['marginleft'].';';
+
+    if(!empty($cell['padding'])) $style .= "padding: ".$cell['padding'].';';
+
+    if(!empty($cell['bold']) && $cell['bold']) $style .= 'font-weight: bold;';
+
+    return "<span style=\"$style\">".markup_text($cell)."</span>\n";
 }
 
 function render_link($link) {
