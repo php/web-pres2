@@ -88,7 +88,7 @@ HEADER;
         if($this->slideNum) echo '<link rel="prev" href="'.$pres_url.'/'.$this->prevSlideNum."\">\n";
         if($this->nextSlideNum) echo '<link rel="next" href="'.$pres_url.'/'.$this->nextSlideNum."\">\n";
         echo '</head>';
-        while(list($this->coid,$obj) = each($this->objs)) {
+        foreach($this->objs as $obj) {
             $obj->display();
         }
         echo <<<FOOTER
