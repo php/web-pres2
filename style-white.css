@@ -4,10 +4,8 @@ body
 }
 
 h1 {
-	position: absolute;
 	color: white !important;
 	background-color: rgba( 0, 0, 0, 0.6) !important;
-	width: 100%;
 	text-align: center;
 }
 

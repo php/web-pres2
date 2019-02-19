@@ -8,6 +8,19 @@ body
 	font-size: 125%;
 }
 
+div.twitter
+{
+	visibility: hidden;
+}
+
+body.slide div.twitter
+{
+	position: absolute;
+	right: 1em;
+	bottom: 2px;
+	visibility: visible;
+}
+
 .xlarge
 {
 	font-size: 333%;
@@ -16,6 +29,12 @@ body
 .large
 {
 	font-size: 150%;
+}
+
+.large_center
+{
+	font-size: 200%;
+	text-align: center;
 }
 
 .pre p
@@ -101,7 +120,7 @@ div.slideCount
 	position: absolute;
 	width: 99%;
 	text-align: right;
-	margin-right: 2em;
+	right: 2em;
 	top: 0.2em;
 	font-size: small;
 	color: #aaa;
@@ -314,7 +333,19 @@ p.attribution
 	text-align: center;
 	font-size: 50%;
 	margin-top: -16px;
-	color: gray;
+	color: black;
+	opacity: 0.5;
+}
+
+p.bgattribution {
+	text-align: center;
+	font-size: 50%;
+	margin-top: -16px;
+	color: black;
+	position: fixed;
+	bottom: 0px;
+	background: #ffffff;
+	opacity: 0.6;
 }
 
 img.inline

@@ -4,8 +4,13 @@ body
 	color: white !important;
 }
 
+div.whole-slide
+{
+	width: 100% !important;
+}
+
 h1 {
-	position: absolute;
+	position: fixed;
 	background-color: rgba( 255, 255, 255, 0.8) !important;
 	width: 100%;
 	text-align: center;
@@ -25,6 +30,13 @@ div.center-blurb {
 	background-color: rgba( 255, 255, 255, 0.6 );
 	margin: 0 auto;
 	width: 50%;
+}
+
+div.center-blurb-wide {
+	color: black;
+	background-color: rgba( 255, 255, 255, 0.6 );
+	margin: 0 auto;
+	width: 66%;
 }
 
 div.center-blurb div {

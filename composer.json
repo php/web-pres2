@@ -1,5 +1,6 @@
 {
     "require": {
-        "zetacomponents/template": "^1.5"
+        "zetacomponents/template": "^1.5",
+        "mongodb/mongodb": "^1.0"
     }
 }

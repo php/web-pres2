@@ -33,7 +33,7 @@
 		
 	foreach($ps as $pres_id=>$filename) {
 		$fh = fopen($filename, "rb");
-		$p = &new XML_Presentation($fh);
+		$p = new XML_Presentation($fh);
 		$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 		$p->parse();
 		$pres = $p->getObjects();
@@ -81,7 +81,7 @@
 	unset($pres);
 
 	// default options for the file..
-	$p = &new XML_Presentation(fopen("index.xml", "rb"));
+	$p = new XML_Presentation(fopen("index.xml", "rb"));
 	$p->setErrorHandling(PEAR_ERROR_DIE,"%s\n");
 	$p->parse();
 	$pres = $p->getObjects();   

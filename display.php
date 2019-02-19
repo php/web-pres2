@@ -1361,7 +1361,7 @@ class pdf extends display {
             $slideDir = dirname($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename).'/';
             $fn = $this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename;
             $fh = fopen($fn, "rb");
-            $r =& new XML_Slide($fh);
+            $r = new XML_Slide($fh);
             $r->setErrorHandling(PEAR_ERROR_DIE,"%s ($fn)\n");
             $r->parse();
 
