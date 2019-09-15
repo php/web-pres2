@@ -150,7 +150,7 @@ function strip_markups($str) {
 			$this->navbartopiclinks = true;
 			$this->navbarheight = '6em';
 			$this->examplebackground = '#dcdcdc';
-			$this->outputbackground = '#eeee33';
+			$this->outputbackground = '#f2f2f2';
 			$this->shadowbackground = '#777777';
 			$this->stylesheet = 'css.php';
 			$this->logoimage1url = 'http://' . $_SERVER['HTTP_HOST'] . $baseDir;
