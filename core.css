@@ -333,7 +333,7 @@ p.attribution
 	text-align: center;
 	font-size: 50%;
 	margin-top: -16px;
-	color: black;
+	color: white;
 	opacity: 0.5;
 }
 
@@ -693,4 +693,16 @@ th, td, tr
 	border: black;
 	border: solid 1px gray;
 	padding: 0px;
+}
+
+div.error
+{
+	border: 1px solid white;
+	background-color: #f57900;
+	color: black;
+}
+
+div.error p
+{
+	font-family: monospace !important;
 }

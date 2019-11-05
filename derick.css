@@ -7,7 +7,7 @@ body, h1, h2
 
 div.whole-slide
 {
-	width: 1024px;
+	width: 90%;
 	margin: 0 auto;
 }
 
@@ -39,6 +39,12 @@ div.section-slide div p
 	text-align: left;
 	margin: 1em;
 	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
+}
+
+ul.noicon
+{
+	list-style-type: none;
+	font-size: 75%;
 }
 
 ul ul li
@@ -139,9 +145,14 @@ div.footer-thanks
 	width: 1024px;
 }
 
+div.big
+{
+	font-size: 150%;
+}
+
 pre
 {
-	font-size: 105%;
+	font-size: 175%;
 }
 
 div.result pre {
@@ -189,7 +200,13 @@ table.two
 	text-align: left;
 }
 
-table.two tr
+table.big
+{
+	font-size: 22pt;
+	text-align: left;
+}
+
+table.two tr, table.big tr
 {
 	vertical-align: top;
 }
@@ -218,7 +235,30 @@ div.small
 	font-size: 80%;
 }
 
+div.medium pre
+{
+	font-size: 125%;
+}
+
+div.small pre
+{
+	font-size: 133%;
+}
+
 h1.style-center
 {
 	text-align: center;
+}
+
+div.twitter
+{
+	position: absolute;
+	right: 1em;
+	bottom: 2px;
+	visibility: visible;
+}
+
+tt
+{
+	font-size: 125%;
 }

@@ -218,6 +218,7 @@ class Presentation
 		$tpl->send->node = $xml->documentElement;
 		$tpl->send->pres = $this;
 		$tpl->send->pres->forPdf = isset( $_GET['pdf'] );
+		$tpl->send->pres->pdfIndex = isset( $_GET['pdf'] ) ? (int) $_GET['pdf'] : 0;
 		$tpl->send->slideNr = $slideNr;
 		$tpl->send->css = $this->css;
 
