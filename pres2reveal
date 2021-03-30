@@ -72,7 +72,7 @@ foreach($slide as $sld) {
 				}
 				break;
 			case 'list':
-				$slides .= render_list($e);	
+				$slides .= render_list($e);
 				break;
 			case 'title':
 				if(empty($s['title']) && !empty($e['title'])) {
@@ -83,11 +83,17 @@ foreach($slide as $sld) {
 			case 'break':
 				if($vertical && !empty($e['section'])) {
 					$slides .= "\t\t</section>\n";
-					$slides .= "<section id=\"{$e['section']}\">\n";
+					$slides .= "\t\t<section id=\"{$e['section']}\" ";
+					foreach($e->attributes() as $ka=>$ea) {
+						if((string)$ka !== 'lines' && (string)$ka !== 'section') {
+							$slides .= (string)$ka.'="'.(string)$ea.'" ';
+						}
+					}
+					$slides .= ">\n";
 				}
-                if(empty($e['section']) && !empty($e['lines'])) {
-                    $slides .= str_repeat("<br/>\n", (int)$e['lines']);
-                }
+				if(empty($e['section']) && !empty($e['lines'])) {
+					$slides .= str_repeat("<br/>\n", (int)$e['lines']);
+				}
 				break;
 		}
 	}
@@ -240,7 +246,7 @@ function render_list($e) {
 	$ret .= "\t\t<ul{$style}>\n";
 	foreach($e->item as $v) {
 		$text = markup_text((string)$v);
-		$ret .= "\t\t\t<li>$text</li>\n";	
+		$ret .= "\t\t\t<li>$text</li>\n";
 	}
 	foreach($e->bullet as $v) {
 		$style = '';
@@ -320,6 +326,7 @@ function format_tt($arg) {
 	_word_		underline
 	%word%		monospaced word (ie. %function()%)
 	~word~		italics
+	--word--    strike
 	|rrggbb|word| Colour a word
 	^N^		   Superscript
 	@N@		   Subscript
@@ -336,6 +343,11 @@ function markup_text($str) {
     // blink
     $ret = str_replace('\*',chr(1),$ret);
     $ret = preg_replace('/\*\*([\S ]+?)\*\*/','<blink>\1</blink>',$ret);
+    $ret = str_replace(chr(1),'\*',$ret);
+    //
+    // blink
+    $ret = str_replace('\-',chr(1),$ret);
+    $ret = preg_replace('/\-\-([\S ]+?)\-\-/','<strike>\1</strike>',$ret);
     $ret = str_replace(chr(1),'\*',$ret);
 
     // bold
