@@ -3,4 +3,4 @@
 	url = https://github.com/hakimel/reveal.js.git
 [submodule "web-shared"]
 	path = shared
-	url = https://github.com/git/web-shared.git
+	url = https://github.com/php/web-shared.git
