@@ -55,13 +55,6 @@ class html extends display {
         // allow caching
         if($cache_ok) header("Last-Modified: " . date("r", filemtime($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename)));
         $HEAD_RAND = <<<HEAD_RAND
-    
-<script>
-function change_mode() {
-	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked;
-	top.location=top.location.href;
-}
-</script>
 
 <base href="http://%1">
 
