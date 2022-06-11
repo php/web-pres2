@@ -54,31 +54,77 @@ class html extends display {
 
         // allow caching
         if($cache_ok) header("Last-Modified: " . date("r", filemtime($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename)));
-        echo <<<HEADER
+        $HEAD_RAND = <<<HEAD_RAND
+    
+<script>
+function change_mode() {
+	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked;
+	top.location=top.location.href;
+}
+</script>
+
+<base href="http://%1">
+
+<style>
+body{
+    padding-bottom: 12px;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+}
+</style>
+
+HEAD_RAND;
+
+        $HEAD_RAND = str_replace("%1", htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir, $HEAD_RAND);
+
+        $TITLE = "Presentation System";
+
+        $CSS = array("/../css.css");
+
+        $SUBDOMAIN = "talks";
+
+        $LINKS = array(
+            array("href" => "https://php.net/downloads.php", "text" => "Downloads"),
+            array("href" => "https://php.net/docs.php", "text" => "Documentation"),
+            array("href" => "https://php.net/get-involved.php", "text" => "Get Involved"),
+            array("href" => "https://php.net/support.php", "text" => "Help")
+        );
+
+            $showHeaderFooter = $presentation->stylesheet == "css.css";
+
+        if($showHeaderFooter) {
+            include_once "shared/templates/header.inc";
+        }else{
+            $HEADER = <<<HEADER
 <!doctype html>
 <html>
 <head>
 <base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
 <meta charset="utf-8">
 <title>{$presentation->title}</title>
+
 HEADER;
+            echo $HEADER;
+        }
+        include 'getwidth.php';
+        if(!$showHeaderFooter) {
+            include $presentation->stylesheet;
+        }else{
+            echo "<style>";
+            include "css.css";
+            echo "</style>";
+        }
         switch($presentation->template) {
-        case 'simple':
-            $body_style = "margin-top: 1em;";
-            break;
-        case 'empty':
-            $body_style = "margin-top: 0em;";
-            break;
-        case 'php2':
-            $body_style = "margin-top: 5em;";
-            break;
-        default:
-            $body_style = "margin-top: 8em;";
-            break;
+            case 'css':
+                $body_style = "margin-top: 8em;";
+                break;
+            default:
+                $body_style = "margin-top: 0em;";
+                break;
         }
         $this->body_style = $body_style;
-        include 'getwidth.php';
-        include $presentation->stylesheet;
         /* the following includes scripts necessary for various animations */
         if($presentation->animate || $presentation->jskeyboard) include 'keyboard.js.php';
         // Link Navigation (and next slide pre-fetching)
@@ -91,9 +137,9 @@ HEADER;
         foreach($this->objs as $obj) {
             $obj->display();
         }
-        echo <<<FOOTER
-</html>
-FOOTER;
+        if($showHeaderFooter) {
+            include "/shared/templates/footer.inc";
+        }
 }
 
     function _slide(&$slide) {
@@ -137,46 +183,31 @@ FOOTER;
             break;
 
         case 'php2':
-            echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"align: {$slide->titleAlign}; width: 100%\"><div class=\"navbar\">";
+            echo "<div align=\"$slide->titleAlign\" style=\"align: {$slide->titleAlign}; width: 100%\"><div class=\"navbar\">";
             echo "<table style=\"float: left;\" width=\"60%\" border=\"0\" cellpadding=0 cellspacing=0><tr>\n";
-            if(!empty($slide->logo1)) $logo1 = $slide->logo1;
-            else $logo1 = $this->pres->logo1;
-            if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $this->pres->logoimage1url;
-            if(!empty($logo1)) {
-                $size = getimagesize($logo1);
-                echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0em; margin-left: 0em;\"></a></td>";
-                $offset+=2;
-            }
             ?>
             <td align="center">
-            <?php echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
+            <?php echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0; \"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
             </td>
-            </tr></table>
-            <br />
-            <table style="float: right">
-              <tr>
-              <td class="c1"><b><?php echo $this->pres->title ?></b></td>
-              <td><img src="images/vline.gif" hspace="5" /></td>
-              <td class="c1"><?php echo date('Y-m-d') ?></td>
-              <td><img src="images/blank.gif" width="5" /></td>
-              <td><?php if( $this->slideNum > 0){
+            <td align="right" >
+
+            <?php if($this->slideNum > 0){
                          $prevSlide = $this->slideNum - 1;
                          echo "<a title=\"$this->prevTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
                      } 
                      if($this->slideNum < $this->maxSlideNum) $this->nextSlideNum = $this->slideNum + 1;
-              ?></td>
-              <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
+            ?>
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
-                  <td><?php if( !empty($this->nextSlideNum) )
+                          <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a>
+              &nbsp;&nbsp;</i></b></span>
+                  <?php if( !empty($this->nextSlideNum) )
                     echo "<a title=\"$this->nextTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
-                ?></td>
-              <td><img src="images/blank.gif" height="10" width="15" /></td>
-              </tr>
-            </table>
+                ?></div>
+
+            </tr></table>
+            </div>
             <br clear="left" />
             <hr style="margin-left: 0; margin-right: 0; border: 0; color: <?php echo $titlecolor?>; background-color: <?php echo $titlecolor?>; height: 2px">
             </div></div>
@@ -184,17 +215,8 @@ FOOTER;
             break;
 
         case 'mysql':
-            echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
+            echo "<div align=\"$slide->titleAlign\" style=\"width: 100%\"><div class=\"navbar\">";
             echo "<table style=\"float: left;\" width=\"60%\" border=\"0\"><tr>\n";
-            if(!empty($slide->logo1)) $logo1 = $slide->logo1;
-            else $logo1 = $this->pres->logo1;
-            if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $this->pres->logoimage1url;
-            if(!empty($logo1)) {
-                $size = getimagesize($logo1);
-                echo "<td align=\"left\" $size[3]><a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left; margin-bottom: 0.5em; margin-left: 1em;\" alt=\"".$this->pres->slides[$this->slideNum]->filename."\"></a></td>";
-                $offset+=2;
-            }
             ?>
             <td align="center">
             <b style="color: CC6600; font-size: 1.5em; font-family: arial, helvetica, verdana"><?php echo markup_text($slide->title) ?></b>
@@ -255,23 +277,7 @@ ENDD;
 
         case 'php':
         default:
-            echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
-            if(!empty($slide->logo1)) $logo1 = $slide->logo1;
-            else $logo1 = $this->pres->logo1;
-            if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $this->pres->logoimage1url;                
-            if(!empty($logo1)) {
-                echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\" alt=\"".$this->pres->slides[$this->slideNum]->filename."\"></a>";
-                $offset+=2;
-            }
-            echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
-            echo "<div style=\"font-size: $navsize; float: right; margin: -2em 0 0 0;\">";
-            if(!empty($slide->logo2)) $logo2 = $slide->logo2;
-            else $logo2 = $this->pres->logo2;
-            if (!empty($logo2)) {
-                echo "<img src=\"$logo2\" border=\"0\"><br/>";
-                $offset-=2;
-            }
+            echo "<div    align=\"$slide->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
             echo "<a href=\"http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
             if ($this->pres->navbartopiclinks) {
                 echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
@@ -918,27 +924,11 @@ FOOTER;
         }
         switch($pres->template) {
             default:
-            echo "<table border=0 width=\"100%\"><tr rowspan=2><td width=1>";
-            if(!empty($slide->logo1)) $logo1 = $slide->logo1;
-            else $logo1 = $pres->logo1;
-            if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $pres->logoimage1url;                
-            if(!empty($logo1)) echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\"></a>\n";
-            echo "</td>\n";
             if ($pres->navbartopiclinks) {
                 echo "<td align=\"left\">";
                 if($this->prevTitle) echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none;\"><font size=+2>Previous: ".markup_text($this->prevTitle)."</font></a></td>\n";
                 if($this->nextTitle) echo "<td align=\"right\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none;\"><font size=+2>Next: ".markup_text($this->nextTitle)."</font></a></td>";
             }
-            echo "<td rowspan=2 width=1>";
-            if(!empty($slide->logo2)) $logo2 = $slide->logo2;
-            else $logo2 = $pres->logo2;
-            if (!empty($logo2)) {
-                echo "<img src=\"$logo2\" align=\"right\">\n";
-            }
-            echo "</td>\n";
-            echo "<tr><th colspan=3 align=\"center\"><font size=+4>".markup_text($slide->title)."</font></th></table>\n";
-
             break;
         }
 
@@ -1170,7 +1160,7 @@ class flash extends html {
         list($dx,$dy) = getFlashDimensions($slide->titleFont,$slide->title,flash_fixsize($slide->titleSize));
         $dx = $this->winW;  // full width
 ?>
-<div align="<?php echo $slide->titleAlign?>" class="sticky" id="stickyBar">
+<div align="<?php echo $slide->titleAlign?>">
 <embed src="<?php echo $this->baseDir?>flash.php/<?php echo time()?>?type=title&dy=<?php echo $dy?>&dx=<?php echo $dx?>&coid=<?php echo $this->coid?>" quality=high loop=false 
 pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"
 type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo $dy?>">

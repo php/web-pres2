@@ -1,6 +1,6 @@
 [submodule "reveal.js"]
 	path = reveal.js
 	url = https://github.com/hakimel/reveal.js.git
-[submodule "web-shared"]
+[submodule "shared"]
 	path = shared
-	url = https://github.com/php/web-shared.git
+	url = https://github.com/php/web-shared

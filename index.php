@@ -83,7 +83,7 @@
 	}
 	unset($pres);
 
-	// default options for the file..
+	// default options for the file.
 	$p = new XML_Presentation(fopen("index.xml", "rb"));
 	$p->setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
 	$check = $p->parse();
@@ -92,42 +92,45 @@
 	}
 	$pres = $p->getObjects();   
 	$pres = $pres[1];
-?>
-<!doctype html>
-<html>
-<head>
-<base href="<?php echo "http://".htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir?>">
-<meta charset="utf-8">
-<title>PHP Presents</title>
-<?php include "css.php"; ?>
+
+    $HEAD_RAND = <<<HEAD_RAND
+    
 <script>
 function change_mode() {
 	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked;
 	top.location=top.location.href;
 }
 </script>
-</head>
-<body>
-<?php
 
-	echo '<div id="stickyBar" class="sticky" align="center" style="width: 100%;"><div class="navbar">';
+<base href="http://%1">
 
-	$logo1 = $pres->logo1;
-	echo "<img src=\"$logo1\" align=\"left\" style=\"float: left;\">";
- 
-	$logo2 = $pres->logo2;
+HEAD_RAND;
 
-	if ($logo2) {
-		echo "<img src=\"$logo2\" align=\"right\" style=\"float: right;\">";
-	}
- 
-	echo "<div style=\"font-size: 3em; margin: 0 2.5em 0 0;\">".message('PRES2_TITLE')."</div>";
+    $HEAD_RAND = str_replace("%1", htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir, $HEAD_RAND);
 
-	echo '</div></div>';
+    $TITLE = "Presentation System";
+
+    $CSS = array("/../css.css");
+
+    $SUBDOMAIN = "talks";
+
+    $LINKS = array(
+            array("href" => "https://php.net/downloads.php", "text" => "Downloads"),
+            array("href" => "https://php.net/docs.php", "text" => "Documentation"),
+            array("href" => "https://php.net/get-involved.php", "text" => "Get Involved"),
+            array("href" => "https://php.net/support.php", "text" => "Help")
+    );
+
+    include_once "shared/templates/header.inc";
 ?>
-<br /><br /><br /><br /><br /><br />
-<div class="shadow" style="margin: 1em 4em 0.8em 3em;">
-<div class="output" style="font-size: 1.8em; margin: -0.5em 0 0 -0.5em;">
+<section class="mainscreen">
+<?php
+    if(!empty($_SERVER['PATH_INFO'])) {
+      $topic = trim(substr(urldecode($_SERVER['PATH_INFO']),1));
+    }
+	echo "<h1>".message('PRES2_TITLE')."</h1>";
+
+?>
 <?php if(empty($topic)){ ?>
 <p><?php echo message('WELCOME_MSG'); ?></p>
 <?php 
@@ -139,10 +142,11 @@ function change_mode() {
 	}
 	$percent = (int)(100 / $topic_cols);
 	foreach($topics as $i => $topic) {
-		printf('<td width="%.1f%%" class="output" style="font-size: 1.8em; padding-bottom: 15px"><a href="' . $baseDir . 'index.php/%s">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", $percent, urlencode($i));
+		printf('<td width="%.1f%%" class="output" style="padding-bottom: 15px"><a href="' . $baseDir . 'index.php/%s">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", $percent, urlencode($i));
 		if (++$col >= $topic_cols) { 
 			$col=0; 
-			print("</tr>\n<tr>"); 
+			print("</tr>\n<tr>");
+            
 		}
 	}
 	print('</tr></table>');
@@ -154,52 +158,16 @@ function change_mode() {
 	$_SESSION['show_speaker_notes'] = ($form_speaker=='true');
 	$_SESSION['selected_display_mode'] = $display_mode;
 
-	// flags for extensions
-	if (!extension_loaded('ming')) {
-		$flag_ext_ming = false;
-	} else {
-		$flag_ext_ming = true;
-	}
-	if (!extension_loaded('pdf')) {
-		$flag_ext_pdf = false;
-	} else {
-		$flag_ext_pdf = true;
-	}
 
 ?>
 <form name="modes_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
-<p><?php echo message('SELECT_MODE'); ?>
-<select name="modes" onChange="change_mode()">
-<option value="html" <?php echo ($display_mode=='html')?'SELECTED':''?>><?php echo message('OPT_FANCYHTML'); ?></option>
-<option value="plainhtml" <?php echo ($display_mode=='plainhtml')?'SELECTED':''?>><?php echo message('OPT_PLAINHTML'); ?></option>
-	<?php if ($flag_ext_ming) { ?>
-<option value="flash" <?php echo ($display_mode=='flash')?'SELECTED':''?>><?php echo message('OPT_FLASH'); ?></option>
-	<?php } ?>
-	<?php if ($flag_ext_pdf) { ?>
-<option value="pdfus" <?php echo ($display_mode=='pdfus')?'SELECTED':''?>><?php echo message('OPT_PDFLETTER'); ?></option>
-<option value="pdfusl" <?php echo ($display_mode=='pdfusl')?'SELECTED':''?>><?php echo message('OPT_PDFLEGAL'); ?></option>
-<option value="pdfa4" <?php echo ($display_mode=='pdfa4')?'SELECTED':''?>><?php echo message('OPT_PDFA4'); ?></option>
-	<?php } ?>
-</select>
-<br />
 <?php echo message('SHOW_NOTES'); ?> <input type="checkbox" name="speaker" <?php echo ($form_speaker=='true')?'checked':''?> onChange="change_mode()">
 </p>
 </form>
 <?php
-switch($display_mode) {
-	case 'html':
-		if($jsKeyboard) {
-			echo "<p>".nl2br(message('HTML_KEYBOARD_CONTROLS'))."</p>\n";
-		} else {
-			echo "<p>".message('HTML_NO_KEYBOARD_CONTROLS')."</p>\n";
-			break;
-		}
-		break;
 
-	case 'flash':
-		echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
-		break;
-}
+echo "<p>".nl2br(message('HTML_KEYBOARD_CONTROLS'))."</p>\n";
+
 ?>
 <p><?php echo message('FONT_SIZES'); ?></p>
 <p><?php echo message('AVAILABLE_PRESENTATIONS'); ?></p>
@@ -232,10 +200,12 @@ for($j=0; $j < $prnum; $j++) {
 echo '</table>';
 }
 ?>
-</div>
-</div>
-</body>
-</html>
+    <br />
+</section>
+
+<?php include('shared/templates/footer.inc'); ?>
+
+
 <?php
 /*
  * Local variables:
