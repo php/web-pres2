@@ -58,9 +58,11 @@
 	$pres = $p->getObjects();
 	$pres = $pres[1];
 
-	// Set display mode
+	// Set display: html, plainhtml, pdfus, etc.
 	if (!isset($navmode)) {
-		if (isset($pres->navmode)) {
+		if (isset($_SESSION['selected_display_mode'])) { 
+			$navmode = $_SESSION['selected_display_mode'];
+		} elseif (isset($pres->navmode)) { 
 			$navmode = $pres->navmode;
 		}	else { 
 			$navmode = 'html';
