@@ -158,16 +158,52 @@ HEAD_RAND;
 	$_SESSION['show_speaker_notes'] = ($form_speaker=='true');
 	$_SESSION['selected_display_mode'] = $display_mode;
 
+	// flags for extensions
+	if (!extension_loaded('ming')) {
+		$flag_ext_ming = false;
+	} else {
+		$flag_ext_ming = true;
+	}
+	if (!extension_loaded('pdf')) {
+		$flag_ext_pdf = false;
+	} else {
+		$flag_ext_pdf = true;
+	}
 
 ?>
 <form name="modes_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
+<p><?php echo message('SELECT_MODE'); ?>
+<select name="modes" onChange="change_mode()">
+<option value="html" <?php echo ($display_mode=='html')?'SELECTED':''?>><?php echo message('OPT_FANCYHTML'); ?></option>
+<option value="plainhtml" <?php echo ($display_mode=='plainhtml')?'SELECTED':''?>><?php echo message('OPT_PLAINHTML'); ?></option>
+	<?php if ($flag_ext_ming) { ?>
+<option value="flash" <?php echo ($display_mode=='flash')?'SELECTED':''?>><?php echo message('OPT_FLASH'); ?></option>
+	<?php } ?>
+	<?php if ($flag_ext_pdf) { ?>
+<option value="pdfus" <?php echo ($display_mode=='pdfus')?'SELECTED':''?>><?php echo message('OPT_PDFLETTER'); ?></option>
+<option value="pdfusl" <?php echo ($display_mode=='pdfusl')?'SELECTED':''?>><?php echo message('OPT_PDFLEGAL'); ?></option>
+<option value="pdfa4" <?php echo ($display_mode=='pdfa4')?'SELECTED':''?>><?php echo message('OPT_PDFA4'); ?></option>
+	<?php } ?>
+</select>
+<br />
 <?php echo message('SHOW_NOTES'); ?> <input type="checkbox" name="speaker" <?php echo ($form_speaker=='true')?'checked':''?> onChange="change_mode()">
 </p>
 </form>
 <?php
+switch($display_mode) {
+	case 'html':
+		if($jsKeyboard) {
+			echo "<p>".nl2br(message('HTML_KEYBOARD_CONTROLS'))."</p>\n";
+		} else {
+			echo "<p>".message('HTML_NO_KEYBOARD_CONTROLS')."</p>\n";
+			break;
+		}
+		break;
 
-echo "<p>".nl2br(message('HTML_KEYBOARD_CONTROLS'))."</p>\n";
-
+	case 'flash':
+		echo "<p>".nl2br(message('FLASH_KEYBOARD_CONTROLS'))."</p>\n";
+		break;
+}
 ?>
 <p><?php echo message('FONT_SIZES'); ?></p>
 <p><?php echo message('AVAILABLE_PRESENTATIONS'); ?></p>
