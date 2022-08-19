@@ -97,7 +97,7 @@
     
 <script>
 function change_mode() {
-	document.cookie="display_mode=html|"+document.modes_form.speaker.checked+";path=/";
+	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked+";path=/";
 	top.location=top.location.href;
 }
 </script>
