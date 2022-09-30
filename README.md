@@ -1,9 +1,12 @@
-Ever wondered what would happen if someone was crazy enough
-to combine XML, PHP, HTML, CSS, JavaScript, Flash and 
-ActionScript in one application?  Well, here it is.  The new
-and improved PHP presentation system.
+# PHP presentation system
 
-Used PHP extensions: pcre, xml, optional: pdf, ming
+This repo holds the PHP presentation system hosted on https://talks.php.net.
+
+You can find the presentations under https://github.com/php/presentations.
+
+This system works perfectly for PHP 5.3 and needs the XML extension.
+
+## Files 
 
 Brief walkthrough of how this all hangs together:
 
@@ -107,6 +110,8 @@ property and that the display() method for each one looks something like this:
 
 And then you can have html(), flash(), text(), svg(), jpg() methods for each
 one.
+
+## Contributing
 
 Have a look at the TODO file for a list of things to start working on.  If
 we all pitch in a bit we should all end up with cool-looking presentations

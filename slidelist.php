@@ -7,6 +7,7 @@
 ?>
 <html><title>Slide Listing</title>
 <head>
+<meta charset="utf-8">
 <script language="JavaScript1.2">
 <!--
 function slide(url){
