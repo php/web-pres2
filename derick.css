@@ -1,7 +1,7 @@
 body, h1, h2
 {
-	background-color: #3a005d;
-	color: #eeeeec;
+	background-color: #cbe6ac;
+	color: black;
 	font-size: 150%;
 }
 
@@ -16,6 +16,11 @@ body.agenda-slide, body.slide
 	background-color: #eeeeec;
 	text-align: left;
 	color: #222;
+}
+
+div.template-black
+{
+	color: black;
 }
 
 div.agenda-slide h1, div.slide h1, div.slide h2
@@ -34,11 +39,11 @@ div.slide h2
 
 div.section-slide div p
 {
-	color: #eee;
+	color: #000;
 	font-weight: bold;
 	text-align: left;
 	margin: 1em;
-	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
+	text-shadow: -2px -2px 3px #fff, -1px -1px 1px #000
 }
 
 ul.noicon
@@ -76,7 +81,7 @@ h2
 
 div.title-slide
 {
-	color: #eeeeec;
+	color: black;
 	margin-left: 60px;
 	margin-right: 100px;
 	text-align: left;
@@ -85,6 +90,19 @@ div.title-slide
 div.template-white div.title-slide
 {
 	color: #000;
+}
+
+div.template-draft::before
+{
+	content: "DRAFT";
+	font-family: sans-serif;
+	position: fixed;
+	margin-left: auto;
+	left: 10%;
+	top: 30%;
+	font-size: 18em;
+	opacity: 0.15;
+	transform: rotate(-25deg);
 }
 
 pre.code, pre.xdebug-var-dump
@@ -161,7 +179,13 @@ div.result pre {
 
 div.big-centre
 {
-    font-size: 250%;
+    font-size: 200%;
+    text-align: center;
+}
+
+div.emoji
+{
+    font-size: 800%;
     text-align: center;
 }
 
@@ -202,7 +226,7 @@ table.two
 
 table.big
 {
-	font-size: 22pt;
+	font-size: 32pt;
 	text-align: left;
 }
 
@@ -261,4 +285,10 @@ div.twitter
 tt
 {
 	font-size: 125%;
+}
+
+@page {
+  margin: 0;
+  padding: 0;
+  size: 500mm 300mm;
 }

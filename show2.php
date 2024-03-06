@@ -161,6 +161,8 @@ class Presentation
 	public $slideFiles;
 	public $base;
 	public $presName;
+	public $css;
+
 
 	function __get( $name )
 	{
@@ -176,7 +178,8 @@ class Presentation
 		foreach (
 			array(
 				'title', 'event', 'location', 'date', 'speaker',
-				'email', 'url', 'joindin', 'twitter', 'lat', 'lon',
+				'email', 'url', 'joindin', 'twitter', 'mastodon',
+				'lat', 'lon',
 			) as $prop )
 		{
 			$this->properties[$prop] = (string) $xml->$prop;
