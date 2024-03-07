@@ -216,7 +216,7 @@ class Presentation
 		$parts = explode( '/', $this->slideFiles[$slideNr] );
 
 		$this->base = '/presentations/slides/' . join( '', array_slice( $parts, -2, 1 ) ) . '/';
-		
+
 		$tpl = new ezcTemplate();
 		$tpl->send->node = $xml->documentElement;
 		$tpl->send->pres = $this;

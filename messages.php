@@ -31,7 +31,7 @@ function _init_gettext() {
     }
     $tdom = textdomain('pres2');
     $btex = bindtextdomain('pres2', PRES2_LOCALEDIR);
-    return ($loc !== false) 
+    return ($loc !== false)
             && ($btex == realpath(PRES2_LOCALEDIR))
             && ($tdom == 'pres2');
 }
