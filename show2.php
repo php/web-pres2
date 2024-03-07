@@ -154,7 +154,7 @@ else
 	echo $pres->display( $slideNr );
 }
 
-
+#[\AllowDynamicProperties]
 class Presentation
 {
 	private $properties;
