@@ -610,7 +610,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             if(!empty($list->lineheight)) $style = "line-height: ".$list->lineheight.';';
             echo '<ul class="pres" style="'.$style.'">';
         }
-        while(list($k,$bul)=each($list->bullets)) { $bul->display(); }
+        foreach($list->bullets as $k => $bul) { $bul->display(); }
         echo '</ul>';
     }
 

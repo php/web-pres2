@@ -48,7 +48,7 @@
 			$pr[$i]['generated'] = false;
 		}
 		$pr[$i]['id'] = $pres_id;
-		$pr[$i]['slidecount'] = count($pres[1]->slides);
+		$pr[$i]['slidecount'] = count($pres[1]->slides ?? []);
 		$pr[$i]['title'] = $pres[1]->title;
 
 		if(isset($pres[1]->date)) {

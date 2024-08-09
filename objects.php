@@ -84,7 +84,7 @@ function add_line_numbers($text)
 	$lnwidth = strlen(count($lines));
 	$format = '%'.$lnwidth."d: %s\n";
 	$lined_text = '';
-	while (list ($num, $line) = each ($lines)) {
+	foreach ($lines as $num => $line) {
 			$lined_text .= sprintf($format, $num + 1, $line);
 	}
 	return $lined_text;

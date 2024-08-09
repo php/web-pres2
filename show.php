@@ -124,7 +124,7 @@
 function get_all_titles($pres) {
 	global $presentationDir;
 
-	while(list($slideNum,$slide) = each($pres->slides)) {
+	foreach($pres->slides as $slideNum => $slide) {
 		$fh = fopen($presentationDir.'/'.$pres->slides[$slideNum]->filename, "rb");
 		$r = new XML_Slide($fh);
 		$r->parse();
