@@ -120,7 +120,7 @@ class XML_Presentation extends XML_Parser
 
             /* Special case for array properties */
             case 'SLIDE':
-                if (!array_key_exists($this->coid)) { $this->objects[$this->coid] = new _presentation; }
+                if (!array_key_exists($this->coid, $this->objects)) { $this->objects[$this->coid] = new _presentation; }
                 $this->objects[$this->coid]->slides[] = new _pres_slide();
                 $idx = count($this->objects[$this->coid]->slides)-1;
                 $this->_add_attribs($this->objects[$this->coid]->slides[$idx], $attribs);
