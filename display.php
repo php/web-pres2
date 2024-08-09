@@ -760,7 +760,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         } else {
             echo '<table '.$align.' width="'.$width.'" border="'.$table->border.'" '.(isset($table->bgcolor)?"bgcolor=\"{$table->bgcolor}\"":'').'>';
         }
-        while(list($k,$cell)=each($table->cells)) {
+        foreach($table->cells as $k => $cell) {
             if(!($i % $table->columns)) {
                 echo "<tr>\n";
             }
@@ -892,7 +892,7 @@ class plainhtml extends html {
 </head>
 <body>
 HEADER;
-        while(list($this->coid,$obj) = each($this->objs)) {
+        foreach($this->objs as $this->coid => $obj) {
             $obj->display();
         }
         echo <<<FOOTER
@@ -1095,7 +1095,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
     function _list(&$list) {
         if(isset($list->title)) echo "<h1>".markup_text($list->title)."</h1>\n";
         echo '<ul>';
-        while(list($k,$bul)=each($list->bullets)) $bul->display();
+        foreach($list->bullets as $k => $bul) $bul->display();
         echo '</ul>';
     }
 
@@ -1109,7 +1109,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         if(isset($table->title)) echo "<h1 $align>".markup_text($table->title)."</h1>\n";
         echo '<table '.$align.' width="100%" border=1>';
         $i = 0;
-        while(list($k,$cell)=each($table->cells)) {
+        foreach($table->cells as $k => $cell) {
             if(!($i % $table->columns)) {
                 echo "<tr>\n";
             }
@@ -1348,7 +1348,7 @@ class pdf extends display {
         pdf_set_info($this->pdf, "Creator", "See Author");
         pdf_set_info($this->pdf, "Subject", isset($presentation->topic)?$presentation->topic:"");
 
-        while(list($this->slideNum,$slide) = each($presentation->slides)) {
+        foreach($presentation->slides as $this->slideNum => $slide) {
             // testing hack
             $slideDir = dirname($this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename).'/';
             $fn = $this->presentationDir.'/'.$presentation->slides[$this->slideNum]->filename;
@@ -1360,7 +1360,7 @@ class pdf extends display {
             $this->objs = $r->getObjects();
             $this->my_new_pdf_page($this->pdf, $this->pdf_x, $this->pdf_y, true);
             $this->pdf_cx = $this->pdf_cy = 0;  // Globals that keep our current x,y position
-            while(list($this->coid,$obj) = each($this->objs)) {
+            foreach($this->objs as $this->coid => $obj) {
                     $obj->display();
             }
             $this->my_new_pdf_end_page($this->pdf);
@@ -1819,7 +1819,7 @@ class pdf extends display {
                 $list->alpha = $list->start;
             }
         }
-        while(list($k,$bul)=each($list->bullets)) $bul->display();
+        foreach($list->bullets as $k => $bul) $bul->display();
         
     }
 
@@ -1935,7 +1935,7 @@ class pdf extends display {
         $cell_offset = $max_w/$table->columns;
 
         $i = 1;
-        while(list($k,$cell)=each($table->cells)) {
+        foreach($table->cells as $k => $cell) {
             if(!($i % $table->columns)) {
                 $cell->end_row = false;
             } 
