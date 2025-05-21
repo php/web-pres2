@@ -177,7 +177,7 @@ div.result pre {
 	background: none;
 }
 
-div.big-centre
+div.big-centre, div.quote
 {
     font-size: 200%;
     text-align: center;
