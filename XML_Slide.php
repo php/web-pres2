@@ -151,15 +151,15 @@ class XML_Slide extends XML_Parser
 				if($element=='NUM') {
 					$this->objects[$this->coid]->bullets[$idx]->type = 'number';
 				}
-                $this->activeTag = 'BULLET'; 
+                $this->activeTag = 'BULLET';
 				$this->level++;
-                break; 
+                break;
 			case 'CELL':
                 $this->objects[$this->coid]->cells[] = new _cell();
                 $idx = count($this->objects[$this->coid]->cells) - 1;
                 $this->_add_attribs($this->objects[$this->coid]->cells[$idx], $attribs);
                 $this->activeTag = $element;
-                break; 
+                break;
 
             /* Everything else can't */
             default:
@@ -234,13 +234,13 @@ class XML_Slide extends XML_Parser
             $idx = count($this->objects[$this->coid]->bullets) - 1;
             if($this->last_handler == 'cdata')
                 $this->objects[$this->coid]->bullets[$idx]->text .= $cdata;
-            else 
+            else
                 $this->objects[$this->coid]->bullets[$idx]->text = $cdata;
 		} elseif($el == 'cell') {
             $idx = count($this->objects[$this->coid]->cells) - 1;
             if($this->last_handler == 'cdata')
                 $this->objects[$this->coid]->cells[$idx]->text .= $cdata;
-            else 
+            else
                 $this->objects[$this->coid]->cells[$idx]->text = $cdata;
         } else {
             if($this->last_handler == 'cdata') {
