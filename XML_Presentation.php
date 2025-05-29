@@ -131,7 +131,7 @@ class XML_Presentation extends XML_Parser
                 if(!empty($this->activeChapter)) {
                     $this->objects[$this->coid]->slides[$idx]->Chapter = $this->activeChapter;
                 }
-                break; 
+                break;
 
             /* Everything else can't */
             case 'SECTION':
@@ -206,7 +206,7 @@ class XML_Presentation extends XML_Parser
             $idx = count($this->objects[$this->coid]->slides) - 1;
             if($this->last_handler == 'cdata')
                 $this->objects[$this->coid]->slides[$idx]->filename .= $cdata;
-            else 
+            else
                 $this->objects[$this->coid]->slides[$idx]->filename = $cdata;
         } else {
             if($this->last_handler == 'cdata') {
