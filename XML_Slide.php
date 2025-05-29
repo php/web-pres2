@@ -98,7 +98,7 @@ class XML_Slide extends XML_Parser
      * @param  array  Attributes of XML tag
      * @return void
      */
-    function startHandler($parser, $element, &$attribs)
+    function startHandler($parser, $element, $attribs)
     {
         switch ($element) {
             /* These tags can have other tags inside */
