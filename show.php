@@ -6,7 +6,7 @@
 
 	set_time_limit(0); // PDF generation can take a while
 	if(!strlen($_SERVER['PATH_INFO'])) {
-		header('Location: http://'.$_SERVER['HTTP_HOST'].$baseDir);
+		header('Location: ' . $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$baseDir);
 		exit;
 	}
 

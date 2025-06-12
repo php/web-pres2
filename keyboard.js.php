@@ -28,11 +28,11 @@ function keypressHandler(e) {
 			}
 			currentEffect = currentEffect+1;
 		} else if (<?php echo $this->nextSlideNum; ?>) {
-			top.location='<?php echo "http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/{$_SESSION['currentPres']}/$this->nextSlideNum"; ?>';
+			top.location='<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/{$_SESSION['currentPres']}/$this->nextSlideNum"; ?>';
 		}
 	}
 	if (e == 37 && <?php echo $this->prevSlideNum+1; ?>) /* left arrow */
-		top.location='<?php echo "http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/{$_SESSION['currentPres']}/$this->prevSlideNum"; ?>';
+		top.location='<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/{$_SESSION['currentPres']}/$this->prevSlideNum"; ?>';
 }
 window.onkeyup = keypressHandler;
 

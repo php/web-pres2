@@ -58,7 +58,7 @@ class html extends display {
 <!doctype html>
 <html>
 <head>
-<base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<base href="$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir">
 <meta charset="utf-8">
 <title>{$presentation->title}</title>
 HEADER;
@@ -130,7 +130,7 @@ FOOTER;
         switch($this->pres->template) {
         case 'simple':
             $slide->titleColor = '#000000';
-            echo "<div align=\"$slide->titleAlign\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
+            echo "<div align=\"$slide->titleAlign\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
             break;
         case 'empty':
             $slide->titleColor = '#000000';
@@ -150,7 +150,7 @@ FOOTER;
             }
             ?>
             <td align="center">
-            <?php echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
+            <?php echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a title=\"".$this->pres->slides[$this->slideNum]->filename."\" href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";?>
             </td>
             </tr></table>
             <br />
@@ -162,16 +162,16 @@ FOOTER;
               <td><img src="images/blank.gif" width="5" /></td>
               <td><?php if( $this->slideNum > 0){
                          $prevSlide = $this->slideNum - 1;
-                         echo "<a title=\"$this->prevTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
+                         echo "<a title=\"$this->prevTitle\" href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
                      } 
                      if($this->slideNum < $this->maxSlideNum) $this->nextSlideNum = $this->slideNum + 1;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+              <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
                   <td><?php if( !empty($this->nextSlideNum) )
-                    echo "<a title=\"$this->nextTitle\" href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
+                    echo "<a title=\"$this->nextTitle\" href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
                 ?></td>
               <td><img src="images/blank.gif" height="10" width="15" /></td>
@@ -209,16 +209,16 @@ FOOTER;
               <td><img src="images/blank.gif" width="5" /></td>
               <td><?php if( $this->slideNum > 0){
                          $prevSlide = $this->slideNum - 1;
-                         echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
+                         echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
                      } 
                      if($this->slideNum < $this->maxSlideNum) $this->nextSlideNum = $this->slideNum + 1;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a href="<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+              <a href="<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
                   <td><?php if( !empty($this->nextSlideNum) )
-                    echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
+                    echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
                 ?></td>
               <td><img src="images/blank.gif" height="10" width="15" /></td>
@@ -233,7 +233,7 @@ FOOTER;
         case 'css':
             echo "<div id=\"stickyBar\" class=\"sticky\" align=\"$slide->titleAlign\" style=\"width: 100%;\"><div class=\"navbar\">";
             echo <<<ENDT
-<div align='center' class='navbar_title'><a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}{$this->showScript}/$currentPres/{$this->slideNum}' style='navbar_title_a'>
+<div align='center' class='navbar_title'><a href='{$_SERVER[REQUEST_SCHEME]}://{$_SERVER['HTTP_HOST']}{$this->baseDir}{$this->showScript}/$currentPres/{$this->slideNum}' style='navbar_title_a'>
 ENDT;
             echo $slide->title."</a></div>";
             if (isset($slide->subtitle)) {
@@ -243,11 +243,11 @@ ENDST;
             }
             echo "<div class='navbar_nr'>";
             echo <<<ENDD
-<a href='http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php' class='navbar-title' onClick="window.open('http://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=10,top=0'); return false">{$this->slideNum}/{$this->maxSlideNum}</a></div>
+<a href='{$_SERVER[REQUEST_SCHEME]}://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php' class='navbar-title' onClick="window.open('{$_SERVER[REQUEST_SCHEME]}://{$_SERVER['HTTP_HOST']}{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=10,top=0'); return false">{$this->slideNum}/{$this->maxSlideNum}</a></div>
 ENDD;
             if ($this->pres->navbartopiclinks) {
-                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
-                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
+                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
+                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
             }
             echo "</div></div>\n";
             echo "<div class=\"mainarea\">\n";
@@ -264,7 +264,7 @@ ENDD;
                 echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\" alt=\"".$this->pres->slides[$this->slideNum]->filename."\"></a>";
                 $offset+=2;
             }
-            echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
+            echo "<div align=\"center\" style=\"font-size: $titlesize; margin: 0 ".$offset."em 0 0;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->slideNum\" style=\"text-decoration: none; color: $titlecolor;\">".markup_text($slide->title)."</a></div>";
             echo "<div style=\"font-size: $navsize; float: right; margin: -2em 0 0 0;\">";
             if(!empty($slide->logo2)) $logo2 = $slide->logo2;
             else $logo2 = $this->pres->logo2;
@@ -272,10 +272,10 @@ ENDD;
                 echo "<img src=\"$logo2\" border=\"0\"><br/>";
                 $offset-=2;
             }
-            echo "<a href=\"http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('http://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
+            echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
             if ($this->pres->navbartopiclinks) {
-                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
-                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
+                echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
+                echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
             }
             echo '</div></div>';
             break;
@@ -886,7 +886,7 @@ class plainhtml extends html {
 <!doctype html>
 <html>
 <head>
-<base href="http://$_SERVER[HTTP_HOST]$this->baseDir">
+<base href="$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir">
 <meta charset="utf-8">
 <title>{$presentation->title}</title>
 </head>
@@ -927,8 +927,8 @@ FOOTER;
             echo "</td>\n";
             if ($pres->navbartopiclinks) {
                 echo "<td align=\"left\">";
-                if($this->prevTitle) echo "<a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none;\"><font size=+2>Previous: ".markup_text($this->prevTitle)."</font></a></td>\n";
-                if($this->nextTitle) echo "<td align=\"right\"><a href=\"http://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none;\"><font size=+2>Next: ".markup_text($this->nextTitle)."</font></a></td>";
+                if($this->prevTitle) echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none;\"><font size=+2>Previous: ".markup_text($this->prevTitle)."</font></a></td>\n";
+                if($this->nextTitle) echo "<td align=\"right\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none;\"><font size=+2>Next: ".markup_text($this->nextTitle)."</font></a></td>";
             }
             echo "<td rowspan=2 width=1>";
             if(!empty($slide->logo2)) $logo2 = $slide->logo2;
@@ -1718,7 +1718,7 @@ class pdf extends display {
                 switch($example->type) {
                     case 'genimage':
                         $fn = tempnam("/tmp","pres2");
-                        $img = file_get_contents("http://".$_SERVER['HTTP_HOST']."/".$this->baseDir.$this->slideDir.$example->filename);
+                        $img = file_get_contents("$_SERVER[REQUEST_SCHEME]://".$_SERVER['HTTP_HOST']."/".$this->baseDir.$this->slideDir.$example->filename);
                         $fp_out = fopen($fn,"wb");
                         fwrite($fp_out,$img);
                         fclose($fp_out);

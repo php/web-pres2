@@ -102,11 +102,12 @@ function change_mode() {
 }
 </script>
 
-<base href="http://%1">
+<base href="%2://%1">
 
 HEAD_RAND;
 
     $HEAD_RAND = str_replace("%1", htmlspecialchars($_SERVER['HTTP_HOST']).$baseDir, $HEAD_RAND);
+    $HEAD_RAND = str_replace("%2", htmlspecialchars($_SERVER['REQUEST_SCHEME']), $HEAD_RAND);
 
     $TITLE = "Presentation System";
 

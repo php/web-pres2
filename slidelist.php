@@ -37,7 +37,7 @@ window.opener.location=url
 		} 
 		$lastSection = isset($v['section']) ? $v['section'] : '';
 		$lastChapter = isset($v['chapter']) ? $v['chapter'] : '';
-		echo "<tr><td align=right>".($k)."</td><td><a href=\"slidelist.php\" style=\"text-decoration: none;\" onClick=\"javascript:slide('http://$_SERVER[HTTP_HOST]$baseDir$showScript/$_SESSION[currentPres]/$k'); window.close();\">$spacer$v[title]</a></td></tr>\n";
+		echo "<tr><td align=right>".($k)."</td><td><a href=\"slidelist.php\" style=\"text-decoration: none;\" onClick=\"javascript:slide('$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$baseDir$showScript/$_SESSION[currentPres]/$k'); window.close();\">$spacer$v[title]</a></td></tr>\n";
 	}
 	echo "</table>\n";
 ?>
