@@ -218,7 +218,7 @@ class XML_Parser_Simple extends XML_Parser
      * @access private
      * @final
      */
-    function startHandler($xp, $elem, &$attribs)
+    function startHandler($xp, $elem, $attribs)
     {
         array_push($this->_elStack, array(
             'name'    => $elem,
