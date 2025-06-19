@@ -1,5 +1,8 @@
 config.php
 .htaccess
 show
+vendor
 img
-/presentations/
+presentations
+.idea
+*.sw*

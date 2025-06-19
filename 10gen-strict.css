@@ -1,0 +1,224 @@
+body, h1, h2
+{
+	background-color: #013290;
+	color: #eeeeec;
+	font-size: 150%;
+}
+
+div.whole-slide
+{
+	width: 1024px;
+	margin: 0 auto;
+}
+
+body.agenda-slide, body.slide
+{
+	background-color: #eeeeec;
+	text-align: left;
+	color: #222;
+}
+
+div.agenda-slide h1, div.slide h1, div.slide h2
+{
+	background-color: #eeeeec;
+	color: #222;
+	margin-bottom: 0.5em;
+}
+
+div.slide h2
+{
+	font-size: 1.5em;
+	margin-top: -1.0em;
+	margin-bottom: 0.5em;
+}
+
+div.section-slide div p
+{
+	color: #eee;
+	font-weight: bold;
+	text-align: left;
+	margin: 1em;
+	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
+}
+
+ul ul li
+{
+	font-size: 80%;
+	list-style-type: disc;
+}
+
+img.right
+{
+	margin: 0em 2em 0em 0.5em;
+}
+
+h1
+{
+	color: #abdc45;
+	margin-bottom: 0em;
+	font-family: "PT Sans", Arial;
+	font-size: 2em;
+	text-align: center;
+}
+
+h2
+{
+	color: #abdc45;
+	margin-bottom: 0em;
+	text-align: center;
+}
+
+div.title-slide
+{
+	color: #eeeeec;
+	margin-left: 60px;
+	margin-right: 100px;
+	text-align: left;
+}
+
+div.template-white div.title-slide
+{
+	color: #000;
+}
+
+pre.code, pre.xdebug-var-dump
+{
+	color: #000;
+	background: #fff;
+}
+
+pre.xdebug-var-dump
+{
+	font-size: 100%;
+}
+
+p
+{
+	font-family: "PT Sans", Arial;
+	font-size: 1.75em;
+}
+
+div.event-title p
+{
+	font-family: "PT Sans Caption", Arial;
+	font-weight: bold;
+	font-size: 180%;
+	padding: 0;
+	text-shadow: -2px -2px 3px #000, -1px -1px 1px #fff
+}
+
+div.event-presenter
+{
+	font-size: 1.25em;
+}
+
+div.pres-url-small
+{
+	font-size: 85%;
+}
+
+div.footer
+{
+	border-top: 3px solid #3366ff;
+	width: 870px;
+	top: 585px;
+	position: absolute;
+	background-color: #013290;
+	clear: both;
+	padding-top: 50px;
+}
+
+div.footer-thanks
+{
+	border-top: 3px solid #3366ff;
+	top: 620px;
+	position: absolute;
+	background-color: #013290;
+	clear: both;
+	padding-top: 20px;
+	width: 1024px;
+}
+
+pre
+{
+	font-size: 105%;
+}
+
+div.result pre {
+	background: none;
+}
+
+div.big-centre
+{
+    font-size: 250%;
+    text-align: center;
+}
+
+div.centre
+{
+    text-align: center;
+}
+
+a
+{
+	color: #000;
+}
+
+div.html
+{
+	font-size: 80%;
+	color: #000;
+	background-color: #fff;
+	margin-left: 2em;
+	margin-right: 2em;
+}
+
+div.html a
+{
+	color: #777;
+}
+
+table
+{
+	font-size: 22pt;
+}
+
+table.two
+{
+	font-size: 85%;
+	text-align: left;
+}
+
+table.two tr
+{
+	vertical-align: top;
+}
+
+pre.code strong
+{
+	color: #f00;
+}
+
+div.float
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+table, td, tr
+{
+	border: 0;
+}
+
+div.small
+{
+	font-size: 80%;
+}
+
+h1.style-center
+{
+	text-align: center;
+}

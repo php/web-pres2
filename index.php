@@ -34,11 +34,13 @@
 	foreach($ps as $pres_id=>$filename) {
 		$fh = fopen($filename, "rb");
 		$p = new XML_Presentation($fh);
+
 		$p->setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
 		$check = $p->parse();
 		if ($p->isError($check)) {
 			continue;
 		}
+
 		$pres = $p->getObjects();
 	
 		// Do we have a generated reveal.js version of this presentation?	
@@ -90,6 +92,7 @@
 	if ($p->isError($check)) {
 		die("Could not parse index.xml, not sure what to do");
 	}
+
 	$pres = $p->getObjects();   
 	$pres = $pres[1];
 
@@ -223,10 +226,13 @@ function cmp($a,$b) {
 usort($pr,'cmp');
 
 for($j=0; $j < $prnum; $j++) {
-
 	if(strtolower($pr[$j]['topic']) == strtolower($topic)) {
-		if(!$pr[$j]['generated']) {
-			echo "<tr><td class='index'><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>";
+		if (!$pr[$j]['generated']) {
+			if ($pr[$j]['speaker'] === 'Derick Rethans') {
+				echo "<tr><td class='index'><a href=\"$baseDir$showSpecialScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>";
+			} else {
+				echo "<tr><td class='index'><a href=\"$baseDir$showScript/{$pr[$j]['id']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>";
+			}
 		} else {
 			echo "<tr><td class='index'><a href=\"$baseDir{$pr[$j]['generated']}\">{$pr[$j]['title']}</a></td><td class='index'>{$pr[$j]['date']}</td><td class='index'>{$pr[$j]['location']}</td><td class='index'>{$pr[$j]['speaker']}</td><td class='index'>{$pr[$j]['slidecount']}</td></tr>";
 

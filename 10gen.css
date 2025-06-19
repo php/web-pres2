@@ -1,0 +1,50 @@
+h1, h2
+{
+	background-color: #1a3e7f;
+}
+
+div.footer
+{
+	height: 105px;
+	width: 1024px;
+	top: 645px;
+	position: absolute;
+	background-color: #1a3e7f;
+	clear: both;
+}
+
+div.footer img
+{
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+div.footer-thanks
+{
+	border-top: 3px solid #3366ff;
+	top: 620px;
+	position: absolute;
+	background-color: #013290;
+	clear: both;
+	padding-top: 20px;
+	width: 1024px;
+}
+
+pre
+{
+	font-size: 135%;
+}
+
+div.section-slide div p
+{
+	text-align: center;
+	color: #000;
+	margin-top: 200px;
+	margin-bottom: 0px;
+}
+
+div.big-centre
+{
+    font-size: 250%;
+    text-align: center;
+}

@@ -2,6 +2,7 @@
 	$presentationDir = 'presentations';
 	$baseDir = '/';
 	$showScript = 'show.php';  // In case you want to ForceType a shorter one
+	$showSpecialScript = 'show2.php';
 	$helpPage = 'help.php';
 	$baseFontSize = '12pt';
 	$flashFontScale = 18;
