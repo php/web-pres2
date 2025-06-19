@@ -38,6 +38,7 @@ class display {
 }
 
 class html extends display {
+    var $coid;
 
     function _presentation(&$presentation) {
         global $pres, $showScript;
