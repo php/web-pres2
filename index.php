@@ -114,7 +114,7 @@ HEAD_RAND;
 
     $TITLE = "Presentation System";
 
-    $CSS = array("/../css.css");
+    $CSS = array();
 
     $SUBDOMAIN = "talks";
 
