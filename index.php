@@ -8,7 +8,7 @@
 	require_once 'messages.php';
 
 	session_start();
-	
+
 	$topics = array();
 	$ps = array();
 
@@ -22,15 +22,15 @@
 
 		@closedir($dir);
 	}
-	
+
 	if (!$ps) {
 		echo message('SLIDES_NOT_FOUND')." \$presentationDir $presentationDir<BR>";
 		echo message('MODIFY_CONFIG')." config.php<BR>";
 		exit;
 	}
-	
+
 	$i = 0;
-		
+
 	foreach($ps as $pres_id=>$filename) {
 		$fh = fopen($filename, "rb");
 		$p = new XML_Presentation($fh);
@@ -65,7 +65,7 @@
 		if(isset($pres[1]->speaker)) {
 			$pr[$i]['speaker'] = $pres[1]->speaker;
 		} else $pr[$i]['speaker'] = '&nbsp;';
-		
+
 		if(isset($pres[1]->topic)) {
 			$pr[$i]['topic'] = $pres[1]->topic;
 			if(!empty($pres[1]->topic)){
@@ -93,11 +93,11 @@
 		die("Could not parse index.xml, not sure what to do");
 	}
 
-	$pres = $p->getObjects();   
+	$pres = $p->getObjects();
 	$pres = $pres[1];
 
     $HEAD_RAND = <<<HEAD_RAND
-    
+
 <script>
 function change_mode() {
 	document.cookie="display_mode="+document.modes_form.modes.options[document.modes_form.modes.selectedIndex].value+"|"+document.modes_form.speaker.checked+";path=/";
@@ -134,7 +134,7 @@ HEAD_RAND;
 ?>
 <?php if(empty($topic)){ ?>
 <p><?php echo message('WELCOME_MSG'); ?></p>
-<?php 
+<?php
 	ksort($topics);
 	print('<table width="100%"><tr>'."\n");
 	$col = 0;
@@ -144,17 +144,17 @@ HEAD_RAND;
 	$percent = (int)(100 / $topic_cols);
 	foreach($topics as $i => $topic) {
 		printf('<td width="%.1f%%" class="output" style="padding-bottom: 15px"><a href="' . $baseDir . 'index.php/%s">' . $i . '</a> (' . $topic['count'] . ')</td>'."\n", $percent, urlencode($i));
-		if (++$col >= $topic_cols) { 
-			$col=0; 
+		if (++$col >= $topic_cols) {
+			$col=0;
 			print("</tr>\n<tr>");
-            
+
 		}
 	}
 	print('</tr></table>');
 } else {
-	if(empty($_COOKIE['display_mode'])) { $display_mode = 'html'; $form_speaker='false'; } 
-	else { 
-		list($display_mode,$form_speaker) = explode('|',$_COOKIE['display_mode']); 
+	if(empty($_COOKIE['display_mode'])) { $display_mode = 'html'; $form_speaker='false'; }
+	else {
+		list($display_mode,$form_speaker) = explode('|',$_COOKIE['display_mode']);
 	}
 	$_SESSION['show_speaker_notes'] = ($form_speaker=='true');
 	$_SESSION['selected_display_mode'] = $display_mode;
