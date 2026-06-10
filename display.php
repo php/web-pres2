@@ -26,14 +26,14 @@ class display {
     // dump in config values
     function __construct($c) {
         foreach($c as $k => $v) {
-            $this->$k = $v;    
+            $this->$k = $v;
         }
     }
 
     function _php(&$php) {
         if(!empty($php->filename)) include $php->filename;
         else eval('?>'.$php->text);
-    
+
     }
 }
 
@@ -109,7 +109,7 @@ FOOTER;
         }
         echo "<body style=\"".$body_style."\"$class>\n";
         $currentPres = $_SESSION['currentPres'];
-        
+
         $navsize = $slide->navsize;
         if (isset($this->pres->navsize)) $navsize = $this->pres->navsize;
 
@@ -118,7 +118,7 @@ FOOTER;
 
         $titlecolor = $slide->titleColor;
         if (isset($this->pres->titlecolor)) $titlecolor = $this->pres->titlecolor;
-        
+
         $prev = $next = 0;
         if($this->slideNum < $this->maxSlideNum) {
             $next = $this->slideNum+1;
@@ -165,7 +165,7 @@ FOOTER;
                          $prevSlide = $this->slideNum - 1;
                          echo "<a title=\"$this->prevTitle\" href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
-                     } 
+                     }
                      if($this->slideNum < $this->maxSlideNum) $this->nextSlideNum = $this->slideNum + 1;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
@@ -212,7 +212,7 @@ FOOTER;
                          $prevSlide = $this->slideNum - 1;
                          echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prevSlide\">"
                          . '<img src="images/back.gif" border="0" hspace="2" /></a>';
-                     } 
+                     }
                      if($this->slideNum < $this->maxSlideNum) $this->nextSlideNum = $this->slideNum + 1;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
@@ -260,7 +260,7 @@ ENDD;
             if(!empty($slide->logo1)) $logo1 = $slide->logo1;
             else $logo1 = $this->pres->logo1;
             if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $this->pres->logoimage1url;                
+            else $logo1url = $this->pres->logoimage1url;
             if(!empty($logo1)) {
                 echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\" style=\"float: left;\" alt=\"".$this->pres->slides[$this->slideNum]->filename."\"></a>";
                 $offset+=2;
@@ -302,13 +302,13 @@ ENDD;
             $smallestfontsize = ((float)$basefontsize/2).'em';
             $p = $this->pres;
             $parts =  ( !empty($p->title) + !empty($p->event) +
-                        (!empty($p->date)||!empty($p->location)) + 
+                        (!empty($p->date)||!empty($p->location)) +
                         (!empty($p->speaker)||!empty($p->email)) +
                         !empty($p->url) + !empty($p->subtitle) );
             for($i=10; $i>$parts; $i--) echo "<br />\n";
-            if(!empty($p->title)) 
+            if(!empty($p->title))
                 echo "<div align=\"center\" style=\"font-size: $basefontsize;\">$p->title</div><br />\n";
-            if(!empty($p->subtitle)) 
+            if(!empty($p->subtitle))
                 echo "<div align=\"center\" style=\"font-size: $smallestfontsize;\">$p->subtitle</div><br />\n";
             if(!empty($p->event))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->event</div><br />\n";
@@ -324,7 +324,7 @@ ENDD;
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
             else if(!empty($p->speaker))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
-            if(!empty($p->url)) 
+            if(!empty($p->url))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
             if(!empty($p->twitter)) {
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">Twitter: $p->twitter</div><br />\n";
@@ -334,7 +334,7 @@ ENDD;
                 $str = str_replace('(c)','&copy;',$p->copyright);
                 $str = str_replace('(R)','&reg;',$str);
                 echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
-            }    
+            }
 
         }
     }
@@ -410,7 +410,7 @@ ENDD;
 
     }
 
-    // Because we are eval()'ing code from slides, obfuscate all local 
+    // Because we are eval()'ing code from slides, obfuscate all local
     // variables so we don't get run over
     function _example(&$example) {
         global $pres;
@@ -419,7 +419,7 @@ ENDD;
 
         $_html_effect = '';
         if($example->effect) $_html_effect = "effect=\"$example->effect\"";
-        // Bring posted variables into the function-local namespace 
+        // Bring posted variables into the function-local namespace
         // so examples will work
         foreach($_POST as $_html_key => $_html_val) {
             $$_html_key = $_html_val;
@@ -526,7 +526,7 @@ ENDD;
                         break;
                     case 'link':
                         echo "<a href=\"$this->slideDir$example->filename\" class=\"resultlink\">$example->linktext</a><br />\n";
-                        break;    
+                        break;
                     case 'nlink':
                         echo "<a href=\"$this->slideDir$example->filename\" class=\"resultlink\" target=\"_blank\">$example->linktext</a><br />\n";
                         break;
@@ -535,12 +535,12 @@ ENDD;
                         break;
                     case 'flash':
                         echo "<embed src=\"$this->slideDir$example->filename?".time()." quality=high loop=true
-pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
+pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\"
 type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->iheight>\n";
                         break;
                     case 'system':
                         system("DISPLAY=localhost:0 $this->slideDir$example->filename");
-                        break;    
+                        break;
                     default:
                         if (isset($example->encoding)) {
                             ob_start();
@@ -634,7 +634,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 
         if(!empty($bullet->start)) {
             if(is_numeric($bullet->start)) {
-                $this->objs[$this->coid]->num = (int)$bullet->start;    
+                $this->objs[$this->coid]->num = (int)$bullet->start;
             } else {
                 $this->objs[$this->coid]->alpha = $bullet->start;
             }
@@ -656,7 +656,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
 
         if ($effect) {
             $eff_str = "id=\"$bullet->id\" effect=\"$effect\"";
-        } 
+        }
         switch($type) {
             case 'numbered':
             case 'number':
@@ -736,7 +736,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
             }
             if ($symbol != '&bull;')
                 echo "\n<li class='$class' style='list-style-type: none;'><div $attrs><tt>{$symbol}</tt> $markedText</div></li>";
-            else 
+            else
                 echo "\n<li class='$class'><div $attrs>$markedText</div></li>";
         } else {
             echo "\n<div $eff_str style=\"position: relative;\"><li style=\"$style\">".'<tt>'.$symbol.'</tt> '.$markedText."</li></div>\n";
@@ -811,7 +811,7 @@ type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->i
         if(!empty($link->text)) {
             if ($this->pres->template == 'css') {
                 $class = '';
-                if (empty($link->class)) $link->class = 'link'; 
+                if (empty($link->class)) $link->class = 'link';
                 echo "<div class='{$link->class}'>".markup_text($leader)."<a href='{$link->href}' target='{$link->target}'>".markup_text($link->text)."</a></div>\n";
             }
             else {
@@ -904,12 +904,12 @@ FOOTER;
 
     function _slide(&$slide) {
         global $pres;
-        
+
         $currentPres = $_SESSION['currentPres'];
-        
+
         $navsize = $slide->navsize;
         if ($pres->navsize) $navsize = $pres->navsize;
-        
+
         $prev = $next = 0;
         if($this->slideNum < $this->maxSlideNum) {
             $next = $this->slideNum+1;
@@ -923,7 +923,7 @@ FOOTER;
             if(!empty($slide->logo1)) $logo1 = $slide->logo1;
             else $logo1 = $pres->logo1;
             if(!empty($slide->logoimage1url)) $logo1url = $slide->logoimage1url;
-            else $logo1url = $pres->logoimage1url;                
+            else $logo1url = $pres->logoimage1url;
             if(!empty($logo1)) echo "<a href=\"$logo1url\"><img src=\"$logo1\" border=\"0\" align=\"left\"></a>\n";
             echo "</td>\n";
             if ($pres->navbartopiclinks) {
@@ -963,13 +963,13 @@ FOOTER;
             $smallestfontsize = ((float)$basefontsize/2).'em';
             $p = $pres;
             $parts =  ( !empty($p->title) + !empty($p->event) +
-                        (!empty($p->date)||!empty($p->location)) + 
+                        (!empty($p->date)||!empty($p->location)) +
                         (!empty($p->speaker)||!empty($p->email)) +
                         !empty($p->url) + !empty($p->subtitle) );
             for($i=10; $i>$parts; $i--) echo "<br />\n";
-            if(!empty($p->title)) 
+            if(!empty($p->title))
                 echo "<div align=\"center\" style=\"font-size: $basefontsize;\">$p->title</div><br />\n";
-            if(!empty($p->subtitle)) 
+            if(!empty($p->subtitle))
                 echo "<div align=\"center\" style=\"font-size: $smallestfontsize;\">$p->subtitle</div><br />\n";
             if(!empty($p->event))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->event</div><br />\n";
@@ -985,15 +985,15 @@ FOOTER;
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
             else if(!empty($p->speaker))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
-            if(!empty($p->url)) 
+            if(!empty($p->url))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
             if(!empty($p->copyright)) {
                 for($i=10; $i>$parts; $i--) echo "<br />\n";
                 $str = str_replace('(c)','&copy;',$p->copyright);
                 $str = str_replace('(R)','&reg;',$str);
                 echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
-            }    
-            
+            }
+
         }
     }
 
@@ -1026,7 +1026,7 @@ FOOTER;
 
     function _example(&$example) {
         global $pres;
-        // Bring posted variables into the function-local namespace 
+        // Bring posted variables into the function-local namespace
         // so examples will work
         foreach($_POST as $_html_key => $_html_val) {
             $$_html_key = $_html_val;
@@ -1071,12 +1071,12 @@ FOOTER;
                         break;
                     case 'flash':
                         echo "<embed src=\"$this->slideDir$example->filename?".time()." quality=high loop=true
-pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" 
+pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\"
 type=\"application/x-shockwave-flash\" width=$example->iwidth height=$example->iheight>\n";
                         break;
                     case 'system':
                         system("DISPLAY=localhost:0 $this->slideDir$example->filename");
-                        break;    
+                        break;
                     default:
                         include $_html_filename;
                         break;
@@ -1172,7 +1172,7 @@ class flash extends html {
         $dx = $this->winW;  // full width
 ?>
 <div align="<?php echo $slide->titleAlign?>" class="sticky" id="stickyBar">
-<embed src="<?php echo $this->baseDir?>flash.php/<?php echo time()?>?type=title&dy=<?php echo $dy?>&dx=<?php echo $dx?>&coid=<?php echo $this->coid?>" quality=high loop=false 
+<embed src="<?php echo $this->baseDir?>flash.php/<?php echo time()?>?type=title&dy=<?php echo $dy?>&dx=<?php echo $dx?>&coid=<?php echo $this->coid?>" quality=high loop=false
 pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"
 type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo $dy?>">
 </embed>
@@ -1198,13 +1198,13 @@ type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo
             $smallestfontsize = ((float)$basefontsize/2).'em';
             $p = $pres;
             $parts =  ( !empty($p->title) + !empty($p->event) +
-                        (!empty($p->date)||!empty($p->location)) + 
+                        (!empty($p->date)||!empty($p->location)) +
                         (!empty($p->speaker)||!empty($p->email)) +
                         !empty($p->url) + !empty($p->subtitle) );
             for($i=10; $i>$parts; $i--) echo "<br />\n";
-            if(!empty($p->title)) 
+            if(!empty($p->title))
                 echo "<div align=\"center\" style=\"font-size: $basefontsize;\">$p->title</div><br />\n";
-            if(!empty($p->subtitle)) 
+            if(!empty($p->subtitle))
                 echo "<div align=\"center\" style=\"font-size: $smallestfontsize;\">$p->subtitle</div><br />\n";
             if(!empty($p->event))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->event</div><br />\n";
@@ -1220,15 +1220,15 @@ type="application/x-shockwave-flash" width="<?php echo $dx?>" height="<?php echo
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">&lt;<a href=\"mailto:$p->email\">$p->email</a>&gt;</div><br />\n";
             else if(!empty($p->speaker))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\">$p->speaker</div><br />\n";
-            if(!empty($p->url)) 
+            if(!empty($p->url))
                 echo "<div align=\"center\" style=\"font-size: $smallerfontsize;\"><a href=\"$p->url\">$p->url</a></div><br />\n";
             if(!empty($p->copyright)) {
                 for($i=10; $i>$parts; $i--) echo "<br />\n";
                 $str = str_replace('(c)','&copy;',$p->copyright);
                 $str = str_replace('(R)','&reg;',$str);
                 echo "<div align\=\"center\" style=\"font-size: 1em\">$str</div>\n";
-            }    
-            
+            }
+
         }
     }
 }
@@ -1255,24 +1255,24 @@ class pdf extends display {
     function my_new_pdf_end_page(&$pdf) {
         pdf_end_page($pdf);
     }
-    
+
     // {{{ my_pdf_page_number($pdf)
-    function my_pdf_page_number(&$pdf, $pdf_x, $pdf_y) {    
+    function my_pdf_page_number(&$pdf, $pdf_x, $pdf_y) {
         if(isset($this->page_index[$this->page_number]) && $this->page_index[$this->page_number] == 'titlepage') return;
         pdf_set_font($pdf, $this->pdf_font, -10, 'winansi');
-        $fnt = pdf_findfont($pdf, $this->pdf_font, 'winansi', 0); 
+        $fnt = pdf_findfont($pdf, $this->pdf_font, 'winansi', 0);
         $dx = pdf_stringwidth($pdf,"- $this->page_number -",$fnt,-10);
         $x = (int)($pdf_x/2 - $dx/2);
         $pdf_cy = pdf_get_value($pdf, "texty", null);
         pdf_show_xy($pdf, "- $this->page_number -", $x, $pdf_y-20);
     }
     // }}}
-    
+
     /* {{{ my_pdf_paginated_code($pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
-    
+
        Function displays and paginates a bunch of text.  Wordwrapping is also
        done on long lines.  Top-down coordinates and a monospaced font are assumed.
-    
+
          $data = text to display
          $x    = width of page
          $y    = height of page
@@ -1284,16 +1284,16 @@ class pdf extends display {
          $fs   = font size
     */
     function my_pdf_paginated_code(&$pdf, $data, $x, $y, $tm, $bm, $lm, $rm, $font, $fs) {
-        $data = strip_markups($data);    
-        pdf_set_font($pdf, $font, $fs, 'winansi');    
+        $data = strip_markups($data);
+        pdf_set_font($pdf, $font, $fs, 'winansi');
         $fnt = pdf_findfont($pdf, $font, 'winansi', 0);
         $cw = pdf_stringwidth($pdf,'m',$fnt,$fs); // Width of 1 char - assuming monospace
         $linelen = (int)(($x-$lm-$rm)/$cw);  // Number of chars on a line
-    
+
         $pos = $i = 0;
         $len = strlen($data);
         pdf_set_text_pos($pdf, $lm, $tm);
-        
+
         $np = true;
         while($pos < $len) {
             $nl = strpos(substr($data,$pos),"\n");
@@ -1304,7 +1304,7 @@ class pdf extends display {
                 continue;
             }
             if($nl!==false) $ln = substr($data,$pos,$nl);
-            else { 
+            else {
                 $ln = substr($data,$pos);
                 $nl = $len-$pos;
             }
@@ -1312,7 +1312,7 @@ class pdf extends display {
                 $ln = wordwrap($ln,$linelen);
                 $out = explode("\n", $ln);
             } else {
-                $out = array($ln);    
+                $out = array($ln);
             }
             foreach($out as $l) {
                 $l = str_replace("\t",'    ',$l);  // 4-space tabs - should probably be an attribute
@@ -1324,19 +1324,19 @@ class pdf extends display {
                 $this->my_pdf_page_number($pdf, $x, $y);
                 $this->my_new_pdf_end_page($pdf);
                 $this->my_new_pdf_page($pdf, $x, $y, true);
-    
-                pdf_set_font($pdf, $font, $fs, 'winansi');    
+
+                pdf_set_font($pdf, $font, $fs, 'winansi');
                 pdf_set_text_pos($pdf, $lm, 60);
                 $np = true;
             }
-            
+
         }
     }
     // }}}
 
     function _presentation(&$presentation) {
         global $pres;
-                
+
         $_SESSION['selected_display_mode'] = get_class($this);
         // In PDF mode we loop through all the slides and make a single
         // big multi-page PDF document.
@@ -1415,7 +1415,7 @@ class pdf extends display {
         if($this->objs[1]->template == 'titlepage') {
             $p = $pres;
             $loc = $middle - 80 * ( !empty($p->title) + !empty($p->event) +
-                                    !empty($p->date) + 
+                                    !empty($p->date) +
                                     (!empty($p->speaker)||!empty($p->email)) +
                                     !empty($p->url) + !empty($p->subtitle) )/2;
             if(!empty($p->title)) {
@@ -1428,7 +1428,7 @@ class pdf extends display {
                 pdf_set_font($this->pdf, $this->pdf_font , -22, 'winansi');
                 pdf_show_boxed($this->pdf, $p->subtitle, 10, $loc, $this->pdf_x-20, 40, 'center',null);
             }
-            
+
             if(!empty($p->event)) {
                 $loc += 80;
                 pdf_set_font($this->pdf, $this->pdf_font , -30, 'winansi');
@@ -1493,13 +1493,13 @@ class pdf extends display {
             $this->page_index[$this->page_number] = strip_markups($slide->title);
         }
 
-        $this->pdf_cy += 30;    
-        if($this->slideNum) { 
-            pdf_moveto($this->pdf,40,$this->pdf_cy); 
-            pdf_lineto($this->pdf,$this->pdf_x-40,$this->pdf_cy);    
+        $this->pdf_cy += 30;
+        if($this->slideNum) {
+            pdf_moveto($this->pdf,40,$this->pdf_cy);
+            pdf_lineto($this->pdf,$this->pdf_x-40,$this->pdf_cy);
             pdf_stroke($this->pdf);
         }
-        $this->pdf_cy += 20;    
+        $this->pdf_cy += 20;
         pdf_set_text_pos($this->pdf, $this->pdf_cx, $this->pdf_cy);
     }
 
@@ -1550,7 +1550,7 @@ class pdf extends display {
         pdf_scale($this->pdf,1, -1);
         pdf_set_font($this->pdf, $this->pdf_font , 12, 'winansi');
         $leading = pdf_get_value($this->pdf, "leading", null);
-        $height = $inc = 12+$leading;    
+        $height = $inc = 12+$leading;
         $txt = strip_markups($blurb->text);
 
         while(pdf_show_boxed($this->pdf, $txt, $this->pdf_cx+20, $this->pdf_y-$this->pdf_cy, $this->pdf_x-2*($this->pdf_cx-20), $height, $align, 'blind')!=0) $height+=$inc;
@@ -1598,7 +1598,7 @@ class pdf extends display {
 
         switch($type) {
             case 1:
-                if(!strstr($image->filename,'blank')) 
+                if(!strstr($image->filename,'blank'))
                     $im = pdf_open_gif($this->pdf, $this->slideDir.$image->filename);
                 break;
             case 2:
@@ -1646,13 +1646,13 @@ class pdf extends display {
             pdf_place_image($this->pdf, $im, $x, ($this->pdf_y-$this->pdf_cy-$dy), $scale);
             pdf_restore($this->pdf);
             pdf_set_text_pos($this->pdf,$this->pdf_cx,$this->pdf_cy+$dy);
-        }        
+        }
     }
 
     function _example(&$example) {
         global $pres;
 
-        // Bring posted variables into the function-local namespace 
+        // Bring posted variables into the function-local namespace
         // so examples will work
         foreach($_POST as $_html_key => $_html_val) {
             $$_html_key = $_html_val;
@@ -1698,8 +1698,8 @@ class pdf extends display {
                     pdf_continue_text($this->pdf,"");
                     break;
             }
-            
-        }            
+
+        }
         $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
         if($example->result && $example->type != 'iframe' && (empty($example->condition) || isset(${$example->condition})) && (empty($example->required_extension) || extension_loaded($example->required_extension))) {
             if(!$example->hide) {
@@ -1767,11 +1767,11 @@ class pdf extends display {
                         // don't think we can do these in pdf
                         break;
                     case 'flash':
-                        // Definitely can't do this one    
+                        // Definitely can't do this one
                         break;
                     case 'system':
                         // system("DISPLAY=localhost:0 $this->slideDir$example->filename");
-                        break;    
+                        break;
                     default:
                         // Need something to turn html into pdf here?
                         // Perhaps just output buffering and stripslashes
@@ -1803,7 +1803,7 @@ class pdf extends display {
     }
 
     function _break(&$break) { /* empty */ }
-    
+
     function _list(&$list) {
         if (!isset($list->bullets)) return;
         if(isset($list->title)) {
@@ -1815,21 +1815,21 @@ class pdf extends display {
         }
         if(!empty($list->start)) {
             if(is_numeric($list->start)) {
-                $list->num = (int)$list->start;    
+                $list->num = (int)$list->start;
             } else {
                 $list->alpha = $list->start;
             }
         }
         foreach($list->bullets as $k => $bul) $bul->display();
-        
+
     }
 
     function _bullet(&$bullet) {
         $type = '';
         $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
-    
+
         pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
-        $height=10;    
+        $height=10;
         $txt = strip_markups($bullet->text);
 
         pdf_save($this->pdf);
@@ -1837,7 +1837,7 @@ class pdf extends display {
         pdf_scale($this->pdf,1, -1);
         pdf_set_font($this->pdf, $this->pdf_font , 12, 'winansi');
         $leading = pdf_get_value($this->pdf, "leading", null);
-        $inc = $leading;    
+        $inc = $leading;
         while(pdf_show_boxed($this->pdf, $txt, $this->pdf_cx+30, $this->pdf_y-$this->pdf_cy, $this->pdf_x-2*($this->pdf_cx+20), $height, 'left', 'blind')) $height+=$inc;
 
         pdf_restore($this->pdf);
@@ -1939,7 +1939,7 @@ class pdf extends display {
         foreach($table->cells as $k => $cell) {
             if(!($i % $table->columns)) {
                 $cell->end_row = false;
-            } 
+            }
             if(($i % $table->columns)==0) {
                 $cell->end_row = true;
                 $cell->offset = $cell_offset;
@@ -1958,11 +1958,11 @@ class pdf extends display {
 
         $row_text[] = $cell->text;
         if(!$cell->end_row) return;
-        
+
         $this->pdf_cy = pdf_get_value($this->pdf, "texty", null);
-    
+
         pdf_set_font($this->pdf, $this->pdf_font, -12, 'winansi');
-        $height=10;    
+        $height=10;
         $txt = strip_markups($row_text[0]);
         while(pdf_show_boxed($this->pdf, $txt, 60, $this->pdf_cy, $this->pdf_x-120, $height, 'left', 'blind')) $height+=10;
         if( ($this->pdf_cy + $height) > $this->pdf_y-40 ) {
@@ -1982,7 +1982,7 @@ class pdf extends display {
         }
         $this->pdf_cy+=$height;
         pdf_set_text_pos($this->pdf, $this->pdf_cx, $this->pdf_cy);
-        pdf_continue_text($this->pdf,"");    
+        pdf_continue_text($this->pdf,"");
         $row_text = array();
     }
 
@@ -2010,7 +2010,7 @@ class pdf extends display {
 
                 case 'left':
                 default:
-                    $x = $this->pdf_cx;    
+                    $x = $this->pdf_cx;
                     break;
             }
             if($link->marginleft) $x += (int)(((float)$link->marginleft) * $cw);
@@ -2030,7 +2030,7 @@ class pdf extends display {
 
     function _movie(&$movie) { /* empty */ }
 
-    function _footer(&$footer) {        
+    function _footer(&$footer) {
         if($this->objs[1]->template != 'titlepage') {
             $this->my_pdf_page_number($this->pdf, $this->pdf_x, $this->pdf_y);
         }
@@ -2043,7 +2043,7 @@ class pdfus extends pdf {
         $this->pdf_x = 612;  $this->pdf_y = 792;
         parent::__construct($c);
     }
-}    
+}
 
 class pdfusl extends pdf {
     function __construct($c) {
@@ -2051,7 +2051,7 @@ class pdfusl extends pdf {
         $this->pdf_x = 612;  $this->pdf_y = 1008;
         parent::__construct($c);
     }
-}    
+}
 
 class pdfa4 extends pdf {
     function __construct($c) {
@@ -2059,6 +2059,6 @@ class pdfa4 extends pdf {
         $this->pdf_x = 595;  $this->pdf_y = 842;
         parent::__construct($c);
     }
-}    
+}
 
 ?>
