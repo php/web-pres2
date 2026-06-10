@@ -59,7 +59,7 @@ class html extends display {
 <!doctype html>
 <html>
 <head>
-<base href="$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir">
+<base href="https://talks.php.net$this->baseDir">
 <meta charset="utf-8">
 <title>{$presentation->title}</title>
 HEADER;
