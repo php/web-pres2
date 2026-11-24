@@ -40,10 +40,6 @@ var effects = [];
 var currentEffect = 0;
 
 onload = function() {
-	<?php if(!isset($_COOKIE['dims'])) {?>
-	get_dims();
-	<?php } ?>
-	
 <?php if (!isset($_GET['effects']) || ($_GET['effects'] != 'no')) { ?>
 	// find any div objects with an effect attribute 
 	var divs = document.getElementsByTagName('div');
@@ -54,7 +50,7 @@ onload = function() {
 			if(divs[i].getAttribute('effect') == 'slide') {
 				divs[i].setAttribute('gotox',divs[i].offsetLeft);
 				divs[i].setAttribute('gotoy',0);
-				divs[i].setAttribute('style','position:relative;left:-<?php echo $this->winW+10?>;top:0;');
+				divs[i].setAttribute('style','position:relative;left:-'+(window.innerWidth+10)+'px;top:0;');
 			} else if(divs[i].getAttribute('effect') == 'hide') {
 				style = divs[i].getAttribute('style');
 				divs[i].setAttribute('style',style+'visibility:hidden;');

@@ -70,17 +70,6 @@
 	}
 	$mode = new $navmode($c);
 
-	// Browser window size, used for JavaScript resizing
-	if(isset($_COOKIE['dims'])) {
-		list($mode->winW, $mode->winH) = explode('_',$_COOKIE['dims']);
-	}
-	if (!isset($mode->winW)) {
-		$mode->winW = 0;
-	}
-	if (!isset($winH)) {
-		$mode->winH = 0;
-	}
-
 	// Store slide titles in session variable
 	if(empty($_SESSION['titles']) || $lastPres != $_SESSION['currentPres'] || $_SESSION['titlesLoaded'] < filemtime($presFile)) {
 		$_SESSION['titles'] = get_all_titles($pres);

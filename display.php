@@ -78,7 +78,6 @@ HEADER;
             break;
         }
         $this->body_style = $body_style;
-        include 'getwidth.php';
         include $presentation->stylesheet;
         /* the following includes scripts necessary for various animations */
         if($presentation->animate || $presentation->jskeyboard) include 'keyboard.js.php';
@@ -126,7 +125,6 @@ FOOTER;
         if($this->slideNum > 0) {
             $prev = $this->slideNum - 1;
         }
-        $slidelistH = $this->winH - 30;
         $offset=0;
         switch($this->pres->template) {
         case 'simple':
@@ -170,7 +168,7 @@ FOOTER;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+              <a title="<?php echo $this->slideNum.' of '.$this->maxSlideNum?>" href="<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left='+(window.innerWidth-300)+',top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
                   <td><?php if( !empty($this->nextSlideNum) )
                     echo "<a title=\"$this->nextTitle\" href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
@@ -217,7 +215,7 @@ FOOTER;
               ?></td>
               <td bgcolor="999999"><img src="images/blank.gif" width="25" height="1" /><br />
               <span class="c2"><b><i>&nbsp;&nbsp;
-              <a href="<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left=<?php echo $this->winW-300 ?>,top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
+              <a href="<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>" onClick="window.open('<?php echo "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php" ?>','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=500,left='+(window.innerWidth-300)+',top=0'); return false" class="linka"><?php echo $this->slideNum ?></a> &nbsp; &nbsp; </i></b></span></td>
                   <td><?php if( !empty($this->nextSlideNum) )
                     echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$this->nextSlideNum\">"
                         . '<img src="images/next.gif" border="0" hspace="2" /></a>';
@@ -273,7 +271,7 @@ ENDD;
                 echo "<img src=\"$logo2\" border=\"0\"><br/>";
                 $offset-=2;
             }
-            echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height=$slidelistH,left=".($this->winW-300).",top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
+            echo "<a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php\" style=\"text-decoration: none; color: $slide->titleColor;\" onClick=\"window.open('$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]{$this->baseDir}/slidelist.php','slidelist','toolbar=no,directories=no,location=no,status=no,menubar=no,resizable=no,scrollbars=yes,width=300,height='+(window.innerHeight-30)+',left='+(window.innerWidth-300)+',top=0'); return false\">".($this->slideNum)."/".($this->maxSlideNum)."</a></div>";
             if ($this->pres->navbartopiclinks) {
                 echo "<div style=\"float: left; margin: -0.2em 2em 0 0; font-size: $navsize;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$prev\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->prevTitle)."</a></div>";
                 echo "<div style=\"float: right; margin: -0.2em 2em 0 0; color: $slide->navcolor; font-size: $navsize;\"><a href=\"$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$this->baseDir$this->showScript/$currentPres/$next\" style=\"text-decoration: none; color: $slide->navcolor;\">".markup_text($this->nextTitle)."</a></div>";
@@ -1169,7 +1167,7 @@ class flash extends html {
         global $pres;
 
         list($dx,$dy) = getFlashDimensions($slide->titleFont,$slide->title,flash_fixsize($slide->titleSize));
-        $dx = $this->winW;  // full width
+        $dx = 1024;  // full width
 ?>
 <div align="<?php echo $slide->titleAlign?>" class="sticky" id="stickyBar">
 <embed src="<?php echo $this->baseDir?>flash.php/<?php echo time()?>?type=title&dy=<?php echo $dy?>&dx=<?php echo $dx?>&coid=<?php echo $this->coid?>" quality=high loop=false
